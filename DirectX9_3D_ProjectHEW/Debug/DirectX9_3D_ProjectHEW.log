@@ -1,0 +1,25 @@
+﻿  debugproc.cpp
+d:\users\hitomi\documents\project\directx9_3d_projecthew\directx9_3d_projecthew\debugproc.cpp(76): warning C4838: 'float' から 'LONG' への変換には縮小変換が必要です
+d:\users\hitomi\documents\project\directx9_3d_projecthew\directx9_3d_projecthew\debugproc.cpp(76): warning C4244: '初期化中': 'float' から 'LONG' への変換です。データが失われる可能性があります。
+d:\users\hitomi\documents\project\directx9_3d_projecthew\directx9_3d_projecthew\debugproc.cpp(112): warning C4996: 'sprintf': This function or variable may be unsafe. Consider using sprintf_s instead. To disable deprecation, use _CRT_SECURE_NO_WARNINGS. See online help for details.
+  c:\program files (x86)\windows kits\10\include\10.0.10240.0\ucrt\stdio.h(1769): note: 'sprintf' の宣言を確認してください
+d:\users\hitomi\documents\project\directx9_3d_projecthew\directx9_3d_projecthew\debugproc.cpp(122): warning C4996: 'sprintf': This function or variable may be unsafe. Consider using sprintf_s instead. To disable deprecation, use _CRT_SECURE_NO_WARNINGS. See online help for details.
+  c:\program files (x86)\windows kits\10\include\10.0.10240.0\ucrt\stdio.h(1769): note: 'sprintf' の宣言を確認してください
+d:\users\hitomi\documents\project\directx9_3d_projecthew\directx9_3d_projecthew\debugproc.cpp(127): warning C4996: 'sprintf': This function or variable may be unsafe. Consider using sprintf_s instead. To disable deprecation, use _CRT_SECURE_NO_WARNINGS. See online help for details.
+  c:\program files (x86)\windows kits\10\include\10.0.10240.0\ucrt\stdio.h(1769): note: 'sprintf' の宣言を確認してください
+d:\users\hitomi\documents\project\directx9_3d_projecthew\directx9_3d_projecthew\debugproc.cpp(132): warning C4996: 'sprintf': This function or variable may be unsafe. Consider using sprintf_s instead. To disable deprecation, use _CRT_SECURE_NO_WARNINGS. See online help for details.
+  c:\program files (x86)\windows kits\10\include\10.0.10240.0\ucrt\stdio.h(1769): note: 'sprintf' の宣言を確認してください
+d:\users\hitomi\documents\project\directx9_3d_projecthew\directx9_3d_projecthew\debugproc.cpp(137): warning C4996: 'sprintf': This function or variable may be unsafe. Consider using sprintf_s instead. To disable deprecation, use _CRT_SECURE_NO_WARNINGS. See online help for details.
+  c:\program files (x86)\windows kits\10\include\10.0.10240.0\ucrt\stdio.h(1769): note: 'sprintf' の宣言を確認してください
+d:\users\hitomi\documents\project\directx9_3d_projecthew\directx9_3d_projecthew\debugproc.cpp(142): warning C4996: 'sprintf': This function or variable may be unsafe. Consider using sprintf_s instead. To disable deprecation, use _CRT_SECURE_NO_WARNINGS. See online help for details.
+  c:\program files (x86)\windows kits\10\include\10.0.10240.0\ucrt\stdio.h(1769): note: 'sprintf' の宣言を確認してください
+d:\users\hitomi\documents\project\directx9_3d_projecthew\directx9_3d_projecthew\debugproc.cpp(147): warning C4996: 'sprintf': This function or variable may be unsafe. Consider using sprintf_s instead. To disable deprecation, use _CRT_SECURE_NO_WARNINGS. See online help for details.
+  c:\program files (x86)\windows kits\10\include\10.0.10240.0\ucrt\stdio.h(1769): note: 'sprintf' の宣言を確認してください
+d:\users\hitomi\documents\project\directx9_3d_projecthew\directx9_3d_projecthew\debugproc.cpp(151): warning C4996: 'sprintf': This function or variable may be unsafe. Consider using sprintf_s instead. To disable deprecation, use _CRT_SECURE_NO_WARNINGS. See online help for details.
+  c:\program files (x86)\windows kits\10\include\10.0.10240.0\ucrt\stdio.h(1769): note: 'sprintf' の宣言を確認してください
+d:\users\hitomi\documents\project\directx9_3d_projecthew\directx9_3d_projecthew\debugproc.cpp(155): warning C4996: 'strcat': This function or variable may be unsafe. Consider using strcat_s instead. To disable deprecation, use _CRT_SECURE_NO_WARNINGS. See online help for details.
+  c:\program files (x86)\windows kits\10\include\10.0.10240.0\ucrt\string.h(90): note: 'strcat' の宣言を確認してください
+d:\users\hitomi\documents\project\directx9_3d_projecthew\directx9_3d_projecthew\debugproc.cpp(164): warning C4996: 'strcat': This function or variable may be unsafe. Consider using strcat_s instead. To disable deprecation, use _CRT_SECURE_NO_WARNINGS. See online help for details.
+  c:\program files (x86)\windows kits\10\include\10.0.10240.0\ucrt\string.h(90): note: 'strcat' の宣言を確認してください
+  DirectX9_3D_ProjectHEW.vcxproj -> D:\Users\Hitomi\Documents\project\DirectX9_3D_ProjectHEW\Debug\DirectX9_3D_ProjectHEW.exe
+  DirectX9_3D_ProjectHEW.vcxproj -> D:\Users\Hitomi\Documents\project\DirectX9_3D_ProjectHEW\Debug\DirectX9_3D_ProjectHEW.pdb (Full PDB)

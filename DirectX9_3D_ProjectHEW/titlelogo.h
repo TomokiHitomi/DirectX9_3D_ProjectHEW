@@ -14,8 +14,8 @@
 //*****************************************************************************
 #define NUM_TITLELOGO		(2)	// ポリゴン数
 
-#define TEXTURE_GAME_TITLELOGO_00	_T("data/TEXTURE/titlelogo_back.png")	// タイトル用画像
-#define TEXTURE_GAME_TITLELOGO_01	_T("data/TEXTURE/titlelogo.png")	// タイトル用画像
+#define TEXTURE_GAME_TITLELOGO_00	_T("data/TEXTURE/title_back.png")	// タイトル用画像
+#define TEXTURE_GAME_TITLELOGO_01	_T("data/TEXTURE/title.png")	// タイトル用画像
 
 #define TEXTURE_TITLELOGO_SIZE_X	(1050 * SCREEN_SCALE/2) // テクスチャサイズ
 #define TEXTURE_TITLELOGO_SIZE_Y	(250 * SCREEN_SCALE/2) // 同上

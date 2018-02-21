@@ -30,16 +30,14 @@
 //*****************************************************************************
 // マクロ定義
 //*****************************************************************************
-#define CLASS_NAME		("AppClass")						// ウインドウのクラス名
-#define WINDOW_NAME		("DirectX9_3D_ProjectHEW")// ウインドウのキャプション名
+#define CLASS_NAME		("AppClass")				// ウインドウのクラス名
+#define WINDOW_NAME		("DirectX9_3D_ProjectHEW")	// ウインドウのキャプション名
 
-#define SCREEN_SCALE	(2.0f)
-
-#define SCREEN_WIDTH	(1280 * SCREEN_SCALE)	// ウインドウの幅
-#define SCREEN_HEIGHT	(720 * SCREEN_SCALE)	// ウインドウの高さ
-
-#define SCREEN_CENTER_X	(SCREEN_WIDTH / 2)	// ウインドウの幅
-#define SCREEN_CENTER_Y	(SCREEN_HEIGHT / 2)	// ウインドウの高さ
+#define SCREEN_SCALE	(1.0f)
+#define SCREEN_WIDTH	(1280 * SCREEN_SCALE)		// ウインドウの幅
+#define SCREEN_HEIGHT	(720 * SCREEN_SCALE)		// ウインドウの高さ
+#define SCREEN_CENTER_X	(SCREEN_WIDTH / 2)			// ウインドウ中央X
+#define SCREEN_CENTER_Y	(SCREEN_HEIGHT / 2)			// ウインドウ中央Y
 
 #define	NUM_VERTEX		(4)		// 頂点数
 #define	NUM_POLYGON		(2)		// ポリゴン数
@@ -50,38 +48,31 @@
 
 // ３Ｄポリゴン頂点フォーマット
 #define FVF_VERTEX_3D (D3DFVF_XYZ | D3DFVF_NORMAL | D3DFVF_DIFFUSE | D3DFVF_TEX1)
+// ２Ｄポリゴン頂点フォーマット( 頂点座標[2D] / 反射光 / テクスチャ座標 )
+#define	FVF_VERTEX_2D	(D3DFVF_XYZRHW | D3DFVF_DIFFUSE | D3DFVF_TEX1)
 
-// 上記３Ｄポリゴン頂点フォーマットに合わせ^た構造体を定義
+//*****************************************************************************
+// 構造体定義
+//*****************************************************************************
 typedef struct
-{
+{	// 3Dポリゴン頂点構造体
 	D3DXVECTOR3	vtx;		// 頂点座標
 	D3DXVECTOR3	nor;		// 法線ベクトル
 	D3DCOLOR	diffuse;	// 反射光
 	D3DXVECTOR2	tex;		// テクスチャ座標
 } VERTEX_3D;
 
-// ２Ｄポリゴン頂点フォーマット( 頂点座標[2D] / 反射光 / テクスチャ座標 )
-#define	FVF_VERTEX_2D	(D3DFVF_XYZRHW | D3DFVF_DIFFUSE | D3DFVF_TEX1)
-
-// 上記２Ｄポリゴン頂点フォーマットに合わせた構造体を定義
 typedef struct
-{
-	D3DXVECTOR3 vtx;	// 頂点座標
-	float		rhw;	// テクスチャのパースペクティブコレクト用
-	D3DCOLOR diffuse;	// 反射光
-	D3DXVECTOR2 tex;	// テクスチャ座標
+{	// 2Dポリゴン頂点構造体
+	D3DXVECTOR3 vtx;		// 頂点座標
+	float		rhw;		// テクスチャのパースペクティブコレクト用
+	D3DCOLOR	diffuse;	// 反射光
+	D3DXVECTOR2 tex;		// テクスチャ座標
 } VERTEX_2D;
-
-
 
 //*****************************************************************************
 // プロトタイプ宣言
 //*****************************************************************************
 LPDIRECT3DDEVICE9 GetDevice(void);
-int *GetTotalCount(void);
-void InitSystem(int nType);
-void SetStage(E_STAGE eStage);
-E_STAGE GetStage(void);
-void SetEndFlag(void);
 
 #endif

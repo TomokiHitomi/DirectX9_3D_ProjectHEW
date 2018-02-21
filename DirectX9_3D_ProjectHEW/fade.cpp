@@ -5,6 +5,7 @@
 //
 //=============================================================================
 #include "fade.h"
+#include "stage.h"
 
 //*****************************************************************************
 // プロトタイプ宣言
@@ -18,9 +19,9 @@ void SetColor(D3DCOLOR col);
 LPDIRECT3DTEXTURE9		g_p3DTextureFade = NULL;		// テクスチャへのポインタ
 VERTEX_2D				g_vertexWkFade[NUM_VERTEX];		// 頂点情報格納ワーク
 
-D3DXCOLOR				g_color;
-FADE					g_eFade = FADE_IN;
-E_STAGE					g_eState = STAGE_TITLE;			// 次に飛ぶ予定のステート
+D3DXCOLOR				g_color;		// フェードカラー
+FADE					g_eFade;		// フェード種類
+int						g_nState;		// 次に飛ぶ予定のステート
 
 //=============================================================================
 // 初期化処理
@@ -28,6 +29,9 @@ E_STAGE					g_eState = STAGE_TITLE;			// 次に飛ぶ予定のステート
 HRESULT InitFade(void)
 {
 	LPDIRECT3DDEVICE9 pDevice = GetDevice();
+
+	g_eFade = FADE_IN;
+	g_nState = STAGE_TITLE;			// 次に飛ぶ予定のステート
 
 	// 頂点情報の設定
 	MakeVertexFade();
@@ -59,8 +63,8 @@ void UpdateFade(void)
 			if(g_color.a >= 1.0f)
 			{
 				// 状態を切り替え
-				SetStage( g_eState );
-				InitSystem(1);
+				SetStage(g_nState);
+				InitStageEach(STAGE_INIT_LOOP);
 
 				// フェードイン処理に切り替え
 				g_color.a = 1.0f;
@@ -129,7 +133,7 @@ HRESULT MakeVertexFade(void)
 	g_vertexWkFade[3].rhw = 1.0f;
 
 	// 反射光の設定
-	g_color = D3DXCOLOR(1.0f, 1.0f, 1.0f, 1.0f);
+	g_color = D3DXCOLOR(FADE_COLOR_R, FADE_COLOR_G, FADE_COLOR_B, 1.0f);
 	g_vertexWkFade[0].diffuse = g_color;
 	g_vertexWkFade[1].diffuse = g_color;
 	g_vertexWkFade[2].diffuse = g_color;
@@ -165,7 +169,7 @@ void SetColor(D3DCOLOR col)
 //=============================================================================
 // フェードの状態設定
 //=============================================================================
-void SetFade(FADE fade, E_STAGE next )
+void SetFade(FADE fade, int next )
 {
 	switch (fade)
 	{
@@ -177,7 +181,7 @@ void SetFade(FADE fade, E_STAGE next )
 		break;
 	}
 	g_eFade = fade;
-	g_eState = next;
+	g_nState = next;
 }
 
 //=============================================================================

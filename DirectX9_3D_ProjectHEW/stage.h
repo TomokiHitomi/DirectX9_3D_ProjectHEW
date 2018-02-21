@@ -1,7 +1,9 @@
 //=============================================================================
 //
-// Stage処理 [stage.h]
+// ステージ遷移処理 [stage.h]
 // Author : GP11B243 24 人見友基
+//
+// タイトル・ゲーム・リザルトの遷移管理
 //
 //=============================================================================
 #ifndef _STAGE_H_
@@ -17,12 +19,6 @@
 /*******************************************************************************
 * 構造体定義
 *******************************************************************************/
-typedef struct
-{
-	int					nTime;
-	bool				bClearFlag;
-	bool				bEndFlag;
-}STAGE_SYS;
 
 /*******************************************************************************
 * 列挙型定義
@@ -35,16 +31,32 @@ enum
 	STAGE_MAX
 };
 
+enum
+{
+	STAGE_INIT_FAST,
+	STAGE_INIT_LOOP
+};
+
+enum
+{
+	STAGE_WIN_NON,
+	STAGE_WIN_1P,
+	STAGE_WIN_2P
+};
+
 //*****************************************************************************
 // プロトタイプ宣言
 //*****************************************************************************
-HRESULT InitStage(HINSTANCE hInstance, HWND hWnd);
-void UpdateStage(void);
-STAGE_SYS *GetStageSys(void);
-void SetResultTime(int nTime);
-int GetResultTime(void);
-void SetClearFlag(bool bClearFlag);
-bool GetClearFlag(void);
-bool GetEndFlag(void);
+HRESULT		InitStage(HINSTANCE hInstance, HWND hWnd);
+HRESULT		InitStageEach(int nType);
+void		UninitStage(void);
+void		UpdateStage(void);
+void		DrawStage(void);
+
+void		SetStage(int nStage);
+int			GetStage(void);
+
+void		SetStageWinPlayer(int nPlayer);
+int			GetStageWinPlayer(void);
 
 #endif

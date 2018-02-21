@@ -26,18 +26,7 @@ void Draw(void);
 //*****************************************************************************
 LPDIRECT3D9			g_pD3D = NULL;			// Direct3Dオブジェクト
 LPDIRECT3DDEVICE9	g_pD3DDevice = NULL;	// デバイスオブジェクト(描画に必要)
-
-int					g_nTotalCount = 0;		// トータルカウンタ
-int					g_nGameCount = 0;		// トータルカウンタ
 int					g_nCountFPS = 0;		// FPSカウンタ
-
-bool				g_bEndFlag = true;		// 終了フラグ
-
-//float g_fFogDensity = 0.8f;
-//D3DXCOLOR g_xFogColor = D3DXCOLOR(1.0f, 1.0f, 1.0f, 1.0f);
-
-
-
 
 //=============================================================================
 // メイン関数
@@ -146,7 +135,7 @@ int APIENTRY WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLi
 			if((dwCurrentTime - dwExecLastTime) >= (1000 / 60))
 			{
 #ifdef _DEBUG
-				PrintDebugProc("FPS:%d  TotalCount:%u", g_nCountFPS, g_nTotalCount);
+				PrintDebugProc("【 FPS:%d 】\n", g_nCountFPS);
 #endif
 
 				dwExecLastTime = dwCurrentTime;
@@ -166,11 +155,6 @@ int APIENTRY WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLi
 
 					// マウスカーソルの移動制限
 					ClipCursor(&lpScreen);
-
-#ifdef _DEBUG
-					PrintDebugProc("Screen L[%l]  T[%l]  R[%l]  B[%l]\n",	// ウィンドウ座標を表示
-						lpScreen.left, lpScreen.top, lpScreen.right, lpScreen.bottom);
-#endif
 				}
 
 				// 更新処理
@@ -180,7 +164,6 @@ int APIENTRY WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLi
 				Draw();
 
 				dwFrameCount++;
-				g_nTotalCount++;
 			}
 		}
 	}
@@ -316,10 +299,8 @@ HRESULT Init(HINSTANCE hInstance, HWND hWnd, BOOL bWindow)
 	g_pD3DDevice->SetTextureStageState(0, D3DTSS_ALPHAARG1, D3DTA_TEXTURE);	// 最初のアルファ引数
 	g_pD3DDevice->SetTextureStageState(0, D3DTSS_ALPHAARG2, D3DTA_CURRENT);	// ２番目のアルファ引数
 
-
-
 	// 各種初期化処理（ステージ）
-	InitSystem(STAGE_TITLE);
+	InitStage(hInstance, hWnd);
 
 	return S_OK;
 }
@@ -341,52 +322,8 @@ void Uninit(void)
 		g_pD3D = NULL;
 	}
 
-
-
-
-	UninitSkydome();		// スカイドーム
-	UninitSkydomeeffect();	// スカイドームエフェクト
-	UninitEnemy();			// エネミー
-	UninitEnemy_normal();	// エネミーノーマル
-	UninitEnemy_boss();		// エネミーボス
-	//UninitField();		// 地面
-	//UninitWall();			// 壁
-	UninitMeshcloud();		// 雲海
-	UninitCloud();			// 雲
-	UninitEnemybullet();	// エネミーバレット
-	UninitBullet();			// バレット
-	UninitBulletQua();		// バレットクォータニオン（エネミー）
-	UninitHiteffect();		// ヒットエフェクト
-	UninitModel();			// モデル
-	UninitShadow();			// 影
-	UninitEffect();			// エフェクト
-	UninitReticle();		// レティクル
-	UninitMagic();			// 魔法陣
-	UninitMagiccircle();	// 魔法サークル
-	UninitPointer();		// ポイント
-	UninitMinimap();		// ミニマップ
-	UninitLockon();			// ロックオン
-	UninitTitle();			// タイトル
-	UninitTitlemenu();		// タイトルメニュー
-	UninitVersion();		// バージョン
-	UninitCopyright();		// コピーライト
-	UninitResult();			// リザルト
-	UninitParameter();		// エネミーHPゲージ
-	UninitDamageeffect();	// ダメージエフェクト
-	UninitGage();			// ゲージ
-	UninitGagefream();		// ゲージフレーム
-	UninitGageback();		// ゲージバック
-	UninitGageselect();		// ゲージセレクト
-	UninitMagiceffect();	// マジックエフェクト
-	UninitRanking();		// ランキング
-	UninitRank();			// ランク
-	UninitJoyconhelp();		// Joyconヘルプ
-	UninitTimefream();		// タイムフレーム
-	UninitTime();			// タイム
-	UninitTimeranking();	// タイムランキング
-	UninitPause();			// ポーズ
-	UninitPausemenu();		// ポーズメニュー
-
+	// ステージ終了処理
+	UninitStage();
 }
 
 //=============================================================================
@@ -394,93 +331,8 @@ void Uninit(void)
 //=============================================================================
 void Update(void)
 {
-	PAUSE *pause = GetPause(0);
-
-
-
-	E_STAGE eStageTemp = g_eStage;
-	switch (g_eStage)
-	{
-	case STAGE_TITLE:					// タイトル
-		UpdateMeshcloud();		// 雲海
-		UpdateShadow();			// 影
-		UpdateModel();			// モデル
-		UpdateSkydome();		// スカイドーム
-		UpdateSkydomeeffect();	// スカイドームエフェクト
-		UpdateTitle();			// タイトル
-		UpdateTitlemenu();		// タイトルメニュー
-		UpdateVersion();
-		UpdateCopyright();
-		break;
-	case STAGE_TUTORIAL:				// チュートリアル
-		break;
-	case STAGE_CREDIT:					// クレジット
-		break;
-	case STAGE_GAME:					// ゲーム
-		UpdatePause();		// ポーズ
-		if (!pause->bUse)	// ポーズ有効中は括弧以下をアップデートしない
-		{
-			//UpdateField();		// 地面
-			//UpdateWall();			// 壁
-			UpdateShadow();			// 影
-			UpdateGame();
-			UpdateMeshcloud();		// 雲海
-			UpdateCloud();			// 雲
-			UpdateEnemy();			// エネミー
-			UpdateEnemy_normal();	// エネミーノーマル
-			UpdateEnemy_boss();		// エネミーボス
-			UpdateEnemybullet();	// バレット
-			UpdateBulletQua();		// バレットクォータニオン（エネミー）
-			UpdateHiteffect();		// ヒットエフェクト
-			UpdateEffect();			// エフェクト
-			UpdateModel();			// モデル
-			UpdateBullet();			// バレット
-			UpdateLockon();			// ロックオン
-			UpdateParameter();
-			UpdateSkydome();		// スカイドーム
-			UpdateSkydomeeffect();	// スカイドームエフェクト
-			UpdateReticle();		// レティクル
-			UpdateMagic();			// 魔法陣
-			UpdateMagiccircle();	// 魔法サークル
-			UpdateMinimap();		// ミニマップ
-			UpdateGageback();		// ゲージバック
-			UpdateGage();			// ゲージ
-			UpdateGagefream();		// ゲージフレーム
-			UpdateGageselect();		// ゲージセレクト
-			UpdateMagiceffect();	// マジックエフェクト
-			UpdateTimefream();		// タイムフレーム
-			UpdateTime();			// タイム
-			UpdatePointer();		// ポイント
-			UpdateDamageeffect();	// ダメージエフェクト
-			UpdateJoyconhelp();		// Joyconヘルプ
-			ChackHit();				// 当たり判定
-		}
-		UpdatePausemenu();	// ポーズメニュー
-		break;
-	case STAGE_RESULT:					// リザルト
-		UpdateMeshcloud();		// 雲海
-		UpdateShadow();			// 影
-		UpdateModel();			// モデル
-		UpdateSkydome();		// スカイドーム
-		UpdateSkydomeeffect();	// スカイドームエフェクト
-		UpdateRank();			// ランク
-		UpdateRanking();		// ランキング
-		UpdateReticle();		// レティクル
-		UpdateTimefream();		// タイムフレーム
-		UpdateTimeranking();	// タイムランキング
-		UpdateTime();			// タイム
-		UpdateResult();			// リザルト
-		break;
-	}
-
-
-	UpdateSound();
-	UpdateFade();
-
-	if (eStageTemp != g_eStage)
-	{
-
-	}
+	// ステージ更新処理
+	UpdateStage();
 }
 
 //=============================================================================
@@ -494,9 +346,8 @@ void Draw(void)
 	// 描画の開始
 	if(SUCCEEDED(g_pD3DDevice->BeginScene()))
 	{
-
-
-
+		// ステージ描画処理
+		DrawStage();
 
 		// 描画の終了
 		g_pD3DDevice->EndScene();
@@ -512,45 +363,4 @@ void Draw(void)
 LPDIRECT3DDEVICE9 GetDevice(void)
 {
 	return g_pD3DDevice;
-}
-
-
-//=============================================================================
-// トータルカウント取得関数
-//=============================================================================
-int *GetTotalCount(void)
-{
-	return(&g_nTotalCount);
-}
-
-//=============================================================================
-// 初期化
-//=====================asas========================================================
-void InitSystem(int nType)
-{
-
-}
-
-//=============================================================================
-// ステージ遷移処理
-//=============================================================================
-void SetStage(E_STAGE eStage)
-{
-	g_eStage = eStage;
-}
-
-//=============================================================================
-// ステージ取得処理
-//=============================================================================
-E_STAGE GetStage(void)
-{
-	return g_eStage;
-}
-
-//=============================================================================
-// 終了フラグ
-//=============================================================================
-void SetEndFlag(void)
-{
-	g_bEndFlag = false;
 }

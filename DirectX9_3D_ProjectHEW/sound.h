@@ -17,12 +17,11 @@
 //*****************************************************************************
 #define VOLUME_CONTROL_UP	(100)			// 音量上昇幅
 #define VOLUME_CONTROL_DOWN	(15)			// 音量下降幅
-#define VOLUME_MAX	(-500)					// 最大音量
-#define VOLUME_HALF	(-2000)					// 中間音量
-#define VOLUME_MIN	(-8000)					// 最小音量
-
-#define VOLUME_SE		(-800)				// SEボリューム
-#define VOLUME_VOICE	(-500)				// ボイスボリューム
+#define VOLUME_MAX			(-500)			// 最大音量
+#define VOLUME_HALF			(-2000)			// 中間音量
+#define VOLUME_MIN			(-8000)			// 最小音量
+#define VOLUME_SE			(-800)			// SEボリューム
+#define VOLUME_VOICE		(-500)			// ボイスボリューム
 
 #define SE_11_CONTINUITY	(5)				// ヒットSEの再生間隔
 #define SE_11_VOLUME_SE		(-1200)			// SE11のボリューム設定

@@ -38,65 +38,65 @@ long g_nVol[SOUND_BGM_MAX];
 // サウンドファイルのパス（sound.hの通しナンバーと順番を合わせること）
 const TCHAR* c_soundFilename[] = {
 	// Atmospheres
-	_T("data/BGM/Atmospheres/ATM 004 D# 138BPM.wav"),
-	_T("data/BGM/Atmospheres/ATM 013 F# 138BPM.wav"),//
+	_T("data/SOUND/BGM/Atmospheres/ATM 004 D# 138BPM.wav"),
+	_T("data/SOUND/BGM/Atmospheres/ATM 013 F# 138BPM.wav"),//
 	// Basslines
-	_T("data/BGM/Basslines/MUFX1 LOOP 027 138BPM.wav"),
-	_T("data/BGM/Basslines/BA 028 G#.wav"),//
-	_T("data/BGM/Basslines/BA 043 B.wav"),//
-	_T("data/BGM/Basslines/BA 072 A#.wav"),//
-	_T("data/BGM/Basslines/BL 010 G 138BPM.wav"),//
-	_T("data/BGM/Basslines/BASS 010 F# 138BPM.wav"),//
-	_T("data/BGM/Basslines/BA 014 C.wav"),//
+	_T("data/SOUND/BGM/Basslines/MUFX1 LOOP 027 138BPM.wav"),
+	_T("data/SOUND/BGM/Basslines/BA 028 G#.wav"),//
+	_T("data/SOUND/BGM/Basslines/BA 043 B.wav"),//
+	_T("data/SOUND/BGM/Basslines/BA 072 A#.wav"),//
+	_T("data/SOUND/BGM/Basslines/BL 010 G 138BPM.wav"),//
+	_T("data/SOUND/BGM/Basslines/BASS 010 F# 138BPM.wav"),//
+	_T("data/SOUND/BGM/Basslines/BA 014 C.wav"),//
 	// Drumloops
-	_T("data/BGM/Drumloops/DL 003 138BPM.wav"),
-	_T("data/BGM/Drumloops/MSD2 Drum Loop 138 BPM 036.wav"),
+	_T("data/SOUND/BGM/Drumloops/DL 003 138BPM.wav"),
+	_T("data/SOUND/BGM/Drumloops/MSD2 Drum Loop 138 BPM 036.wav"),
 	// Sequences
-	_T("data/BGM/Sequences/SEQ 104 C.wav"),
-	_T("data/BGM/Sequences/SEQ 144 D#.wav"),
-	_T("data/BGM/Sequences/SEQ 131 B.wav"),//
-	_T("data/BGM/Sequences/SQ 013 A# 138BPM.wav"),//
-	_T("data/BGM/Sequences/SQ 017 G 138BPM.wav"),//
-	_T("data/BGM/Sequences/SEQ 098 B.wav"),//
-	_T("data/BGM/Sequences/SQ 001 F# 138BPM.wav"),//
-	_T("data/BGM/Sequences/SQ 016 A# 138BPM.wav"),//
-	_T("data/BGM/Sequences/SQ 035 C 138BPM.wav"),//
-	_T("data/BGM/Sequences/SQ 062 G 138BPM.wav"),//
-	_T("data/BGM/Sequences/SQ 065 G# 138BPM.wav"),//
+	_T("data/SOUND/BGM/Sequences/SEQ 104 C.wav"),
+	_T("data/SOUND/BGM/Sequences/SEQ 144 D#.wav"),
+	_T("data/SOUND/BGM/Sequences/SEQ 131 B.wav"),//
+	_T("data/SOUND/BGM/Sequences/SQ 013 A# 138BPM.wav"),//
+	_T("data/SOUND/BGM/Sequences/SQ 017 G 138BPM.wav"),//
+	_T("data/SOUND/BGM/Sequences/SEQ 098 B.wav"),//
+	_T("data/SOUND/BGM/Sequences/SQ 001 F# 138BPM.wav"),//
+	_T("data/SOUND/BGM/Sequences/SQ 016 A# 138BPM.wav"),//
+	_T("data/SOUND/BGM/Sequences/SQ 035 C 138BPM.wav"),//
+	_T("data/SOUND/BGM/Sequences/SQ 062 G 138BPM.wav"),//
+	_T("data/SOUND/BGM/Sequences/SQ 065 G# 138BPM.wav"),//
 	// TCE
-	_T("data/BGM/TCE/TCE3 06 Piano 138 BPM G# Wet.wav"),//
+	_T("data/SOUND/BGM/TCE/TCE3 06 Piano 138 BPM G# Wet.wav"),//
 	// SE
-	_T("data/SE/close.wav"),
-	_T("data/SE/select.wav"),
-	_T("data/SE/decision.wav"),
-	_T("data/SE/pause.wav"),
-	_T("data/SE/nogravity.wav"),
-	_T("data/SE/gravity.wav"),
-	_T("data/SE/enemybullet00.wav"),
-	_T("data/SE/result.wav"),
-	_T("data/SE/playerbullet00.wav"),
-	_T("data/SE/alert.wav"),
-	_T("data/SE/jump.wav"),
-	_T("data/SE/hit.wav"),
-	_T("data/SE/enemyfalse.wav"),
-	_T("data/SE/enemybulletreversal.wav"),
-	_T("data/SE/se_maoudamashii_onepoint33.wav"),
-	_T("data/SE/TC/Crash.wav"),
-	_T("data/SE/TC/MRE Open Hat 009.wav"),
-	_T("data/SE/TC/MUFX1 EXPL 045.wav"),
-	_T("data/SE/TC/MRE Clap 009.wav"),
+	_T("data/SOUND/SE/close.wav"),
+	_T("data/SOUND/SE/select.wav"),
+	_T("data/SOUND/SE/decision.wav"),
+	_T("data/SOUND/SE/pause.wav"),
+	_T("data/SOUND/SE/nogravity.wav"),
+	_T("data/SOUND/SE/gravity.wav"),
+	_T("data/SOUND/SE/enemybullet00.wav"),
+	_T("data/SOUND/SE/result.wav"),
+	_T("data/SOUND/SE/playerbullet00.wav"),
+	_T("data/SOUND/SE/alert.wav"),
+	_T("data/SOUND/SE/jump.wav"),
+	_T("data/SOUND/SE/hit.wav"),
+	_T("data/SOUND/SE/enemyfalse.wav"),
+	_T("data/SOUND/SE/enemybulletreversal.wav"),
+	_T("data/SOUND/SE/se_maoudamashii_onepoint33.wav"),
+	_T("data/SOUND/SE/TC/Crash.wav"),
+	_T("data/SOUND/SE/TC/MRE Open Hat 009.wav"),
+	_T("data/SOUND/SE/TC/MUFX1 EXPL 045.wav"),
+	_T("data/SOUND/SE/TC/MRE Clap 009.wav"),
 	// VOICE
-	_T("data/VOICE/fire_01.wav"),
-	_T("data/VOICE/thunder_01.wav"),
-	_T("data/VOICE/ice_01.wav"),
-	_T("data/VOICE/storm_01.wav"),
-	_T("data/VOICE/water_01.wav"),
-	_T("data/VOICE/daichiyo_01.wav"),
-	_T("data/VOICE/powerup_02.wav"),
-	_T("data/VOICE/warenichikarawo_01.wav"),
-	_T("data/VOICE/stageclear_01.wav"),
-	_T("data/VOICE/gameover_02.wav"),
-	_T("data/VOICE/ittaa_01.wav")
+	_T("data/SOUND/VOICE/fire_01.wav"),
+	_T("data/SOUND/VOICE/thunder_01.wav"),
+	_T("data/SOUND/VOICE/ice_01.wav"),
+	_T("data/SOUND/VOICE/storm_01.wav"),
+	_T("data/SOUND/VOICE/water_01.wav"),
+	_T("data/SOUND/VOICE/daichiyo_01.wav"),
+	_T("data/SOUND/VOICE/powerup_02.wav"),
+	_T("data/SOUND/VOICE/warenichikarawo_01.wav"),
+	_T("data/SOUND/VOICE/stageclear_01.wav"),
+	_T("data/SOUND/VOICE/gameover_02.wav"),
+	_T("data/SOUND/VOICE/ittaa_01.wav")
 };
 
 // グローバル変数

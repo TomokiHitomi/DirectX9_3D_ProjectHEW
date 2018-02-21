@@ -1,7 +1,9 @@
 //=============================================================================
 //
-// Stage処理 [stage.cpp]
+// ステージ遷移処理 [stage.cpp]
 // Author : GP11B243 24 人見友基
+//
+// タイトル・ゲーム・リザルトの遷移管理
 //
 //=============================================================================
 #include "main.h"
@@ -9,16 +11,16 @@
 
 /* Stage */
 #include "title.h"
-
-
+#include "game.h"
+#include "result.h"
 
 /* Camera */
 #include "camera.h"
 
 /* System */
+#include "input.h"
 #include "sound.h"
 #include "light.h"
-#include "input.h"
 #include "fade.h"
 
 /* Debug */
@@ -27,19 +29,15 @@
 #endif
 
 //*****************************************************************************
-// マクロ定義
-//*****************************************************************************
-
-//*****************************************************************************
 // プロトタイプ宣言
 //*****************************************************************************
+
 
 //*****************************************************************************
 // グローバル変数
 //*****************************************************************************
-STAGE_SYS					stageSysWk;
-
-int					g_nStage = START_STAGE;	// ステージ
+int					g_nStage;				// 初期ステージ
+int					g_nPlayerWin;			// 勝利プレイヤー
 
 #ifdef _DEBUG
 bool				g_bDispDebug = true;	// デバッグ表示ON/OFF
@@ -50,16 +48,31 @@ bool				g_bDispDebug = true;	// デバッグ表示ON/OFF
 //=============================================================================
 HRESULT InitStage(HINSTANCE hInstance, HWND hWnd)
 {
+	// グローバル変数の初期化
+	g_nStage = START_STAGE;			// 初期ステージを設定
+	g_nPlayerWin = STAGE_WIN_NON;	// 勝利プレイヤーを初期化
+
 	InitInput(hInstance, hWnd);		// 入力
+	InitCamera();					// カメラ
 	InitSound(hWnd);				// サウンド
+	InitLight();					// ライト
 	InitFade();						// フェード
+	InitStageEach(STAGE_INIT_FAST);	// 各ステージの初期化
+
 #ifdef _DEBUG
 	InitDebugProc();				// デバッグ表示処理の初期化
 #endif
+	return S_OK;
+}
 
-	InitTitle(0);					// タイトル
-	InitLight();				// ライト
-	InitCamera();					// カメラ
+//=============================================================================
+// 再初期化処理
+//=============================================================================
+HRESULT InitStageEach(int nType)
+{
+	InitTitle(nType);		// タイトル
+	InitGame(nType);		// ゲーム
+	InitResult(nType);		// リザルト
 	return S_OK;
 }
 
@@ -68,16 +81,14 @@ HRESULT InitStage(HINSTANCE hInstance, HWND hWnd)
 //=============================================================================
 void UninitStage(void)
 {
-	UninitInput();					// 入力の終了処理
+	UninitCamera();					// カメラ
+	UninitInput();					// 入力
 	UninitSound();					// サウンド
 	UninitFade();					// フェード
-
+	UninitTitle();					// タイトル
 #ifdef _DEBUG
 	UninitDebugProc();				// デバッグ表示処理の終了処理
 #endif
-
-	UninitTitle();					// タイトル
-	UninitCamera();					// カメラ
 }
 
 //=============================================================================
@@ -85,27 +96,34 @@ void UninitStage(void)
 //=============================================================================
 void UpdateStage(void)
 {
-	UpdateInput();					// 入力の更新処理
-
-	switch (g_nStage)
-	{
-	case STAGE_TITLE:
-		UpdateTitle;				// タイトル
-		break;
-	case STAGE_GAME:
-		break;
-	case STAGE_RESULT:
-		break;
-	}
-	UpdateCamera();					// カメラ
-
 #ifdef _DEBUG
 	if (GetKeyboardTrigger(DIK_F1))
-	{// デバッグ表示ON/OFF
+	{	// デバッグ表示ON/OFF
 		g_bDispDebug = g_bDispDebug ? false : true;
 	}
 	UpdateDebugProc();				// デバッグ
+	PrintDebugProc("【 STAGE:%d 】\n", g_nStage);
 #endif
+
+	UpdateInput();					// 入力
+
+	// ステージに応じた更新処理
+	switch (g_nStage)
+	{
+	case STAGE_TITLE:
+		UpdateTitle();				// タイトル
+		break;
+	case STAGE_GAME:
+		UpdateGame();				// ゲーム
+		break;
+	case STAGE_RESULT:
+		UpdateResult();				// リザルト
+		break;
+	}
+	UpdateCamera();					// カメラ
+	UpdateFade();					// フェード
+
+
 }
 
 //=============================================================================
@@ -114,7 +132,21 @@ void UpdateStage(void)
 void DrawStage(void)
 {
 	SetCamera();					// カメラの設定処理
-	DrawTitle();					// タイトル
+
+	// ステージに応じた描画処理
+	switch (g_nStage)
+	{
+	case STAGE_TITLE:
+		DrawTitle();				// タイトル
+		break;
+	case STAGE_GAME:
+		DrawGame();					// ゲーム
+		break;
+	case STAGE_RESULT:
+		DrawResult();				// リザルト
+		break;
+	}
+
 	DrawFade();						// フェード
 
 #ifdef _DEBUG
@@ -125,59 +157,34 @@ void DrawStage(void)
 #endif
 }
 
-
-
-
 //=============================================================================
-// 取得関数
+// ステージ設定関数
 //=============================================================================
-STAGE_SYS *GetStageSys(void)
+void SetStage(int nStage)
 {
-	return(&stageSysWk);
+	g_nStage = nStage;
 }
 
 //=============================================================================
-// カウント取得関数
+// ステージ取得関数
 //=============================================================================
-void SetResultTime(int nTime)
+int GetStage(void)
 {
-	STAGE_SYS *stageSys = &stageSysWk;
-	stageSys->nTime = nTime;
+	return (g_nStage);
 }
 
 //=============================================================================
-// カウント取得関数
+// 勝利プレイヤー設定関数
 //=============================================================================
-int GetResultTime(void)
+void SetStageWinPlayer(int nPlayer)
 {
-	STAGE_SYS *stageSys = &stageSysWk;
-	return(stageSys->nTime);
+	g_nPlayerWin = nPlayer;
 }
 
 //=============================================================================
-// クリアフラグ取得関数
+// 勝利プレイヤー取得関数
 //=============================================================================
-void SetClearFlag(bool bClearFlag)
+int GetStageWinPlayer(void)
 {
-	STAGE_SYS *stageSys = &stageSysWk;
-	stageSys->bClearFlag = bClearFlag;
-	stageSys->bEndFlag = true;
-}
-
-//=============================================================================
-// クリアフラグ取得関数
-//=============================================================================
-bool GetClearFlag(void)
-{
-	STAGE_SYS *stageSys = &stageSysWk;
-	return(stageSys->bClearFlag);
-}
-
-//=============================================================================
-// 終了フラグ取得関数
-//=============================================================================
-bool GetEndFlag(void)
-{
-	STAGE_SYS *stageSys = &stageSysWk;
-	return(stageSys->bEndFlag);
+	return (g_nPlayerWin);
 }

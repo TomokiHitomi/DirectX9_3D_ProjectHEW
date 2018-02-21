@@ -10,6 +10,7 @@
 // タイトルで必要なインクルード
 #include "titlelogo.h"
 
+
 // デバッグ用
 #ifdef _DEBUG
 #include "debugproc.h"
