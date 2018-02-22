@@ -1,3 +1,7 @@
-﻿  camera.cpp
+﻿  game.cpp
+  camera.cpp
+  Light.cpp
+c:\users\hitomi\documents\project\directx9_3d_projecthew\directx9_3d_projecthew\light.cpp : warning C4819: ファイルは、現在のコード ページ (932) で表示できない文字を含んでいます。データの損失を防ぐために、ファイルを Unicode 形式で保存してください。
+  コードを生成中...
   DirectX9_3D_ProjectHEW.vcxproj -> C:\Users\Hitomi\Documents\project\DirectX9_3D_ProjectHEW\Debug\DirectX9_3D_ProjectHEW.exe
   DirectX9_3D_ProjectHEW.vcxproj -> C:\Users\Hitomi\Documents\project\DirectX9_3D_ProjectHEW\Debug\DirectX9_3D_ProjectHEW.pdb (Full PDB)
