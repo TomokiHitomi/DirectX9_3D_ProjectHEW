@@ -8,9 +8,6 @@
 #include "stage.h"
 
 // ゲームで必要なインクルード
-// oware
-//成功を祈る
-
 
 // デバッグ用
 #ifdef _DEBUG
