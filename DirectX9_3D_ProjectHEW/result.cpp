@@ -8,7 +8,7 @@
 #include "stage.h"
 
 // リザルトで必要なインクルード
-
+// 求）内定
 
 // デバッグ用
 #ifdef _DEBUG
