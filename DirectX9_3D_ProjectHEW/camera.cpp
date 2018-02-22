@@ -142,6 +142,7 @@ void UpdateCamera(void)
 		if (camera->fLength < CAMERA_LENGTH)
 		{
 			camera->fLength = CAMERA_LENGTH;
+			camera->fLength = camera->fLength;
 		}
 	}
 
