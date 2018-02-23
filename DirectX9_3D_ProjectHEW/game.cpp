@@ -8,6 +8,7 @@
 #include "stage.h"
 
 // ゲームで必要なインクルード
+// tisaka
 
 // デバッグ用
 #ifdef _DEBUG
