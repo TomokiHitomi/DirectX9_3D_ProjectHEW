@@ -24,7 +24,7 @@ void UninitMobUse();						// マウスの終了処理
 HRESULT UpdateMobUse();					// マウスの更新処理
 
 HRESULT InitializePad(HWND hWnd);			// パッド初期化
-										//BOOL CALLBACK SearchPadCallback(LPDIDEVICEINSTANCE lpddi, LPVOID);	// パッド検査コールバック
+											//BOOL CALLBACK SearchPadCallback(LPDIDEVICEINSTANCE lpddi, LPVOID);	// パッド検査コールバック
 void UpdatePad(void);
 void UninitPad(void);
 
@@ -41,14 +41,14 @@ BYTE					g_keyStateRepeat[NUM_KEY_MAX];		// キーボードの状態を受け取るワーク
 BYTE					g_keyStateRelease[NUM_KEY_MAX];		// キーボードの状態を受け取るワーク
 int						g_keyStateRepeatCnt[NUM_KEY_MAX];	// キーボードのリピートカウンタ
 
-//--------------------------------- mobUse
+															//--------------------------------- mobUse
 static LPDIRECTINPUTDEVICE8 pMobUse = NULL; // mobUse
 
 static DIMOUSESTATE2   mobUseState;		// マウスのダイレクトな状態
 static DIMOUSESTATE2   mobUseTrigger;	// 押された瞬間だけON
 static DIMOUSESTATE2   mobUseRelease;	// 押された瞬間だけOFF
 
-//--------------------------------- game pad
+										//--------------------------------- game pad
 
 static LPDIRECTINPUTDEVICE8	pGamePad[GAMEPADMAX] = { NULL,NULL,NULL,NULL };// パッドデバイス
 
@@ -126,7 +126,7 @@ void UpdateInput(void)
 	if (IsButtonTriggered(0, R_BUTTON_PLUS))
 	{
 		g_nJoyconSlider++;
-		if(g_nJoyconSlider > PAD_SLIDER_MAX)
+		if (g_nJoyconSlider > PAD_SLIDER_MAX)
 		{
 			g_nJoyconSlider = PAD_SLIDER_MAX;
 		}
@@ -326,7 +326,9 @@ HRESULT InitializeMobUse(HINSTANCE hInst, HWND hWindow)
 
 	// アクセス権を得る
 	pMobUse->Acquire();
-	ShowCursor(false);
+
+	//// マウスポインタの非表示
+	//ShowCursor(false);
 
 	SetRect(&rectMove, 0, 0, 1280 * SCREEN_SCALE, 720 * SCREEN_SCALE);
 	return result;
@@ -379,7 +381,9 @@ HRESULT UpdateMobUse()
 
 	// デバッグ用
 #ifdef _DEBUG
-	PrintDebugProc("Mouse.X[%l]  Y[%l]\n", lpMouse.x, lpMouse.y);
+	PrintDebugProc("【 INPUT 】\n");
+	PrintDebugProc("MousePos X[%l]  Y[%l]\n", lpMouse.x, lpMouse.y);
+	PrintDebugProc("\n");
 #endif
 
 	return result;
@@ -485,15 +489,15 @@ HRESULT InitializePad(HWND hWnd)			// パッド初期化
 		if (FAILED(result))
 			return false;	// データフォーマットの設定に失敗
 
-						//// モードを設定（フォアグラウンド＆非排他モード）
-						//result = pGamePad[i]->SetCooperativeLevel(hWnd, DISCL_NONEXCLUSIVE | DISCL_FOREGROUND);
-						//if ( FAILED(result) )
-						//	return false; // モードの設定に失敗
+							//// モードを設定（フォアグラウンド＆非排他モード）
+							//result = pGamePad[i]->SetCooperativeLevel(hWnd, DISCL_NONEXCLUSIVE | DISCL_FOREGROUND);
+							//if ( FAILED(result) )
+							//	return false; // モードの設定に失敗
 
-		// 軸の値の範囲を設定
-		// X軸、Y軸のそれぞれについて、オブジェクトが報告可能な値の範囲をセットする。
-		// (max-min)は、最大10,000(?)。(max-min)/2が中央値になる。
-		// 差を大きくすれば、アナログ値の細かな動きを捕らえられる。(パッドの性能による)
+							// 軸の値の範囲を設定
+							// X軸、Y軸のそれぞれについて、オブジェクトが報告可能な値の範囲をセットする。
+							// (max-min)は、最大10,000(?)。(max-min)/2が中央値になる。
+							// 差を大きくすれば、アナログ値の細かな動きを捕らえられる。(パッドの性能による)
 		DIPROPRANGE				diprg;
 		ZeroMemory(&diprg, sizeof(diprg));
 		diprg.diph.dwSize = sizeof(diprg);
@@ -580,10 +584,6 @@ void UpdatePad(void)
 	HRESULT			result;
 	DIJOYSTATE2		dijs;
 	int				i;
-
-#ifdef _DEBUG
-	PrintDebugProc("【PAD】\n");
-#endif
 
 	for (i = 0; i<padCount; i++)
 	{
@@ -683,9 +683,9 @@ void UpdatePad(void)
 		//* 右スティック下
 		if (dijs.lRy > 0)				padState[i] |= RSTICK_DOWN;
 		//* 右スティック左
-		if (dijs.lRx < 0 )				padState[i] |= RSTICK_LEFT;
+		if (dijs.lRx < 0)				padState[i] |= RSTICK_LEFT;
 		//* 右スティック右
-		if (dijs.lRx > 0 )				padState[i] |= RSTICK_RIGHT;
+		if (dijs.lRx > 0)				padState[i] |= RSTICK_RIGHT;
 
 
 		////* 右スティック上
@@ -702,11 +702,11 @@ void UpdatePad(void)
 		//* 右スティックボタン
 		if (dijs.rgbButtons[11] & 0x80)	padState[i] |= RSTICK_BUTTON;
 
-		
+
 		// Trigger設定
 		padTrigger[i] = ((lastPadState ^ padState[i])	// 前回と違っていて
 			& padState[i]);					// しかも今ONのやつ
-		// Release設定
+											// Release設定
 		padRelease[i] = ((lastPadState ^ padState[i])	// 前回と違っていて
 			& ~padState[i]);					// しかも今OFFのやつ
 
@@ -723,33 +723,34 @@ void UpdatePad(void)
 			g_rglSlider[1] = (float)dijs.rglSlider[1];
 		}
 
-#ifdef _DEBUG
-			PrintDebugProc("LStick[X:%l  Y:%l  Z:%l]  RStick[X:%l  Y:%l  Z:%l]\n",
-				dijs.lX, dijs.lY, dijs.lZ, dijs.lRx, dijs.lRy, dijs.lRz);
-			PrintDebugProc("POV[UP:%d  RIGHT:%d  DOWN:%d  LEFT:%d]\n",
-				dijs.rgdwPOV[0], dijs.rgdwPOV[1], dijs.rgdwPOV[2], dijs.rgdwPOV[3]);
-			PrintDebugProc("lV[X:%l  Y:%l  Z:%l]  lVR[X:%l  Y:%l  Z:%l]\n",
-				dijs.lVX, dijs.lVY, dijs.lVZ, dijs.lVRx, dijs.lVRy, dijs.lVRz);
-			PrintDebugProc("lA[X:%l  Y:%l  Z:%l]  lAR[X:%l  Y:%l  Z:%l]\n",
-				dijs.lAX, dijs.lAY, dijs.lAZ, dijs.lARx, dijs.lARy, dijs.lARz);
-			PrintDebugProc("lF[X:%l  Y:%l  Z:%l]  lFR[X:%l  Y:%l  Z:%l]\n",
-				dijs.lFX, dijs.lFY, dijs.lFZ, dijs.lFRx, dijs.lFRy, dijs.lFRz);
-			PrintDebugProc("rglSlider[0:%l  1:%l]  rglVSlider[0:%l  1:%l]\n",
-				dijs.rglSlider[0], dijs.rglSlider[1], dijs.rglVSlider[0], dijs.rglVSlider[1]);
-			PrintDebugProc("rglASlider[0:%l  1:%l]  rglFSlider[0:%l  1:%l]\n",
-				dijs.rglASlider[0], dijs.rglASlider[1], dijs.rglFSlider[0], dijs.rglFSlider[1]);
-			PrintDebugProc("rgbButtons\n");
-			for (int i = 0; i < 128; i++)
-			{
-				PrintDebugProc("%d", dijs.rgbButtons[i]);
-				if (i % 32 == 0 && i != 0)
-				{
-					PrintDebugProc("\n");
-				}
-			}
-			PrintDebugProc("[%f] [%f]\n", (float)padlZ, (float)padlRz);
-			PrintDebugProc("\n");
-#endif
+		//#ifdef _DEBUG
+		//			PrintDebugProc("【PAD】\n");
+		//			PrintDebugProc("LStick[X:%l  Y:%l  Z:%l]  RStick[X:%l  Y:%l  Z:%l]\n",
+		//				dijs.lX, dijs.lY, dijs.lZ, dijs.lRx, dijs.lRy, dijs.lRz);
+		//			PrintDebugProc("POV[UP:%d  RIGHT:%d  DOWN:%d  LEFT:%d]\n",
+		//				dijs.rgdwPOV[0], dijs.rgdwPOV[1], dijs.rgdwPOV[2], dijs.rgdwPOV[3]);
+		//			PrintDebugProc("lV[X:%l  Y:%l  Z:%l]  lVR[X:%l  Y:%l  Z:%l]\n",
+		//				dijs.lVX, dijs.lVY, dijs.lVZ, dijs.lVRx, dijs.lVRy, dijs.lVRz);
+		//			PrintDebugProc("lA[X:%l  Y:%l  Z:%l]  lAR[X:%l  Y:%l  Z:%l]\n",
+		//				dijs.lAX, dijs.lAY, dijs.lAZ, dijs.lARx, dijs.lARy, dijs.lARz);
+		//			PrintDebugProc("lF[X:%l  Y:%l  Z:%l]  lFR[X:%l  Y:%l  Z:%l]\n",
+		//				dijs.lFX, dijs.lFY, dijs.lFZ, dijs.lFRx, dijs.lFRy, dijs.lFRz);
+		//			PrintDebugProc("rglSlider[0:%l  1:%l]  rglVSlider[0:%l  1:%l]\n",
+		//				dijs.rglSlider[0], dijs.rglSlider[1], dijs.rglVSlider[0], dijs.rglVSlider[1]);
+		//			PrintDebugProc("rglASlider[0:%l  1:%l]  rglFSlider[0:%l  1:%l]\n",
+		//				dijs.rglASlider[0], dijs.rglASlider[1], dijs.rglFSlider[0], dijs.rglFSlider[1]);
+		//			PrintDebugProc("rgbButtons\n");
+		//			for (int i = 0; i < 128; i++)
+		//			{
+		//				PrintDebugProc("%d", dijs.rgbButtons[i]);
+		//				if (i % 32 == 0 && i != 0)
+		//				{
+		//					PrintDebugProc("\n");
+		//				}
+		//			}
+		//			PrintDebugProc("[%f] [%f]\n", (float)padlZ, (float)padlRz);
+		//			PrintDebugProc("\n");
+		//#endif
 	}
 	//GetButtonlZ(0);
 }
@@ -805,6 +806,6 @@ float GetRglSlider(int nSlider)
 {
 	float fSlider = 0.0f;
 	if (g_rglSlider[nSlider] > PAD_SLIDER_MARGIN || g_rglSlider[nSlider] < -PAD_SLIDER_MARGIN)
-	fSlider = g_rglSlider[nSlider] * PAD_SLIDER_SPEED * g_nJoyconSlider;
+		fSlider = g_rglSlider[nSlider] * PAD_SLIDER_SPEED * g_nJoyconSlider;
 	return (fSlider);
 }

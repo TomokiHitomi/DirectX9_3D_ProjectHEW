@@ -28,9 +28,9 @@ LPDIRECT3D9			g_pD3D = NULL;			// Direct3Dオブジェクト
 LPDIRECT3DDEVICE9	g_pD3DDevice = NULL;	// デバイスオブジェクト(描画に必要)
 int					g_nCountFPS = 0;		// FPSカウンタ
 
-//=============================================================================
-// メイン関数
-//=============================================================================
+											//=============================================================================
+											// メイン関数
+											//=============================================================================
 int APIENTRY WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine, int nCmdShow)
 {
 	UNREFERENCED_PARAMETER(hPrevInstance);	// 無くても良いけど、警告が出る（未使用宣言）
@@ -58,23 +58,23 @@ int APIENTRY WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLi
 	};
 	HWND hWnd;
 	MSG msg;
-	
+
 	// ウィンドウクラスの登録
 	RegisterClassEx(&wcex);
 
 	// ウィンドウの作成
 	hWnd = CreateWindowEx(0,
-						CLASS_NAME,
-						WINDOW_NAME,
-						WS_OVERLAPPEDWINDOW,
-						CW_USEDEFAULT,
-						CW_USEDEFAULT,
-						SCREEN_WIDTH + GetSystemMetrics(SM_CXDLGFRAME) * 2,
-						SCREEN_HEIGHT + GetSystemMetrics(SM_CXDLGFRAME) * 2 + GetSystemMetrics(SM_CYCAPTION),
-						NULL,
-						NULL,
-						hInstance,
-						NULL);
+		CLASS_NAME,
+		WINDOW_NAME,
+		WS_OVERLAPPEDWINDOW,
+		CW_USEDEFAULT,
+		CW_USEDEFAULT,
+		SCREEN_WIDTH + GetSystemMetrics(SM_CXDLGFRAME) * 2,
+		SCREEN_HEIGHT + GetSystemMetrics(SM_CXDLGFRAME) * 2 + GetSystemMetrics(SM_CYCAPTION),
+		NULL,
+		NULL,
+		hInstance,
+		NULL);
 
 	// DirectXの初期化(ウィンドウを作成してから行う)
 	bool flag = false; // フルスクリーンモードで初期化
@@ -84,7 +84,7 @@ int APIENTRY WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLi
 	}
 
 	// 初期化処理(ウィンドウを作成してから行う)
-	if(FAILED(Init(hInstance, hWnd, flag)))
+	if (FAILED(Init(hInstance, hWnd, flag)))
 	{
 		return -1;
 	}
@@ -94,10 +94,10 @@ int APIENTRY WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLi
 
 	//フレームカウント初期化
 	timeBeginPeriod(1);				// 分解能を設定
-	dwExecLastTime = 
-	dwFPSLastTime = timeGetTime();
+	dwExecLastTime =
+		dwFPSLastTime = timeGetTime();
 	dwCurrentTime =
-	dwFrameCount = 0;
+		dwFrameCount = 0;
 
 	// ウインドウの表示(初期化処理の後に呼ばないと駄目)
 	ShowWindow(hWnd, nCmdShow);
@@ -105,11 +105,11 @@ int APIENTRY WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLi
 
 
 	// メッセージループ
-	while(1)
+	while (1)
 	{
-		if(PeekMessage(&msg, NULL, 0, 0, PM_REMOVE))
+		if (PeekMessage(&msg, NULL, 0, 0, PM_REMOVE))
 		{
-			if(msg.message == WM_QUIT)
+			if (msg.message == WM_QUIT)
 			{	// PostQuitMessage()が呼ばれたらループ終了
 				break;
 			}
@@ -123,7 +123,7 @@ int APIENTRY WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLi
 		else
 		{
 			dwCurrentTime = timeGetTime();
-			if((dwCurrentTime - dwFPSLastTime) >= 500)	// 0.5秒ごとに実行
+			if ((dwCurrentTime - dwFPSLastTime) >= 500)	// 0.5秒ごとに実行
 			{
 #ifdef _DEBUG
 				g_nCountFPS = dwFrameCount * 1000 / (dwCurrentTime - dwFPSLastTime);
@@ -132,30 +132,30 @@ int APIENTRY WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLi
 				dwFrameCount = 0;
 			}
 
-			if((dwCurrentTime - dwExecLastTime) >= (1000 / 60))
+			if ((dwCurrentTime - dwExecLastTime) >= (1000 / 60))
 			{
 #ifdef _DEBUG
-				PrintDebugProc("【 FPS:%d 】\n", g_nCountFPS);
+				PrintDebugProc("【 FPS : %d 】\n\n", g_nCountFPS);
 #endif
 
 				dwExecLastTime = dwCurrentTime;
 
-				// ウィンドウがアクティブの場合
-				if (hWnd == GetActiveWindow())
-				{
-					// ウィンドウの座標を取得
-					RECT	lpScreen;
-					GetWindowRect(hWnd, &lpScreen);
+				//// ウィンドウがアクティブの場合
+				//if (hWnd == GetActiveWindow())
+				//{
+				//	// ウィンドウの座標を取得
+				//	RECT	lpScreen;
+				//	GetWindowRect(hWnd, &lpScreen);
 
-					// マウスカーソルの移動範囲を指定
-					lpScreen.left = lpScreen.left + (long)MOUSE_MARGIN;
-					lpScreen.top = lpScreen.bottom - (long)SCREEN_HEIGHT + (long)MOUSE_MARGIN;
-					lpScreen.right = lpScreen.right - (long)MOUSE_MARGIN;
-					lpScreen.bottom = lpScreen.bottom - (long)MOUSE_MARGIN;
+				//	// マウスカーソルの移動範囲を指定
+				//	lpScreen.left = lpScreen.left + (long)MOUSE_MARGIN;
+				//	lpScreen.top = lpScreen.bottom - (long)SCREEN_HEIGHT + (long)MOUSE_MARGIN;
+				//	lpScreen.right = lpScreen.right - (long)MOUSE_MARGIN;
+				//	lpScreen.bottom = lpScreen.bottom - (long)MOUSE_MARGIN;
 
-					// マウスカーソルの移動制限
-					ClipCursor(&lpScreen);
-				}
+				//	// マウスカーソルの移動制限
+				//	ClipCursor(&lpScreen);
+				//}
 
 				// 更新処理
 				Update();
@@ -167,7 +167,7 @@ int APIENTRY WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLi
 			}
 		}
 	}
-	
+
 	DestroyWindow(hWnd);
 
 	// ウィンドウクラスの登録を解除
@@ -186,14 +186,14 @@ int APIENTRY WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLi
 //=============================================================================
 LRESULT CALLBACK WndProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 {
-	switch(uMsg)
+	switch (uMsg)
 	{
 	case WM_DESTROY:
 		PostQuitMessage(0);
 		break;
 
 	case WM_KEYDOWN:
-		switch(wParam)
+		switch (wParam)
 		{
 		case VK_ESCAPE:
 			DestroyWindow(hWnd);
@@ -288,18 +288,18 @@ HRESULT Init(HINSTANCE hInstance, HWND hWnd, BOOL bWindow)
 	g_pD3DDevice->SetRenderState(D3DRS_SRCBLEND, D3DBLEND_SRCALPHA);		// αソースカラーの指定
 	g_pD3DDevice->SetRenderState(D3DRS_DESTBLEND, D3DBLEND_INVSRCALPHA);	// αデスティネーションカラーの指定
 
-	// サンプラーステートパラメータの設定
+																			// サンプラーステートパラメータの設定
 	g_pD3DDevice->SetSamplerState(0, D3DSAMP_ADDRESSU, D3DTADDRESS_WRAP);	// テクスチャアドレッシング方法(U値)を設定
 	g_pD3DDevice->SetSamplerState(0, D3DSAMP_ADDRESSV, D3DTADDRESS_WRAP);	// テクスチャアドレッシング方法(V値)を設定
 	g_pD3DDevice->SetSamplerState(0, D3DSAMP_MINFILTER, D3DTEXF_LINEAR);	// テクスチャ縮小フィルタモードを設定
 	g_pD3DDevice->SetSamplerState(0, D3DSAMP_MAGFILTER, D3DTEXF_LINEAR);	// テクスチャ拡大フィルタモードを設定
 
-	// テクスチャステージステートの設定
+																			// テクスチャステージステートの設定
 	g_pD3DDevice->SetTextureStageState(0, D3DTSS_ALPHAOP, D3DTOP_MODULATE);	// アルファブレンディング処理を設定
 	g_pD3DDevice->SetTextureStageState(0, D3DTSS_ALPHAARG1, D3DTA_TEXTURE);	// 最初のアルファ引数
 	g_pD3DDevice->SetTextureStageState(0, D3DTSS_ALPHAARG2, D3DTA_CURRENT);	// ２番目のアルファ引数
 
-	// 各種初期化処理（ステージ）
+																			// 各種初期化処理（ステージ）
 	InitStage(hInstance, hWnd);
 
 	return S_OK;
@@ -310,13 +310,13 @@ HRESULT Init(HINSTANCE hInstance, HWND hWnd, BOOL bWindow)
 //=============================================================================
 void Uninit(void)
 {
-	if(g_pD3DDevice != NULL)
+	if (g_pD3DDevice != NULL)
 	{// デバイスオブジェクトの開放
 		g_pD3DDevice->Release();
 		g_pD3DDevice = NULL;
 	}
 
-	if(g_pD3D != NULL)
+	if (g_pD3D != NULL)
 	{// Direct3Dオブジェクトの開放
 		g_pD3D->Release();
 		g_pD3D = NULL;
@@ -344,7 +344,7 @@ void Draw(void)
 	g_pD3DDevice->Clear(0, NULL, (D3DCLEAR_TARGET | D3DCLEAR_ZBUFFER), D3DCOLOR_RGBA(0, 0, 0, 0), 1.0f, 0);
 
 	// 描画の開始
-	if(SUCCEEDED(g_pD3DDevice->BeginScene()))
+	if (SUCCEEDED(g_pD3DDevice->BeginScene()))
 	{
 		// ステージ描画処理
 		DrawStage();

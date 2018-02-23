@@ -129,6 +129,7 @@ void UpdateTitlelogo(void)
 #ifdef _DEBUG
 				PrintDebugProc("【 TITLELOGO 】\n");
 				PrintDebugProc("Alpha:%f\n", titlelogo->fAlpha);
+				PrintDebugProc("\n");
 #endif
 			}
 		}
@@ -177,21 +178,21 @@ HRESULT MakeVertexTitlelogo(int no)
 
 	// rhwの設定
 	titlelogo->vertexWk[0].rhw =
-	titlelogo->vertexWk[1].rhw =
-	titlelogo->vertexWk[2].rhw =
-	titlelogo->vertexWk[3].rhw = 1.0f;
+		titlelogo->vertexWk[1].rhw =
+		titlelogo->vertexWk[2].rhw =
+		titlelogo->vertexWk[3].rhw = 1.0f;
 
 	// 反射光の設定
 	titlelogo->vertexWk[0].diffuse =
-	titlelogo->vertexWk[1].diffuse =
-	titlelogo->vertexWk[2].diffuse =
-	titlelogo->vertexWk[3].diffuse = D3DXCOLOR(1.0f, 1.0f, 1.0f, 1.0f);
+		titlelogo->vertexWk[1].diffuse =
+		titlelogo->vertexWk[2].diffuse =
+		titlelogo->vertexWk[3].diffuse = D3DXCOLOR(1.0f, 1.0f, 1.0f, 1.0f);
 
 	// テクスチャ座標の設定
-	titlelogo->vertexWk[0].tex = D3DXVECTOR2( 0.0f, 0.0f );
-	titlelogo->vertexWk[1].tex = D3DXVECTOR2( 1.0f/TEXTURE_PATTERN_DIVIDE_X_TITLELOGO, 0.0f );
-	titlelogo->vertexWk[2].tex = D3DXVECTOR2( 0.0f, 1.0f/TEXTURE_PATTERN_DIVIDE_Y_TITLELOGO );
-	titlelogo->vertexWk[3].tex = D3DXVECTOR2( 1.0f/TEXTURE_PATTERN_DIVIDE_X_TITLELOGO, 1.0f/TEXTURE_PATTERN_DIVIDE_Y_TITLELOGO );
+	titlelogo->vertexWk[0].tex = D3DXVECTOR2(0.0f, 0.0f);
+	titlelogo->vertexWk[1].tex = D3DXVECTOR2(1.0f / TEXTURE_PATTERN_DIVIDE_X_TITLELOGO, 0.0f);
+	titlelogo->vertexWk[2].tex = D3DXVECTOR2(0.0f, 1.0f / TEXTURE_PATTERN_DIVIDE_Y_TITLELOGO);
+	titlelogo->vertexWk[3].tex = D3DXVECTOR2(1.0f / TEXTURE_PATTERN_DIVIDE_X_TITLELOGO, 1.0f / TEXTURE_PATTERN_DIVIDE_Y_TITLELOGO);
 
 	return S_OK;
 }
@@ -229,15 +230,15 @@ void SetDiffuseTitlelogo(int no, float fAlpha)
 
 	// 反射光の設定
 	titlelogo->vertexWk[0].diffuse =
-	titlelogo->vertexWk[1].diffuse =
-	titlelogo->vertexWk[2].diffuse =
-	titlelogo->vertexWk[3].diffuse = D3DXCOLOR(1.0f, 1.0f,1.0f, fAlpha);
+		titlelogo->vertexWk[1].diffuse =
+		titlelogo->vertexWk[2].diffuse =
+		titlelogo->vertexWk[3].diffuse = D3DXCOLOR(1.0f, 1.0f, 1.0f, fAlpha);
 }
 
 //=============================================================================
 // テクスチャ座標の設定
 //=============================================================================
-void SetTextureTitlelogo( int no, int cntPattern )
+void SetTextureTitlelogo(int no, int cntPattern)
 {
 	TITLELOGO *titlelogo = &titlelogoWk[no];
 
@@ -246,10 +247,10 @@ void SetTextureTitlelogo( int no, int cntPattern )
 	int y = cntPattern / TEXTURE_PATTERN_DIVIDE_X_TITLELOGO;
 	float sizeX = 1.0f / TEXTURE_PATTERN_DIVIDE_X_TITLELOGO;
 	float sizeY = 1.0f / TEXTURE_PATTERN_DIVIDE_Y_TITLELOGO;
-	titlelogo->vertexWk[0].tex = D3DXVECTOR2( (float)( x ) * sizeX, (float)( y ) * sizeY );
-	titlelogo->vertexWk[1].tex = D3DXVECTOR2( (float)( x ) * sizeX + sizeX, (float)( y ) * sizeY );
-	titlelogo->vertexWk[2].tex = D3DXVECTOR2( (float)( x ) * sizeX, (float)( y ) * sizeY + sizeY );
-	titlelogo->vertexWk[3].tex = D3DXVECTOR2( (float)( x ) * sizeX + sizeX, (float)( y ) * sizeY + sizeY );
+	titlelogo->vertexWk[0].tex = D3DXVECTOR2((float)(x)* sizeX, (float)(y)* sizeY);
+	titlelogo->vertexWk[1].tex = D3DXVECTOR2((float)(x)* sizeX + sizeX, (float)(y)* sizeY);
+	titlelogo->vertexWk[2].tex = D3DXVECTOR2((float)(x)* sizeX, (float)(y)* sizeY + sizeY);
+	titlelogo->vertexWk[3].tex = D3DXVECTOR2((float)(x)* sizeX + sizeX, (float)(y)* sizeY + sizeY);
 }
 
 //=============================================================================

@@ -43,9 +43,9 @@ int					g_nPlayerWin;			// 勝利プレイヤー
 bool				g_bDispDebug = true;	// デバッグ表示ON/OFF
 #endif
 
-//=============================================================================
-// 初期化処理
-//=============================================================================
+											//=============================================================================
+											// 初期化処理
+											//=============================================================================
 HRESULT InitStage(HINSTANCE hInstance, HWND hWnd)
 {
 	// グローバル変数の初期化
@@ -54,7 +54,7 @@ HRESULT InitStage(HINSTANCE hInstance, HWND hWnd)
 
 	InitInput(hInstance, hWnd);		// 入力
 	InitCamera();					// カメラ
-	InitSound(hWnd);				// サウンド
+									//InitSound(hWnd);				// サウンド
 	InitLight();					// ライト
 	InitFade();						// フェード
 	InitStageEach(STAGE_INIT_FAST);	// 各ステージの初期化
@@ -102,12 +102,26 @@ void UpdateStage(void)
 		g_bDispDebug = g_bDispDebug ? false : true;
 	}
 	UpdateDebugProc();				// デバッグ
-	PrintDebugProc("【 STAGE:%d 】\n", g_nStage);
+
+	PrintDebugProc("【 STAGE 】\n");
+	switch (g_nStage)
+	{
+	case STAGE_TITLE:
+		PrintDebugProc("%s (%d)\n", STR(STAGE_TITLE), g_nStage);
+		break;
+	case STAGE_GAME:
+		PrintDebugProc("%s (%d)\n", STR(STAGE_GAME), g_nStage);
+		break;
+	case STAGE_RESULT:
+		PrintDebugProc("%s (%d)\n", STR(STAGE_RESULT), g_nStage);
+		break;
+	}
+	PrintDebugProc("\n");
 #endif
 
 	UpdateInput();					// 入力
 
-	// ステージに応じた更新処理
+									// ステージに応じた更新処理
 	switch (g_nStage)
 	{
 	case STAGE_TITLE:
@@ -133,7 +147,7 @@ void DrawStage(void)
 {
 	SetCamera();					// カメラの設定処理
 
-	// ステージに応じた描画処理
+									// ステージに応じた描画処理
 	switch (g_nStage)
 	{
 	case STAGE_TITLE:

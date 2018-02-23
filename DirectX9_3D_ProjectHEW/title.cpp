@@ -6,6 +6,8 @@
 //=============================================================================
 #include "title.h"
 #include "stage.h"
+#include "input.h"
+#include "fade.h"
 
 // タイトルで必要なインクルード
 #include "titlelogo.h"
@@ -48,6 +50,12 @@ void UninitTitle(void)
 void UpdateTitle(void)
 {
 	UpdateTitlelogo();			// タイトルロゴ
+
+								// エンターキーでステージ遷移（テスト）
+	if (GetKeyboardPress(DIK_RETURN))
+	{
+		SetFade(FADE_OUT, STAGE_GAME);
+	}
 }
 
 //=============================================================================
