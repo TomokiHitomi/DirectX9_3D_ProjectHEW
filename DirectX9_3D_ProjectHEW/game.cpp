@@ -8,6 +8,7 @@
 #include "stage.h"
 
 // ゲームで必要なインクルード
+// nyaho
 
 // デバッグ用
 #ifdef _DEBUG
