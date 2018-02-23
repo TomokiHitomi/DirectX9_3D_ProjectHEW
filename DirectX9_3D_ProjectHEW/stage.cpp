@@ -43,9 +43,9 @@ int					g_nPlayerWin;			// 勝利プレイヤー
 bool				g_bDispDebug = true;	// デバッグ表示ON/OFF
 #endif
 
-											//=============================================================================
-											// 初期化処理
-											//=============================================================================
+//=============================================================================
+// 初期化処理
+//=============================================================================
 HRESULT InitStage(HINSTANCE hInstance, HWND hWnd)
 {
 	// グローバル変数の初期化
@@ -54,7 +54,7 @@ HRESULT InitStage(HINSTANCE hInstance, HWND hWnd)
 
 	InitInput(hInstance, hWnd);		// 入力
 	InitCamera();					// カメラ
-									//InitSound(hWnd);				// サウンド
+	//InitSound(hWnd);				// サウンド
 	InitLight();					// ライト
 	InitFade();						// フェード
 	InitStageEach(STAGE_INIT_FAST);	// 各ステージの初期化
@@ -121,7 +121,7 @@ void UpdateStage(void)
 
 	UpdateInput();					// 入力
 
-									// ステージに応じた更新処理
+	// ステージに応じた更新処理
 	switch (g_nStage)
 	{
 	case STAGE_TITLE:

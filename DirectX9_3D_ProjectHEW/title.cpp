@@ -51,7 +51,7 @@ void UpdateTitle(void)
 {
 	UpdateTitlelogo();			// タイトルロゴ
 
-								// エンターキーでステージ遷移（テスト）
+	// エンターキーでステージ遷移（テスト）
 	if (GetKeyboardPress(DIK_RETURN))
 	{
 		SetFade(FADE_OUT, STAGE_GAME);
