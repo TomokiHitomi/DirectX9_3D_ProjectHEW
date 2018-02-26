@@ -165,7 +165,6 @@
     <ClInclude Include="stage.h" />
     <ClInclude Include="title.h" />
     <ClInclude Include="titlelogo.h" />
-    <ClInclude Include="titlelogo2.h" />
     <ClInclude Include="workChisaka.h" />
     <ClInclude Include="workHitomi.h" />
     <ClInclude Include="workHoriguchi.h" />
@@ -186,7 +185,6 @@
     <ClCompile Include="stage.cpp" />
     <ClCompile Include="title.cpp" />
     <ClCompile Include="titlelogo.cpp" />
-    <ClCompile Include="titlelogo2.cpp" />
     <ClCompile Include="workChisaka.cpp" />
     <ClCompile Include="workHitomi.cpp" />
     <ClCompile Include="workHoriguchi.cpp" />
