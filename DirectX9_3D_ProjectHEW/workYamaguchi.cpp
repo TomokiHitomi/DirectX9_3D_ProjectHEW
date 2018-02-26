@@ -8,6 +8,7 @@
 #include "stage.h"
 #include "input.h"
 #include "fade.h"
+#include "field.h"
 
 // 山口担当分で必要なインクルード
 
@@ -30,6 +31,7 @@
 //=============================================================================
 HRESULT InitWorkYamaguchi(int nType)
 {
+	InitField();
 	return S_OK;
 }
 
@@ -38,6 +40,7 @@ HRESULT InitWorkYamaguchi(int nType)
 //=============================================================================
 void UninitWorkYamaguchi(void)
 {
+	UninitField();
 }
 
 //=============================================================================
@@ -50,6 +53,7 @@ void UpdateWorkYamaguchi(void)
 	case STAGE_TITLE:
 		break;
 	case STAGE_GAME:
+		UpdateField();
 		break;
 	case STAGE_RESULT:
 		break;
@@ -66,6 +70,7 @@ void DrawWorkYamaguchi(void)
 	case STAGE_TITLE:
 		break;
 	case STAGE_GAME:
+		DrawField();
 		break;
 	case STAGE_RESULT:
 		break;
