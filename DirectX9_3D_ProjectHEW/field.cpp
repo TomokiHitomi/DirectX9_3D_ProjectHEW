@@ -41,9 +41,9 @@ HRESULT InitField(void)
 
 	for (int i = 0; i < PANEL_MAX; i++, panel++)
 	{
-		panel->Pos.x = i % PANEL_NUM_X*PANEL_SIZE_X;	//X座標の設定
+		panel->Pos.x = i % PANEL_NUM_X * PANEL_SIZE_X;	//X座標の設定
 		panel->Pos.y = 0.0f;							//Y座標は0固定
-		panel->Pos.z = i / PANEL_NUM_X*PANEL_SIZE_Z;	//Z座標の設定
+		panel->Pos.z = i / PANEL_NUM_X * PANEL_SIZE_Z;	//Z座標の設定
 		panel->PanelNumber = PANEL_NORMAL;				//パネルナンバー　基本は0
 		panel->PanelCol = D3DXCOLOR(1.0f, 1.0f, 1.0f, 1.0f);//パネルカラー 基本は白
 	}
@@ -123,7 +123,7 @@ void DrawField(void)
 		pDevice->SetTexture(0, g_pD3DTextureField);
 
 		// ポリゴンの描画
-		pDevice->DrawPrimitive(D3DPT_TRIANGLESTRIP, i*4, NUM_POLYGON);
+		pDevice->DrawPrimitive(D3DPT_TRIANGLESTRIP, i * 4, NUM_POLYGON);
 	}
 }
 
@@ -143,15 +143,14 @@ HRESULT MakeVertexField(LPDIRECT3DDEVICE9 pDevice)
 		return E_FAIL;
 	}
 
-	PANEL *panel = GetPanel(0);
-	for (int i = 0; i < PANEL_MAX; i++, panel++)
-	{
-		{//頂点バッファの中身を埋める
-			VERTEX_3D *pVtx;
+	{//頂点バッファの中身を埋める
+		VERTEX_3D *pVtx;
 
-			// 頂点データの範囲をロックし、頂点バッファへのポインタを取得
-			g_pD3DVtxBuffField->Lock(0, 0, (void**)&pVtx, 0);
+		// 頂点データの範囲をロックし、頂点バッファへのポインタを取得
+		g_pD3DVtxBuffField->Lock(0, 0, (void**)&pVtx, 0);
 
+		for (int i = 0; i < PANEL_MAX; i++, pVtx += 4)
+		{
 			// 頂点座標の設定
 			pVtx[0].vtx = D3DXVECTOR3(-100.0f, 0.0f, 100.0f);
 			pVtx[1].vtx = D3DXVECTOR3(100.0f, 0.0f, 100.0f);
@@ -166,20 +165,20 @@ HRESULT MakeVertexField(LPDIRECT3DDEVICE9 pDevice)
 
 			// 反射光の設定
 			pVtx[0].diffuse =
-				pVtx[1].diffuse =
-				pVtx[2].diffuse =
-				pVtx[3].diffuse = panel->PanelCol;
+			pVtx[1].diffuse =
+			pVtx[2].diffuse =
+			pVtx[3].diffuse = D3DXCOLOR(1.0f, 1.0f, 1.0f, 1.0f);
 
 			// テクスチャ座標の設定
 			pVtx[0].tex = D3DXVECTOR2(0.0f, 0.0f);
 			pVtx[1].tex = D3DXVECTOR2(1.0f, 0.0f);
 			pVtx[2].tex = D3DXVECTOR2(0.0f, 1.0f);
 			pVtx[3].tex = D3DXVECTOR2(1.0f, 1.0f);
-
-			// 頂点データをアンロックする
-			g_pD3DVtxBuffField->Unlock();
 		}
+		// 頂点データをアンロックする
+		g_pD3DVtxBuffField->Unlock();
 	}
+	
 	return S_OK;
 }
 
