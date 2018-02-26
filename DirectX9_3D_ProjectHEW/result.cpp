@@ -10,6 +10,7 @@
 #include "fade.h"
 
 // リザルトで必要なインクルード
+// ほりぐち
 
 // デバッグ用
 #ifdef _DEBUG
