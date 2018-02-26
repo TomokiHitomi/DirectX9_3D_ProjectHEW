@@ -11,7 +11,6 @@
 
 // タイトルで必要なインクルード
 #include "titlelogo.h"
-// yosgida
 
 // デバッグ用
 #ifdef _DEBUG
