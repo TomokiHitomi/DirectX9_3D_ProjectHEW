@@ -180,6 +180,7 @@
     <ClInclude Include="uigage.h" />
     <ClInclude Include="wall.h" />
     <ClInclude Include="workChisaka.h" />
+    <ClInclude Include="workChisaka.h" />
     <ClInclude Include="workHitomi.h" />
     <ClInclude Include="workHoriguchi.h" />
     <ClInclude Include="workYamaguchi.h" />
@@ -213,6 +214,7 @@
     <ClCompile Include="uiframe.cpp" />
     <ClCompile Include="uigage.cpp" />
     <ClCompile Include="wall.cpp" />
+    <ClCompile Include="workChisaka.cpp" />
     <ClCompile Include="workChisaka.cpp" />
     <ClCompile Include="workHitomi.cpp" />
     <ClCompile Include="workHoriguchi.cpp" />
