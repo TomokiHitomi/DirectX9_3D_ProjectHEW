@@ -87,6 +87,12 @@
     <ClInclude Include="workChisaka.h">
       <Filter>ソース ファイル\Work</Filter>
     </ClInclude>
+    <ClInclude Include="titlelogo2.h">
+      <Filter>ソース ファイル\Stage\Title</Filter>
+    </ClInclude>
+    <ClCompile Include="titlelogo3.cpp">
+      <Filter>ソース ファイル\Stage\Title</Filter>
+    </ClCompile>
     <ClInclude Include="titlelogo3.h">
       <Filter>ソース ファイル\Stage\Title</Filter>
     </ClInclude>
@@ -145,6 +151,9 @@
     </ClCompile>
     <ClCompile Include="workChisaka.cpp">
       <Filter>ソース ファイル\Work</Filter>
+    </ClCompile>
+    <ClCompile Include="titlelogo2.cpp">
+      <Filter>ソース ファイル\Stage\Title</Filter>
     </ClCompile>
     <ClCompile Include="titlelogo3.cpp">
       <Filter>ソース ファイル\Stage\Title</Filter>
