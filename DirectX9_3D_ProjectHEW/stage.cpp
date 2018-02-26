@@ -86,6 +86,9 @@ void UninitStage(void)
 	UninitSound();					// サウンド
 	UninitFade();					// フェード
 	UninitTitle();					// タイトル
+	UninitGame();					// ゲーム
+	UninitResult();					// リザルト
+
 #ifdef _DEBUG
 	UninitDebugProc();				// デバッグ表示処理の終了処理
 #endif
