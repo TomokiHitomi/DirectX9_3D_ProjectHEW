@@ -72,9 +72,6 @@
     <ClInclude Include="calculate.h">
       <Filter>ソース ファイル\System</Filter>
     </ClInclude>
-    <ClInclude Include="titlelogo.h">
-      <Filter>ソース ファイル\Stage\Title</Filter>
-    </ClInclude>
     <ClInclude Include="fade.h">
       <Filter>ソース ファイル\System</Filter>
     </ClInclude>
@@ -129,12 +126,6 @@
     <ClInclude Include="effect.h">
       <Filter>ソース ファイル\Stage\Game\Effect</Filter>
     </ClInclude>
-    <ClInclude Include="resulelogo.h">
-      <Filter>ソース ファイル\Stage\Result</Filter>
-    </ClInclude>
-    <ClInclude Include="resulebg.h">
-      <Filter>ソース ファイル\Stage\Result</Filter>
-    </ClInclude>
     <ClInclude Include="titlebg.h">
       <Filter>ソース ファイル\Stage\Title</Filter>
     </ClInclude>
@@ -143,7 +134,17 @@
     </ClInclude>
     <ClInclude Include="collision.h">
       <Filter>ソース ファイル\System</Filter>
-    </ClInclude>  </ItemGroup>
+    </ClInclude>
+    <ClInclude Include="workChisaka.h">
+      <Filter>ヘッダー ファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="titlelogo.h">
+      <Filter>ソース ファイル\Stage\Title</Filter>
+    </ClInclude>
+    <ClInclude Include="resultlogo.h">
+      <Filter>ソース ファイル\Stage\Result</Filter>
+    </ClInclude>
+  </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
       <Filter>ソース ファイル</Filter>
@@ -168,9 +169,6 @@
     </ClCompile>
     <ClCompile Include="calculate.cpp">
       <Filter>ソース ファイル\System</Filter>
-    </ClCompile>
-    <ClCompile Include="titlelogo.cpp">
-      <Filter>ソース ファイル\Stage\Title</Filter>
     </ClCompile>
     <ClCompile Include="fade.cpp">
       <Filter>ソース ファイル\System</Filter>
@@ -226,12 +224,6 @@
     <ClCompile Include="effect.cpp">
       <Filter>ソース ファイル\Stage\Game\Effect</Filter>
     </ClCompile>
-    <ClCompile Include="resulelogo.cpp">
-      <Filter>ソース ファイル\Stage\Result</Filter>
-    </ClCompile>
-    <ClCompile Include="resulebg.cpp">
-      <Filter>ソース ファイル\Stage\Result</Filter>
-    </ClCompile>
     <ClCompile Include="titlebg.cpp">
       <Filter>ソース ファイル\Stage\Title</Filter>
     </ClCompile>
@@ -240,5 +232,15 @@
     </ClCompile>
     <ClCompile Include="collision.cpp">
       <Filter>ソース ファイル\System</Filter>
-    </ClCompile>  </ItemGroup>
+    </ClCompile>
+    <ClCompile Include="workChisaka.cpp">
+      <Filter>ソース ファイル</Filter>
+    </ClCompile>
+    <ClCompile Include="titlelogo.cpp">
+      <Filter>ソース ファイル\Stage\Title</Filter>
+    </ClCompile>
+    <ClCompile Include="resultlogo.cpp">
+      <Filter>ソース ファイル\Stage\Result</Filter>
+    </ClCompile>
+  </ItemGroup>
 </Project>

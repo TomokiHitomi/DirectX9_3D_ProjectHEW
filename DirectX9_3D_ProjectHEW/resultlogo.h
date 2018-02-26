@@ -1,20 +1,20 @@
 //=============================================================================
 //
-// タイトル画面処理 [titlelogo.h]
+// リザルト画面処理 [resultlogo.h]
 // Author : 
 //
 //=============================================================================
-#ifndef _TITLELOGO_H_
-#define _TITLELOGO_H_
+#ifndef _RESULTLOGO_H_
+#define _RESULTLOGO_H_
 
 #include "main.h"
 
 //*****************************************************************************
 // プロトタイプ宣言
 //*****************************************************************************
-HRESULT InitTitlelogo(int nType);
-void UninitTitlelogo(void);
-void UpdateTitlelogo(void);
-void DrawTitlelogo(void);
+HRESULT InitResultlogo(int nType);
+void UninitResultlogo(void);
+void UpdateResultlogo(void);
+void DrawResultlogo(void);
 
 #endif

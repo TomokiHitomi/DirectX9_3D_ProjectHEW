@@ -167,8 +167,7 @@
     <ClInclude Include="Light.h" />
     <ClInclude Include="main.h" />
     <ClInclude Include="player.h" />
-    <ClInclude Include="resulebg.h" />
-    <ClInclude Include="resulelogo.h" />
+    <ClInclude Include="resultlogo.h" />
     <ClInclude Include="result.h" />
     <ClInclude Include="resultwin.h" />
     <ClInclude Include="sound.h" />
@@ -202,8 +201,7 @@
     <ClCompile Include="Light.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="player.cpp" />
-    <ClCompile Include="resulebg.cpp" />
-    <ClCompile Include="resulelogo.cpp" />
+    <ClCompile Include="resultlogo.cpp" />
     <ClCompile Include="result.cpp" />
     <ClCompile Include="resultwin.cpp" />
     <ClCompile Include="sound.cpp" />

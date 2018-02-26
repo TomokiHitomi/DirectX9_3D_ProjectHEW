@@ -60,11 +60,6 @@ void UpdateTitle(void)
 	UpdateWorkYamaguchi();		// 山口担当分
 	UpdateWorkYoshida();		// 吉田担当分
 
-	// エンターキーでステージ遷移（テスト）
-	if (GetKeyboardPress(DIK_RETURN))
-	{
-		SetFade(FADE_OUT, STAGE_GAME);
-	}
 }
 
 //=============================================================================

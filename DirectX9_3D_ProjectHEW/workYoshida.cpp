@@ -11,6 +11,7 @@
 
 // 吉田担当分で必要なインクルード
 #include "titlelogo.h"
+#include "resultlogo.h"
 
 // デバッグ用
 #ifdef _DEBUG
@@ -32,6 +33,7 @@
 HRESULT InitWorkYoshida(int nType)
 {
 	InitTitlelogo(nType);		// タイトルロゴ
+	InitResultlogo(nType);		// リザルトロゴ
 	return S_OK;
 }
 
@@ -41,6 +43,8 @@ HRESULT InitWorkYoshida(int nType)
 void UninitWorkYoshida(void)
 {
 	UninitTitlelogo();			// タイトルロゴ
+	UninitResultlogo();			// リザルトロゴ
+
 }
 
 //=============================================================================
@@ -53,9 +57,8 @@ void UpdateWorkYoshida(void)
 	case STAGE_TITLE:
 		UpdateTitlelogo();		// タイトルロゴ
 		break;
-	case STAGE_GAME:
-		break;
 	case STAGE_RESULT:
+		UpdateResultlogo();		// リザルトロゴ
 		break;
 	}
 }
@@ -70,9 +73,8 @@ void DrawWorkYoshida(void)
 	case STAGE_TITLE:
 		DrawTitlelogo();		// タイトルロゴ
 		break;
-	case STAGE_GAME:
-		break;
 	case STAGE_RESULT:
+		DrawResultlogo();		// リザルトロゴ
 		break;
 	}
 
