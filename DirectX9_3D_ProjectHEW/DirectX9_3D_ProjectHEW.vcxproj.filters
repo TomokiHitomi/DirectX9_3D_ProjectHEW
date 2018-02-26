@@ -31,6 +31,21 @@
     <Filter Include="ソース ファイル\Work">
       <UniqueIdentifier>{736af8f5-3550-439f-acc1-3af0fcd974c8}</UniqueIdentifier>
     </Filter>
+    <Filter Include="ソース ファイル\Stage\Game\Ui">
+      <UniqueIdentifier>{01d95694-0730-486c-b4d1-df68c4b9c09e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ソース ファイル\Stage\Game\Field">
+      <UniqueIdentifier>{1e6d0aaf-ca96-4cc0-9f94-eb7c12b6bba4}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ソース ファイル\Stage\Game\Model">
+      <UniqueIdentifier>{48d1bbf6-34f0-4ff1-92b8-3b64c38c7255}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ソース ファイル\Stage\Game\Bullet">
+      <UniqueIdentifier>{781db939-b4c5-4541-ac3a-5e6bf39fc4b3}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ソース ファイル\Stage\Game\Effect">
+      <UniqueIdentifier>{982b7955-cda3-43b4-a983-ed29c000a64d}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="main.h">
@@ -87,6 +102,48 @@
     <ClInclude Include="workChisaka.h">
       <Filter>ソース ファイル\Work</Filter>
     </ClInclude>
+    <ClInclude Include="uiframe.h">
+      <Filter>ソース ファイル\Stage\Game\Ui</Filter>
+    </ClInclude>
+    <ClInclude Include="uigage.h">
+      <Filter>ソース ファイル\Stage\Game\Ui</Filter>
+    </ClInclude>
+    <ClInclude Include="enemy.h">
+      <Filter>ソース ファイル\Stage\Game\Model</Filter>
+    </ClInclude>
+    <ClInclude Include="item.h">
+      <Filter>ソース ファイル\Stage\Game\Model</Filter>
+    </ClInclude>
+    <ClInclude Include="player.h">
+      <Filter>ソース ファイル\Stage\Game\Model</Filter>
+    </ClInclude>
+    <ClInclude Include="wall.h">
+      <Filter>ソース ファイル\Stage\Game\Field</Filter>
+    </ClInclude>
+    <ClInclude Include="field.h">
+      <Filter>ソース ファイル\Stage\Game\Field</Filter>
+    </ClInclude>
+    <ClInclude Include="bullet.h">
+      <Filter>ソース ファイル\Stage\Game\Bullet</Filter>
+    </ClInclude>
+    <ClInclude Include="effect.h">
+      <Filter>ソース ファイル\Stage\Game\Effect</Filter>
+    </ClInclude>
+    <ClInclude Include="resulelogo.h">
+      <Filter>ソース ファイル\Stage\Result</Filter>
+    </ClInclude>
+    <ClInclude Include="resulebg.h">
+      <Filter>ソース ファイル\Stage\Result</Filter>
+    </ClInclude>
+    <ClInclude Include="titlebg.h">
+      <Filter>ソース ファイル\Stage\Title</Filter>
+    </ClInclude>
+    <ClInclude Include="resultwin.h">
+      <Filter>ソース ファイル\Stage\Result</Filter>
+    </ClInclude>
+    <ClInclude Include="collision.h">
+      <Filter>ソース ファイル\System</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -142,6 +199,48 @@
     </ClCompile>
     <ClCompile Include="workChisaka.cpp">
       <Filter>ソース ファイル\Work</Filter>
+    </ClCompile>
+    <ClCompile Include="uiframe.cpp">
+      <Filter>ソース ファイル\Stage\Game\Ui</Filter>
+    </ClCompile>
+    <ClCompile Include="uigage.cpp">
+      <Filter>ソース ファイル\Stage\Game\Ui</Filter>
+    </ClCompile>
+    <ClCompile Include="enemy.cpp">
+      <Filter>ソース ファイル\Stage\Game\Model</Filter>
+    </ClCompile>
+    <ClCompile Include="item.cpp">
+      <Filter>ソース ファイル\Stage\Game\Model</Filter>
+    </ClCompile>
+    <ClCompile Include="player.cpp">
+      <Filter>ソース ファイル\Stage\Game\Model</Filter>
+    </ClCompile>
+    <ClCompile Include="wall.cpp">
+      <Filter>ソース ファイル\Stage\Game\Field</Filter>
+    </ClCompile>
+    <ClCompile Include="field.cpp">
+      <Filter>ソース ファイル\Stage\Game\Field</Filter>
+    </ClCompile>
+    <ClCompile Include="bullet.cpp">
+      <Filter>ソース ファイル\Stage\Game\Bullet</Filter>
+    </ClCompile>
+    <ClCompile Include="effect.cpp">
+      <Filter>ソース ファイル\Stage\Game\Effect</Filter>
+    </ClCompile>
+    <ClCompile Include="resulelogo.cpp">
+      <Filter>ソース ファイル\Stage\Result</Filter>
+    </ClCompile>
+    <ClCompile Include="resulebg.cpp">
+      <Filter>ソース ファイル\Stage\Result</Filter>
+    </ClCompile>
+    <ClCompile Include="titlebg.cpp">
+      <Filter>ソース ファイル\Stage\Title</Filter>
+    </ClCompile>
+    <ClCompile Include="resultwin.cpp">
+      <Filter>ソース ファイル\Stage\Result</Filter>
+    </ClCompile>
+    <ClCompile Include="collision.cpp">
+      <Filter>ソース ファイル\System</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>
