@@ -88,7 +88,6 @@ void UninitStage(void)
 	UninitTitle();					// タイトル
 	UninitGame();					// ゲーム
 	UninitResult();					// リザルト
-	//test
 
 #ifdef _DEBUG
 	UninitDebugProc();				// デバッグ表示処理の終了処理
