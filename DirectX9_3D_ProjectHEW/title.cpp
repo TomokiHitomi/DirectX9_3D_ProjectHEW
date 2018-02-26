@@ -10,7 +10,13 @@
 #include "fade.h"
 
 // タイトルで必要なインクルード
-#include "titlelogo.h"
+
+// 担当ワーク
+#include "workChisaka.h"
+#include "workHitomi.h"
+#include "workHoriguchi.h"
+#include "workYamaguchi.h"
+#include "workYoshida.h"
 
 // デバッグ用
 #ifdef _DEBUG
@@ -31,7 +37,7 @@
 //=============================================================================
 HRESULT InitTitle(int nType)
 {
-	InitTitlelogo(nType);		// タイトルロゴ
+
 	return S_OK;
 }
 
@@ -40,7 +46,7 @@ HRESULT InitTitle(int nType)
 //=============================================================================
 void UninitTitle(void)
 {
-	UninitTitlelogo();			// タイトルロゴ
+
 }
 
 //=============================================================================
@@ -48,7 +54,11 @@ void UninitTitle(void)
 //=============================================================================
 void UpdateTitle(void)
 {
-	UpdateTitlelogo();			// タイトルロゴ
+	UpdateWorkChisaka();		// 千坂担当分
+	UpdateWorkHitomi();			// 人見担当分
+	UpdateWorkHoriguchi();		// 堀口担当分
+	UpdateWorkYamaguchi();		// 山口担当分
+	UpdateWorkYoshida();		// 吉田担当分
 
 	// エンターキーでステージ遷移（テスト）
 	if (GetKeyboardPress(DIK_RETURN))
@@ -62,6 +72,10 @@ void UpdateTitle(void)
 //=============================================================================
 void DrawTitle(void)
 {
-	DrawTitlelogo();			// タイトルロゴ
+	DrawWorkChisaka();			// 千坂担当分
+	DrawWorkHitomi();			// 人見担当分
+	DrawWorkHoriguchi();		// 堀口担当分
+	DrawWorkYamaguchi();		// 山口担当分
+	DrawWorkYoshida();			// 吉田担当分
 }
 

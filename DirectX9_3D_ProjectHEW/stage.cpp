@@ -23,6 +23,13 @@
 #include "light.h"
 #include "fade.h"
 
+/* Work */
+#include "workChisaka.h"
+#include "workHitomi.h"
+#include "workHoriguchi.h"
+#include "workYamaguchi.h"
+#include "workYoshida.h"
+
 /* Debug */
 #ifdef _DEBUG
 #include "debugproc.h"
@@ -73,6 +80,12 @@ HRESULT InitStageEach(int nType)
 	InitTitle(nType);		// タイトル
 	InitGame(nType);		// ゲーム
 	InitResult(nType);		// リザルト
+
+	InitWorkChisaka(nType);		// 千坂担当分
+	InitWorkHitomi(nType);		// 人見担当分
+	InitWorkHoriguchi(nType);	// 堀口担当分
+	InitWorkYamaguchi(nType);	// 山口担当分
+	InitWorkYoshida(nType);		// 吉田担当分
 	return S_OK;
 }
 
@@ -88,6 +101,12 @@ void UninitStage(void)
 	UninitTitle();					// タイトル
 	UninitGame();					// ゲーム
 	UninitResult();					// リザルト
+
+	UninitWorkChisaka();		// 千坂担当分
+	UninitWorkHitomi();			// 人見担当分
+	UninitWorkHoriguchi();		// 堀口担当分
+	UninitWorkYamaguchi();		// 山口担当分
+	UninitWorkYoshida();		// 吉田担当分
 
 #ifdef _DEBUG
 	UninitDebugProc();				// デバッグ表示処理の終了処理

@@ -11,6 +11,13 @@
 
 // リザルトで必要なインクルード
 
+// 担当ワーク
+#include "workChisaka.h"
+#include "workHitomi.h"
+#include "workHoriguchi.h"
+#include "workYamaguchi.h"
+#include "workYoshida.h"
+
 // デバッグ用
 #ifdef _DEBUG
 #include "debugproc.h"
@@ -30,6 +37,7 @@
 //=============================================================================
 HRESULT InitResult(int nType)
 {
+
 	return S_OK;
 }
 
@@ -46,6 +54,12 @@ void UninitResult(void)
 //=============================================================================
 void UpdateResult(void)
 {
+	UpdateWorkChisaka();		// 千坂担当分
+	UpdateWorkHitomi();			// 人見担当分
+	UpdateWorkHoriguchi();		// 堀口担当分
+	UpdateWorkYamaguchi();		// 山口担当分
+	UpdateWorkYoshida();		// 吉田担当分
+
 	// エンターキーでステージ遷移（テスト）
 	if (GetKeyboardPress(DIK_RETURN))
 	{
@@ -58,6 +72,10 @@ void UpdateResult(void)
 //=============================================================================
 void DrawResult(void)
 {
-
+	DrawWorkChisaka();			// 千坂担当分
+	DrawWorkHitomi();			// 人見担当分
+	DrawWorkHoriguchi();		// 堀口担当分
+	DrawWorkYamaguchi();		// 山口担当分
+	DrawWorkYoshida();			// 吉田担当分
 }
 

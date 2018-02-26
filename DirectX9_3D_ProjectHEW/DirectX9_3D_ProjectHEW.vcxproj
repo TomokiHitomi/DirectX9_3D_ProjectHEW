@@ -165,6 +165,11 @@
     <ClInclude Include="stage.h" />
     <ClInclude Include="title.h" />
     <ClInclude Include="titlelogo.h" />
+    <ClInclude Include="workChisaka.h" />
+    <ClInclude Include="workHitomi.h" />
+    <ClInclude Include="workHoriguchi.h" />
+    <ClInclude Include="workYamaguchi.h" />
+    <ClInclude Include="workYoshida.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="calculate.cpp" />
@@ -180,6 +185,11 @@
     <ClCompile Include="stage.cpp" />
     <ClCompile Include="title.cpp" />
     <ClCompile Include="titlelogo.cpp" />
+    <ClCompile Include="workChisaka.cpp" />
+    <ClCompile Include="workHitomi.cpp" />
+    <ClCompile Include="workHoriguchi.cpp" />
+    <ClCompile Include="workYamaguchi.cpp" />
+    <ClCompile Include="workYoshida.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
