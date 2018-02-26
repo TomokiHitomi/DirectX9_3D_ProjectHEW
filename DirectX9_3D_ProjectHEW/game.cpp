@@ -10,6 +10,7 @@
 #include "fade.h"
 
 // ゲームで必要なインクルード
+// あばば
 
 // デバッグ用
 #ifdef _DEBUG
