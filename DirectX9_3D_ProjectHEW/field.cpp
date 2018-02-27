@@ -44,7 +44,7 @@ HRESULT InitField(void)
 		panel->Pos.x = i % PANEL_NUM_X * PANEL_SIZE_X;	//X座標の設定
 		panel->Pos.y = 0.0f;							//Y座標は0固定
 		panel->Pos.z = i / PANEL_NUM_X * PANEL_SIZE_Z;	//Z座標の設定
-		panel->PanelNumber = PANEL_NORMAL;				//パネルナンバー　基本は0
+		panel->PanelNumber = i%3;				//パネルナンバー　基本は0
 		panel->PanelCol = D3DXCOLOR(1.0f, 1.0f, 1.0f, 1.0f);//パネルカラー 基本は白
 	}
 
@@ -80,14 +80,14 @@ void UpdateField(void)
 
 	for (int i = 0; i < PANEL_MAX; i++, panel++)
 	{
-		//if (panel->PanelNumber == PANEL_1P)	//パネルナンバーが1Pに変わったら
-		//{
-		//	panel->PanelCol = PANEL_COL_1P;	//パネルカラーを1Pに
-		//}
-		//else if (panel->PanelNumber == PANEL_2P)	//パネルナンバーが2Pになったら
-		//{
-		//	panel->PanelCol = PANEL_COL_2P;			//パネルカラーを2Pに
-		//}
+		if (panel->PanelNumber == PANEL_1P)	//パネルナンバーが1Pに変わったら
+		{
+			panel->PanelCol = PANEL_COL_1P;	//パネルカラーを1Pに
+		}
+		else if (panel->PanelNumber == PANEL_2P)	//パネルナンバーが2Pになったら
+		{
+			panel->PanelCol = PANEL_COL_2P;			//パネルカラーを2Pに
+		}
 		SetDiffuseField(i, panel->PanelCol);
 	}
 }
@@ -132,6 +132,7 @@ void DrawField(void)
 //=============================================================================
 HRESULT MakeVertexField(LPDIRECT3DDEVICE9 pDevice)
 {
+
 	// オブジェクトの頂点バッファを生成
 	if (FAILED(pDevice->CreateVertexBuffer(sizeof(VERTEX_3D) * NUM_VERTEX* PANEL_MAX,	// 頂点データ用に確保するバッファサイズ(バイト単位)
 		D3DUSAGE_WRITEONLY,			// 頂点バッファの使用法　
@@ -142,20 +143,22 @@ HRESULT MakeVertexField(LPDIRECT3DDEVICE9 pDevice)
 	{
 		return E_FAIL;
 	}
-
+	//for (int i = 0; i < PANEL_MAX; i++)
 	{//頂点バッファの中身を埋める
 		VERTEX_3D *pVtx;
 
 		// 頂点データの範囲をロックし、頂点バッファへのポインタを取得
 		g_pD3DVtxBuffField->Lock(0, 0, (void**)&pVtx, 0);
-
+		
 		for (int i = 0; i < PANEL_MAX; i++, pVtx += 4)
+
 		{
+
 			// 頂点座標の設定
-			pVtx[0].vtx = D3DXVECTOR3(-100.0f, 0.0f, 100.0f);
-			pVtx[1].vtx = D3DXVECTOR3(100.0f, 0.0f, 100.0f);
-			pVtx[2].vtx = D3DXVECTOR3(-100.0f, 0.0f, -100.0f);
-			pVtx[3].vtx = D3DXVECTOR3(100.0f, 0.0f, -100.0f);
+			pVtx[0].vtx = D3DXVECTOR3(-PANEL_SIZE_X/2, 0, PANEL_SIZE_Z / 2);
+			pVtx[1].vtx = D3DXVECTOR3(PANEL_SIZE_X / 2, 0, PANEL_SIZE_Z / 2);
+			pVtx[2].vtx = D3DXVECTOR3(-PANEL_SIZE_X / 2, 0, -PANEL_SIZE_Z / 2);
+			pVtx[3].vtx = D3DXVECTOR3(PANEL_SIZE_X / 2, 0, -PANEL_SIZE_Z / 2);
 
 			// 法線ベクトルの設定
 			pVtx[0].nor = D3DXVECTOR3(0.0f, 1.0f, 0.0f);

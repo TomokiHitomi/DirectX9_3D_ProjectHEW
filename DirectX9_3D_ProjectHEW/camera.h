@@ -8,7 +8,7 @@
 #define _CAMERA_H_
 
 #include "main.h"
-
+#include "field.h"
 //*****************************************************************************
 // マクロ定義
 //*****************************************************************************
@@ -36,9 +36,9 @@
 
 #define ROOT_2					(1.414213f)
 
-#define	POS_X_CAM				(-1000.0f)										// カメラの初期位置(X座標)
+#define	POS_X_CAM				(PANEL_SIZE_X*PANEL_NUM_X/2)										// カメラの初期位置(X座標)
 #define	POS_Y_CAM				(500.0f)										// カメラの初期位置(Y座標)
-#define	POS_Z_CAM				(0.0f)										// カメラの初期位置(Z座標)
+#define	POS_Z_CAM				(-1000.0f)										// カメラの初期位置(Z座標)
 
 #define	VIEW_ANGLE				(D3DXToRadian(35.0f))							// ビュー平面の視野角
 #define	VIEW_ASPECT				((float)SCREEN_WIDTH / (float)SCREEN_HEIGHT)	// ビュー平面のアスペクト比	
