@@ -8,9 +8,9 @@
 #include "stage.h"
 #include "input.h"
 #include "fade.h"
-#include "field.h"
 
 // 山口担当分で必要なインクルード
+#include "field.h"
 
 // デバッグ用
 #ifdef _DEBUG

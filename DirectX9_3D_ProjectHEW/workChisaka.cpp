@@ -10,6 +10,7 @@
 #include "fade.h"
 
 // 千坂担当分で必要なインクルード
+#include "enemy.h"
 
 // デバッグ用
 #ifdef _DEBUG
@@ -30,6 +31,7 @@
 //=============================================================================
 HRESULT InitWorkChisaka(int nType)
 {
+	InitEnemy();
 	return S_OK;
 }
 
@@ -38,6 +40,7 @@ HRESULT InitWorkChisaka(int nType)
 //=============================================================================
 void UninitWorkChisaka(void)
 {
+	UninitEnemy();
 }
 
 //=============================================================================
@@ -50,6 +53,7 @@ void UpdateWorkChisaka(void)
 	case STAGE_TITLE:
 		break;
 	case STAGE_GAME:
+		UpdateEnemy();
 		break;
 	case STAGE_RESULT:
 		break;
@@ -66,6 +70,7 @@ void DrawWorkChisaka(void)
 	case STAGE_TITLE:
 		break;
 	case STAGE_GAME:
+		DrawEnemy();
 		break;
 	case STAGE_RESULT:
 		break;

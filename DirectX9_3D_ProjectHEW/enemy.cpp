@@ -1,0 +1,291 @@
+//=============================================================================
+//
+// エネミー処理 [enemy.cpp]
+// Author : GP11B243-18-千坂浩太
+//
+//=============================================================================
+#include "camera.h"
+#include "debugproc.h"
+#include "enemy.h"
+
+
+//*****************************************************************************
+// マクロ定義
+//*****************************************************************************
+
+//*****************************************************************************
+// プロトタイプ宣言
+//*****************************************************************************
+
+
+//*****************************************************************************
+// グローバル変数
+//*****************************************************************************
+LPDIRECT3DTEXTURE9	g_pD3DTextureEnemy[ENEMY_ANIM_MAX];			// テクスチャ読み込み場所
+LPD3DXMESH			g_pD3DXMeshEnemy[ENEMY_ANIM_MAX];			// ID3DXMeshインターフェイスへのポインタ
+LPD3DXBUFFER		g_pD3DXBuffMatEnemy[ENEMY_ANIM_MAX];		// メッシュのマテリアル情報を格納
+DWORD				g_nNumMatEnemy[ENEMY_ANIM_MAX];				// 属性情報の総数
+
+D3DXMATRIX			g_mtxWorldEnemy;			// ワールドマトリックス
+
+float				g_fSizeShadowE;				// 影のサイズ
+D3DXCOLOR			g_colShadowE;				// 影の色
+
+ENEMY				enemyWk[ENEMY_MAX];		// エネミー格納ワーク
+
+int					animCnt;		// アニメカウント
+
+const char *FileNameEnemy[ENEMY_ANIM_MAX] =
+{
+	"data/MODEL/enemy_a00.x",		// 直立
+	"data/MODEL/enemy_a01.x",		// 左足前１
+	"data/MODEL/enemy_a02.x",		// 左足前２
+	"data/MODEL/enemy_a03.x",		// 左足前３
+	"data/MODEL/enemy_a02.x",		// 左足前２
+	"data/MODEL/enemy_a01.x",		// 左足前１
+	"data/MODEL/enemy_a00.x",		// 直立
+	"data/MODEL/enemy_a11.x",		// 右足前１
+	"data/MODEL/enemy_a12.x",		// 右足前２
+	"data/MODEL/enemy_a13.x",		// 右足前３
+	"data/MODEL/enemy_a12.x",		// 右足前２
+	"data/MODEL/enemy_a11.x"		// 右足前１
+
+};
+
+//=============================================================================
+// 初期化処理
+//=============================================================================
+HRESULT InitEnemy(void)
+{
+	LPDIRECT3DDEVICE9 pDevice = GetDevice();
+	ENEMY *enemy = &enemyWk[0];
+
+
+	for (int nCntEnemyType = 0; nCntEnemyType < ENEMY_ANIM_MAX; nCntEnemyType++)
+	{
+		g_pD3DTextureEnemy[nCntEnemyType] = NULL;
+		g_pD3DXMeshEnemy[nCntEnemyType] = NULL;
+		g_pD3DXBuffMatEnemy[nCntEnemyType] = NULL;
+
+
+		// Xファイルの読み込み
+		if (FAILED(D3DXLoadMeshFromX(FileNameEnemy[nCntEnemyType],
+			D3DXMESH_SYSTEMMEM,
+			pDevice,
+			NULL,
+			&g_pD3DXBuffMatEnemy[nCntEnemyType],
+			NULL,
+			&g_nNumMatEnemy[nCntEnemyType],
+			&g_pD3DXMeshEnemy[nCntEnemyType])))
+		{
+			return E_FAIL;
+		}
+
+		// テクスチャの読み込み
+		//D3DXCreateTextureFromFile(pDevice,						// デバイスへのポインタ
+		//	TEXTURE_ENEMY,			// ファイルの名前
+		//	&g_pD3DTextureEnemy);	// 読み込むメモリー
+
+#if 0
+		// テクスチャの読み込み
+		D3DXCreateTextureFromFile(pDevice,					// デバイスへのポインタ
+			TEXTURE_FILENAME,		// ファイルの名前
+			&g_pD3DTextureModel);	// 読み込むメモリー
+#endif
+
+	}
+
+	// エネミーの初期化処理
+	for (int i = 0; i < ENEMY_MAX; i++, enemy++)
+	{
+		// エネミーの視点の初期化
+		enemy->EnemyEye = D3DXVECTOR3(290.0f, 0.0f, 290.0f);
+		// エネミーの注視点の初期化
+		enemy->EnemyAt = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
+		// エネミーの上方向の初期化
+		enemy->EnemyUp = D3DXVECTOR3(0.0f, 1.0f, 0.0f);
+
+		// エネミーのスケールの初期化
+		enemy->scl = D3DXVECTOR3(1.0f, 1.0f, 1.0f);
+
+		// useフラグをtrueに設定
+		enemy->use = true;
+
+		// アニメーション番号初期化
+		// 最初は直立状態に設定
+		enemy->anim = 0;
+
+		// アニメーションカウント初期化
+		animCnt = 0;
+	}
+
+
+
+	return S_OK;
+}
+
+//=============================================================================
+// 終了処理
+//=============================================================================
+void UninitEnemy(void)
+{
+	for (int nCntEnemyType = 0; nCntEnemyType < ENEMY_ANIM_MAX; nCntEnemyType++)
+	{
+		if (g_pD3DTextureEnemy[nCntEnemyType] != NULL)
+		{// テクスチャの開放
+			g_pD3DTextureEnemy[nCntEnemyType]->Release();
+			g_pD3DTextureEnemy[nCntEnemyType] = NULL;
+		}
+
+		if (g_pD3DXMeshEnemy[nCntEnemyType] != NULL)
+		{// メッシュの開放
+			g_pD3DXMeshEnemy[nCntEnemyType]->Release();
+			g_pD3DXMeshEnemy[nCntEnemyType] = NULL;
+		}
+
+		if (g_pD3DXBuffMatEnemy[nCntEnemyType] != NULL)
+		{// マテリアルの開放
+			g_pD3DXBuffMatEnemy[nCntEnemyType]->Release();
+			g_pD3DXBuffMatEnemy[nCntEnemyType] = NULL;
+		}
+	}
+}
+
+//=============================================================================
+// 更新処理
+//=============================================================================
+void UpdateEnemy(void)
+{
+	ENEMY *enemy = &enemyWk[0];
+
+
+	// アニメーション
+	animCnt++;
+
+	if (animCnt % 5 == 0)
+	{	// カウントを進める
+		enemy->anim++;
+		if (enemy->anim > 11)
+		{
+			enemy->anim = 0;
+		}
+	}
+
+	enemy = &enemyWk[0];
+
+#ifdef _DEBUG
+	PrintDebugProc("[エネミーの位置  ：(%f : %f : %f)]\n", enemy->EnemyEye.x, enemy->EnemyEye.y, enemy->EnemyEye.z);
+	PrintDebugProc("\n");
+#endif
+
+
+}
+//=============================================================================
+// 描画処理
+//=============================================================================
+void DrawEnemy(void)
+{
+	LPDIRECT3DDEVICE9 pDevice = GetDevice();
+	D3DXMATRIX mtxRot, mtxTranslate, mtxScale;
+	D3DXMATERIAL *pD3DXMat;
+	D3DMATERIAL9 matDef;
+
+	ENEMY *enemy = &enemyWk[0];
+
+	for (int i = 0; i < ENEMY_MAX; i++, enemy++)
+	{
+		if (enemy->use == true)	// 使用状態なら描画する
+		{
+			// ライトをon
+			pDevice->SetRenderState(D3DRS_LIGHTING, TRUE);
+
+
+			// ワールドマトリックスの初期化
+			D3DXMatrixIdentity(&g_mtxWorldEnemy);
+
+			// スケールを反映
+			D3DXMatrixScaling(&mtxScale, enemy->scl.x,
+				enemy->scl.y,
+				enemy->scl.z);
+			D3DXMatrixMultiply(&g_mtxWorldEnemy,
+				&g_mtxWorldEnemy, &mtxScale);
+
+
+			// 回転を反映
+			//D3DXMatrixRotationYawPitchRoll(&mtxRot, enemy->rot.y, enemy->rot.x, enemy->rot.z);
+			//D3DXMatrixMultiply(&g_mtxWorldEnemy, &g_mtxWorldEnemy, &mtxRot);
+			EnemyLookAtMatrix(&mtxRot, &enemy->EnemyEye, &enemy->EnemyAt, &enemy->EnemyUp);
+			D3DXMatrixMultiply(&g_mtxWorldEnemy, &g_mtxWorldEnemy, &mtxRot);
+			
+			//// 移動を反映
+			D3DXMatrixTranslation(&mtxTranslate, enemy->EnemyEye.x, enemy->EnemyEye.y, enemy->EnemyEye.z);
+			D3DXMatrixMultiply(&g_mtxWorldEnemy, &g_mtxWorldEnemy, &mtxTranslate);
+
+			// ワールドマトリックスの設定
+			pDevice->SetTransform(D3DTS_WORLD, &g_mtxWorldEnemy);
+
+			// 現在のマテリアルを取得
+			pDevice->GetMaterial(&matDef);
+
+			// マテリアル情報に対するポインタを取得
+			// 今は直立を設定してる０
+			pD3DXMat = (D3DXMATERIAL*)g_pD3DXBuffMatEnemy[enemy->anim]->GetBufferPointer();
+
+			for (int nCntMat = 0; nCntMat < (int)g_nNumMatEnemy[enemy->anim]; nCntMat++)
+			{
+				// マテリアルの設定
+				pDevice->SetMaterial(&pD3DXMat[nCntMat].MatD3D);
+
+				// テクスチャの設定
+				pDevice->SetTexture(0, g_pD3DTextureEnemy[enemy->anim]);
+
+				// 描画
+				g_pD3DXMeshEnemy[enemy->anim]->DrawSubset(nCntMat);
+
+			}
+
+			// ライトをoff
+			pDevice->SetRenderState(D3DRS_LIGHTING, FALSE);
+
+		}
+
+	}
+
+	{// マテリアルをデフォルトに戻す
+		D3DXMATERIAL mat;
+
+		mat.MatD3D.Diffuse = D3DXCOLOR(1.0f, 1.0f, 1.0f, 0.0f);
+		mat.MatD3D.Ambient = D3DXCOLOR(0.0f, 0.0f, 0.0f, 0.0f);
+		mat.MatD3D.Emissive = D3DXCOLOR(0.0f, 0.0f, 0.0f, 0.0f);
+
+		pDevice->SetMaterial(&mat.MatD3D);
+	}
+
+}
+//=============================================================================
+// エネミー取得関数
+//=============================================================================
+ENEMY *GetEnemy(int no)
+{
+	return(&enemyWk[no]);
+}
+//=============================================================================
+// エネミーの回転行列算出関数
+//=============================================================================
+D3DXMATRIX* EnemyLookAtMatrix(D3DXMATRIX *pout, D3DXVECTOR3 *pEye, D3DXVECTOR3 *pAt, D3DXVECTOR3 *pUp)
+{
+	D3DXVECTOR3 X, Y, Z, D;
+	D = *pAt - *pEye;
+	D3DXVec3Normalize(&D, &D);
+	D3DXVec3Cross(&X, D3DXVec3Normalize(&Y, pUp), &D);
+	D3DXVec3Normalize(&X, &X);
+	D3DXVec3Normalize(&Z, D3DXVec3Cross(&Z, &X, &Y));
+
+
+	pout->_11 = X.x; pout->_12 = X.y; pout->_13 = X.z; pout->_14 = 0;
+	pout->_21 = Y.x; pout->_22 = Y.y; pout->_23 = Y.z; pout->_24 = 0;
+	pout->_31 = Z.x; pout->_32 = Z.y; pout->_33 = Z.z; pout->_34 = 0;
+	pout->_41 = 0.0f; pout->_42 = 0.0f; pout->_43 = 0.0f; pout->_44 = 1.0f;
+
+	return pout;
+}
