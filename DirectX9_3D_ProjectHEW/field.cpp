@@ -14,6 +14,7 @@
 //*****************************************************************************
 // プロトタイプ宣言
 //*****************************************************************************
+
 HRESULT MakeVertexField(LPDIRECT3DDEVICE9 pDevice);
 void SetDiffuseField(int nField, D3DXCOLOR col);
 
@@ -44,7 +45,7 @@ HRESULT InitField(void)
 		panel->Pos.x = i % PANEL_NUM_X * PANEL_SIZE_X;	//X座標の設定
 		panel->Pos.y = 0.0f;							//Y座標は0固定
 		panel->Pos.z = i / PANEL_NUM_X * PANEL_SIZE_Z;	//Z座標の設定
-		panel->PanelNumber = i%3;				//パネルナンバー　基本は0
+		panel->PanelType = PANEL_NORMAL;				//パネルタイプ　基本はノーマル
 		panel->PanelCol = D3DXCOLOR(1.0f, 1.0f, 1.0f, 1.0f);//パネルカラー 基本は白
 	}
 
@@ -80,16 +81,17 @@ void UpdateField(void)
 
 	for (int i = 0; i < PANEL_MAX; i++, panel++)
 	{
-		if (panel->PanelNumber == PANEL_1P)	//パネルナンバーが1Pに変わったら
+		if (panel->PanelType == PANEL_1P)	//パネルタイプが1Pに変わったら
 		{
 			panel->PanelCol = PANEL_COL_1P;	//パネルカラーを1Pに
 		}
-		else if (panel->PanelNumber == PANEL_2P)	//パネルナンバーが2Pになったら
+		else if (panel->PanelType == PANEL_2P)	//パネルタイプが2Pになったら
 		{
-			panel->PanelCol = PANEL_COL_2P;			//パネルカラーを2Pに
+			panel->PanelCol = PANEL_COL_2P;		//パネルカラーを2Pに
 		}
 		SetDiffuseField(i, panel->PanelCol);
 	}
+
 }
 
 //=============================================================================
@@ -216,4 +218,14 @@ void SetDiffuseField(int nField, D3DXCOLOR col)
 PANEL *GetPanel(int no)
 {
 	return &g_aPanel[no];
+}
+
+//===========================================================
+//パネル番号の計算
+//height(引数１)	上から数えて何番目のパネルか
+//width(引数２)		左から数えて何番目のパネルか
+//===========================================================
+int GetPanelNumber(int height, int width)
+{
+	return (height-1)*PANEL_NUM_X + (width-1);
 }
