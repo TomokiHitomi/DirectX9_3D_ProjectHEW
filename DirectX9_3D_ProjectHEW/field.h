@@ -13,8 +13,8 @@
 #define	PANEL_NUM_X		(15)						//横に並べる枚数
 #define	PANEL_NUM_Z		(7)						//縦に並べる枚数
 #define	PANEL_MAX		(PANEL_NUM_X*PANEL_NUM_Z)	//使用する枚数
-#define	PANEL_SIZE_X	(50)						//パネルサイズ横
-#define	PANEL_SIZE_Z	(50)						//パネルサイズ縦
+#define	PANEL_SIZE_X	(35)						//パネルサイズ横
+#define	PANEL_SIZE_Z	(35)						//パネルサイズ縦
 #define	PANEL_COL_1P	(D3DXCOLOR(1.0f,0.0f,0.0f,1.0f))//1Pカラー
 #define	PANEL_COL_2P	(D3DXCOLOR(0.0f,0.0f,1.0f,1.0f))//2Pカラー
 
@@ -23,15 +23,15 @@ typedef struct
 	D3DXMATRIX	mtxWorldField;			// ワールドマトリックス
 
 	D3DXVECTOR3	Pos;					//ポジション
-	int			PanelNumber;			//パネルナンバー
+	int			PanelType;				//パネルタイプ
 	D3DXCOLOR	PanelCol;				//パネルカラー
 }PANEL;
 
-enum PANEL_PATTERN
+enum PANEL_TYPE		//パネルタイプ
 {
-	PANEL_NORMAL,
-	PANEL_1P,
-	PANEL_2P,
+	PANEL_NORMAL,	//ノーマルパネル
+	PANEL_1P,		//1Pパネル
+	PANEL_2P,		//2Pパネル
 };
 
 
@@ -44,5 +44,6 @@ void UpdateField(void);
 void DrawField(void);
 
 PANEL *GetPanel(int no);
+int GetPanelNumber(int height, int width);
 
 #endif
