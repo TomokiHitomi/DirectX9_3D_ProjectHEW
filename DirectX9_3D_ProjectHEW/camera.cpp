@@ -54,6 +54,35 @@ void UninitCamera(void)
 //=============================================================================
 void UpdateCamera(void)
 {
+
+#ifdef _DEBUG
+	CAMERA *camera = GetCamera();
+
+	//デバッグ時にZCでカメラ回転
+	if (GetKeyboardPress(DIK_Z))
+	{// 視点旋回「左」
+		camera->rotCamera.y += VALUE_ROTATE_CAMERA;
+		if (camera->rotCamera.y > D3DX_PI)
+		{
+			camera->rotCamera.y -= D3DX_PI * 2.0f;
+		}
+
+		camera->posCameraEye.x = camera->posCameraAt.x - sinf(camera->rotCamera.y) * camera->fLength;
+		camera->posCameraEye.z = camera->posCameraAt.z - cosf(camera->rotCamera.y) * camera->fLength;
+	}
+	if (GetKeyboardPress(DIK_C))
+	{// 視点旋回「右」
+		camera->rotCamera.y -= VALUE_ROTATE_CAMERA;
+		if (camera->rotCamera.y < -D3DX_PI)
+		{
+			camera->rotCamera.y += D3DX_PI * 2.0f;
+		}
+
+		camera->posCameraEye.x = camera->posCameraAt.x - sinf(camera->rotCamera.y) * camera->fLength;
+		camera->posCameraEye.z = camera->posCameraAt.z - cosf(camera->rotCamera.y) * camera->fLength;
+	}
+
+#endif
 }
 
 //=============================================================================

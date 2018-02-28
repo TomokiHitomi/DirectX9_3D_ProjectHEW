@@ -28,7 +28,7 @@
 #define CAMERA_MARGIN_SPEED		(D3DX_PI / 180)
 #define CAMERA_LENGTH_SPEED			(10.0f)
 #define CAMERA_LENGTH_AUTO_SPEED	(30.0f)
-#define CAMERA_LENGTH			(100.0f)
+#define CAMERA_LENGTH			(800.0f)
 
 #define CAMERA_ROT_MOUSE_X			(0.002f)
 #define CAMERA_ROT_MOUSE_Y			(0.002f)
@@ -36,19 +36,20 @@
 
 #define ROOT_2					(1.414213f)
 
-#define	POS_X_CAM				(PANEL_SIZE_X*PANEL_NUM_X/2-15)					// カメラの初期位置(X座標)
+#define	POS_X_CAM				(PANEL_SIZE_X*PANEL_NUM_X/2)					// カメラの初期位置(X座標)
 #define	POS_Y_CAM				(500.0f)										// カメラの初期位置(Y座標)
 #define	POS_Z_CAM				(-100.0f)										// カメラの初期位置(Z座標)
 
 #define	POS_X_CAM_AT			(POS_X_CAM)
 #define	POS_Y_CAM_AT			(0.0f)
-#define	POS_Z_CAM_AT			(PANEL_SIZE_Z*PANEL_NUM_Z/2)
+#define	POS_Z_CAM_AT			(PANEL_SIZE_Z*PANEL_NUM_Z/2+52)
 
 #define	VIEW_ANGLE				(D3DXToRadian(35.0f))							// ビュー平面の視野角
 #define	VIEW_ASPECT				((float)SCREEN_WIDTH / (float)SCREEN_HEIGHT)	// ビュー平面のアスペクト比	
 #define	VIEW_NEAR_Z				(10.0f)											// ビュー平面のNearZ値
 #define	VIEW_FAR_Z				(5000.0f)										// ビュー平面のFarZ値
 
+#define	VALUE_ROTATE_CAMERA	(D3DX_PI * 0.01f)									// カメラの移動量
 
 
 typedef struct
@@ -59,8 +60,8 @@ typedef struct
 	D3DXVECTOR3			rotCamera;					// カメラの回転
 	D3DXVECTOR3			vecTag;
 
-	D3DXVECTOR3			posCameraAtTps;					// ポジション
-	D3DXVECTOR3			posCameraAtNormal;				// ポジション
+	D3DXVECTOR3			posCameraAtTps;				// ポジション
+	D3DXVECTOR3			posCameraAtNormal;			// ポジション
 
 	D3DXVECTOR3			vecCameraAtPos;
 

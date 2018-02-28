@@ -5,7 +5,7 @@
 //
 //=============================================================================
 #include "field.h"
-
+#include "debugproc.h"
 
 //*****************************************************************************
 // マクロ定義
@@ -92,6 +92,21 @@ void UpdateField(void)
 		SetDiffuseField(i, panel->PanelCol);
 	}
 
+
+#ifdef _DEBUG
+	//パネル位置確認用
+	PANEL *panelcheck1 = GetPanel(GetPanelNumber(1, 1));
+	PANEL *panelcheck2 = GetPanel(GetPanelNumber(1, 15));
+	PANEL *panelcheck3 = GetPanel(GetPanelNumber(7, 1));
+	PANEL *panelcheck4 = GetPanel(GetPanelNumber(7, 15));
+	PrintDebugProc("パネル[ 1][ 1] : (%f,%f,%f)\n", panelcheck1->Pos.x, panelcheck1->Pos.y, panelcheck1->Pos.z);
+	PrintDebugProc("パネル[ 1][15] : (%f,%f,%f)\n", panelcheck2->Pos.x, panelcheck2->Pos.y, panelcheck2->Pos.z);
+	PrintDebugProc("パネル[ 7][ 1] : (%f,%f,%f)\n", panelcheck3->Pos.x, panelcheck3->Pos.y, panelcheck3->Pos.z);
+	PrintDebugProc("パネル[ 7][15] : (%f,%f,%f)\n", panelcheck4->Pos.x, panelcheck4->Pos.y, panelcheck4->Pos.z);
+
+
+
+#endif
 }
 
 //=============================================================================
@@ -157,10 +172,10 @@ HRESULT MakeVertexField(LPDIRECT3DDEVICE9 pDevice)
 		{
 
 			// 頂点座標の設定
-			pVtx[0].vtx = D3DXVECTOR3(-PANEL_SIZE_X/2, 0, PANEL_SIZE_Z / 2);
-			pVtx[1].vtx = D3DXVECTOR3(PANEL_SIZE_X / 2, 0, PANEL_SIZE_Z / 2);
-			pVtx[2].vtx = D3DXVECTOR3(-PANEL_SIZE_X / 2, 0, -PANEL_SIZE_Z / 2);
-			pVtx[3].vtx = D3DXVECTOR3(PANEL_SIZE_X / 2, 0, -PANEL_SIZE_Z / 2);
+			pVtx[0].vtx = D3DXVECTOR3(0, 0, PANEL_SIZE_Z);
+			pVtx[1].vtx = D3DXVECTOR3(PANEL_SIZE_X, 0, PANEL_SIZE_Z);
+			pVtx[2].vtx = D3DXVECTOR3(0, 0, 0);
+			pVtx[3].vtx = D3DXVECTOR3(PANEL_SIZE_X, 0, 0);
 
 			// 法線ベクトルの設定
 			pVtx[0].nor = D3DXVECTOR3(0.0f, 1.0f, 0.0f);
@@ -222,7 +237,7 @@ PANEL *GetPanel(int no)
 
 //===========================================================
 //パネル番号の計算
-//height(引数１)	上から数えて何番目のパネルか
+//height(引数１)	下(手前)から数えて何番目のパネルか
 //width(引数２)		左から数えて何番目のパネルか
 //===========================================================
 int GetPanelNumber(int height, int width)
