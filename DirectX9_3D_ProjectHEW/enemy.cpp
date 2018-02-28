@@ -166,7 +166,7 @@ void UpdateEnemy(void)
 	enemy = &enemyWk[0];
 #ifdef _DEBUG
 	PrintDebugProc("[エネミーの位置  ：(%f : %f : %f)]\n", enemy->EnemyEye.x, enemy->EnemyEye.y, enemy->EnemyEye.z);
-	PrintDebugProc("\n");
+	//PrintDebugProc("\n");
 #endif
 
 

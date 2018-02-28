@@ -15,7 +15,7 @@
 #define	MAX_ITEM				(128)						// アイテム最大数
 #define	MAX_ITEM_POP			(5)							// アイテム同時存在可能数
 #define	NUM_POP					(2)							// SetItem関数で一回当たりポップさせる数
-#define	ITEM_LIFE				(600)						// アイテムの寿命
+#define	ITEM_LIFE				(120)						// アイテムの寿命
 
 //**************************************
 // 種類

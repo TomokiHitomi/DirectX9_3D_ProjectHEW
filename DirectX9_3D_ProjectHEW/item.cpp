@@ -7,6 +7,8 @@
 #include "item.h"
 #include "field.h"
 #include "main.h"
+#include "debugproc.h"
+
 //#include "stdlib.h"
 //#include "shadow.h"
 
@@ -82,10 +84,12 @@ HRESULT InitItem(void)
 		item->fRadius = 0.0f;
 		item->nIdxShadow = -1;
 		item->nType = ITEMTYPE_COIN;
+		item->life = 0;
 		item->use = false;
 	}
 
-	SetItem(D3DXVECTOR3(0.0f, 50.0f, 0.0f), ITEMTYPE_COIN, ITEM_LIFE);
+
+	SetItem(D3DXVECTOR3(0.0f, 10.0f, 0.0f), ITEMTYPE_COIN, ITEM_LIFE);
 
 	return S_OK;
 }
@@ -168,6 +172,13 @@ void UpdateItem(void)
 			//SetColorShadow(item->nIdxShadow, D3DXCOLOR(1.0f, 1.0f, 1.0f, colA));
 		}
 	}
+
+
+#ifdef _DEBUG
+	PrintDebugProc("[アイテムの生存数]  ：(%d)]\n", GetExistItemNum());
+	PrintDebugProc("\n");
+#endif
+
 }
 
 //=============================================================================
@@ -252,6 +263,7 @@ void SetItem(D3DXVECTOR3 pos, int nType, int life)
 		// ランダムでアイテムをポップさせるパネルを選択
 		no = rand() % PANEL_MAX;
 		panel = GetPanel(no);
+		// 
 		
 		for (int nCntItem = 0; nCntItem < MAX_ITEM; nCntItem++, item++)
 		{
