@@ -85,7 +85,7 @@ HRESULT InitItem(void)
 		item->use = false;
 	}
 
-	SetItem(D3DXVECTOR3(0.0f, 10.0f, 0.0f), ITEMTYPE_COIN, ITEM_LIFE);
+	SetItem(D3DXVECTOR3(0.0f, 50.0f, 0.0f), ITEMTYPE_COIN, ITEM_LIFE);
 
 	return S_OK;
 }
@@ -184,6 +184,9 @@ void DrawItem(void)
 	{
 		if (item->use)
 		{
+			// ライトをon
+			pDevice->SetRenderState(D3DRS_LIGHTING, TRUE);
+
 			// ワールドマトリックスの初期化
 			D3DXMatrixIdentity(&g_mtxWorldItem);
 
@@ -211,6 +214,10 @@ void DrawItem(void)
 				// 描画
 				g_pMeshItem[item->nType]->DrawSubset(nCntMat);
 			}
+
+			// ライトをoff
+			pDevice->SetRenderState(D3DRS_LIGHTING, FALSE);
+
 		}
 	}
 
