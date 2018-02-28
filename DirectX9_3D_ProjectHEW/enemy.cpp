@@ -37,18 +37,18 @@ int					animCnt;		// アニメカウント
 
 const char *FileNameEnemy[ENEMY_ANIM_MAX] =
 {
-	"data/MODEL/enemy_a00.x",		// 直立
-	"data/MODEL/enemy_a01.x",		// 左足前１
-	"data/MODEL/enemy_a02.x",		// 左足前２
-	"data/MODEL/enemy_a03.x",		// 左足前３
-	"data/MODEL/enemy_a02.x",		// 左足前２
-	"data/MODEL/enemy_a01.x",		// 左足前１
-	"data/MODEL/enemy_a00.x",		// 直立
-	"data/MODEL/enemy_a11.x",		// 右足前１
-	"data/MODEL/enemy_a12.x",		// 右足前２
-	"data/MODEL/enemy_a13.x",		// 右足前３
-	"data/MODEL/enemy_a12.x",		// 右足前２
-	"data/MODEL/enemy_a11.x"		// 右足前１
+	"data/MODEL/ENEMY/enemy_a00.x",		// 直立
+	"data/MODEL/ENEMY/enemy_a01.x",		// 左足前１
+	"data/MODEL/ENEMY/enemy_a02.x",		// 左足前２
+	"data/MODEL/ENEMY/enemy_a03.x",		// 左足前３
+	"data/MODEL/ENEMY/enemy_a02.x",		// 左足前２
+	"data/MODEL/ENEMY/enemy_a01.x",		// 左足前１
+	"data/MODEL/ENEMY/enemy_a00.x",		// 直立
+	"data/MODEL/ENEMY/enemy_a11.x",		// 右足前１
+	"data/MODEL/ENEMY/enemy_a12.x",		// 右足前２
+	"data/MODEL/ENEMY/enemy_a13.x",		// 右足前３
+	"data/MODEL/ENEMY/enemy_a12.x",		// 右足前２
+	"data/MODEL/ENEMY/enemy_a11.x"		// 右足前１
 
 };
 
@@ -99,7 +99,7 @@ HRESULT InitEnemy(void)
 	for (int i = 0; i < ENEMY_MAX; i++, enemy++)
 	{
 		// エネミーの視点の初期化
-		enemy->EnemyEye = D3DXVECTOR3(290.0f, 0.0f, 290.0f);
+		enemy->EnemyEye = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
 		// エネミーの注視点の初期化
 		enemy->EnemyAt = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
 		// エネミーの上方向の初期化
@@ -157,7 +157,11 @@ void UninitEnemy(void)
 void UpdateEnemy(void)
 {
 	ENEMY *enemy = &enemyWk[0];
+	CAMERA *camera = GetCamera();
 
+	// エネミーをカメラの注視点にセット
+	enemy->EnemyEye = camera->posCameraAt;
+	enemy->EnemyEye.y = 5.0f;
 
 	// アニメーション
 	animCnt++;

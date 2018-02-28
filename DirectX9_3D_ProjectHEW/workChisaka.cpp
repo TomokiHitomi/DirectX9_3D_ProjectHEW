@@ -11,6 +11,7 @@
 
 // 千坂担当分で必要なインクルード
 #include "enemy.h"
+#include "field.h"
 
 // デバッグ用
 #ifdef _DEBUG
@@ -58,6 +59,7 @@ void UpdateWorkChisaka(void)
 	case STAGE_RESULT:
 		break;
 	}
+
 }
 
 //=============================================================================
