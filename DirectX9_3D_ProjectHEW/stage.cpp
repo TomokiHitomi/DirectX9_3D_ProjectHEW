@@ -60,7 +60,6 @@ HRESULT InitStage(HINSTANCE hInstance, HWND hWnd)
 	g_nPlayerWin = STAGE_WIN_NON;	// 勝利プレイヤーを初期化
 
 	InitInput(hInstance, hWnd);		// 入力
-	InitCamera();					// カメラ
 	//InitSound(hWnd);				// サウンド
 	InitLight();					// ライト
 	InitFade();						// フェード
@@ -77,9 +76,10 @@ HRESULT InitStage(HINSTANCE hInstance, HWND hWnd)
 //=============================================================================
 HRESULT InitStageEach(int nType)
 {
-	InitTitle(nType);		// タイトル
-	InitGame(nType);		// ゲーム
-	InitResult(nType);		// リザルト
+	InitCamera();				// カメラ
+	InitTitle(nType);			// タイトル
+	InitGame(nType);			// ゲーム
+	InitResult(nType);			// リザルト
 
 	InitWorkChisaka(nType);		// 千坂担当分
 	InitWorkHitomi(nType);		// 人見担当分
