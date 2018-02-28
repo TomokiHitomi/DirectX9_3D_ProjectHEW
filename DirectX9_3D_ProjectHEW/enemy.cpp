@@ -63,22 +63,22 @@ HRESULT InitEnemy(void)
 	ENEMY *enemy = &enemyWk[0];
 
 
-	for (int nCntEnemyType = 0; nCntEnemyType < ENEMY_ANIM_MAX; nCntEnemyType++)
+	for (int nCntEnemyAnim = 0; nCntEnemyAnim < ENEMY_ANIM_MAX; nCntEnemyAnim++)
 	{
-		g_pD3DTextureEnemy[nCntEnemyType] = NULL;
-		g_pD3DXMeshEnemy[nCntEnemyType] = NULL;
-		g_pD3DXBuffMatEnemy[nCntEnemyType] = NULL;
+		g_pD3DTextureEnemy[nCntEnemyAnim] = NULL;
+		g_pD3DXMeshEnemy[nCntEnemyAnim] = NULL;
+		g_pD3DXBuffMatEnemy[nCntEnemyAnim] = NULL;
 
 
 		// Xファイルの読み込み
-		if (FAILED(D3DXLoadMeshFromX(FileNameEnemy[nCntEnemyType],
+		if (FAILED(D3DXLoadMeshFromX(FileNameEnemy[nCntEnemyAnim],
 			D3DXMESH_SYSTEMMEM,
 			pDevice,
 			NULL,
-			&g_pD3DXBuffMatEnemy[nCntEnemyType],
+			&g_pD3DXBuffMatEnemy[nCntEnemyAnim],
 			NULL,
-			&g_nNumMatEnemy[nCntEnemyType],
-			&g_pD3DXMeshEnemy[nCntEnemyType])))
+			&g_nNumMatEnemy[nCntEnemyAnim],
+			&g_pD3DXMeshEnemy[nCntEnemyAnim])))
 		{
 			return E_FAIL;
 		}
@@ -126,24 +126,24 @@ HRESULT InitEnemy(void)
 //=============================================================================
 void UninitEnemy(void)
 {
-	for (int nCntEnemyType = 0; nCntEnemyType < ENEMY_ANIM_MAX; nCntEnemyType++)
+	for (int nCntEnemyAnim = 0; nCntEnemyAnim < ENEMY_ANIM_MAX; nCntEnemyAnim++)
 	{
-		if (g_pD3DTextureEnemy[nCntEnemyType] != NULL)
+		if (g_pD3DTextureEnemy[nCntEnemyAnim] != NULL)
 		{// テクスチャの開放
-			g_pD3DTextureEnemy[nCntEnemyType]->Release();
-			g_pD3DTextureEnemy[nCntEnemyType] = NULL;
+			g_pD3DTextureEnemy[nCntEnemyAnim]->Release();
+			g_pD3DTextureEnemy[nCntEnemyAnim] = NULL;
 		}
 
-		if (g_pD3DXMeshEnemy[nCntEnemyType] != NULL)
+		if (g_pD3DXMeshEnemy[nCntEnemyAnim] != NULL)
 		{// メッシュの開放
-			g_pD3DXMeshEnemy[nCntEnemyType]->Release();
-			g_pD3DXMeshEnemy[nCntEnemyType] = NULL;
+			g_pD3DXMeshEnemy[nCntEnemyAnim]->Release();
+			g_pD3DXMeshEnemy[nCntEnemyAnim] = NULL;
 		}
 
-		if (g_pD3DXBuffMatEnemy[nCntEnemyType] != NULL)
+		if (g_pD3DXBuffMatEnemy[nCntEnemyAnim] != NULL)
 		{// マテリアルの開放
-			g_pD3DXBuffMatEnemy[nCntEnemyType]->Release();
-			g_pD3DXBuffMatEnemy[nCntEnemyType] = NULL;
+			g_pD3DXBuffMatEnemy[nCntEnemyAnim]->Release();
+			g_pD3DXBuffMatEnemy[nCntEnemyAnim] = NULL;
 		}
 	}
 }
@@ -158,7 +158,6 @@ void UpdateEnemy(void)
 
 	// エネミーの座標ををカメラの注視点にセット
 	enemy->EnemyEye = camera->posCameraAt;
-	enemy->EnemyEye.y = 5.0f;
 
 	// アニメーション
 	SetEnemyAnimation(ENEMY_ANIM_SEC);
