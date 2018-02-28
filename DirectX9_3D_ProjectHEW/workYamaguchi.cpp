@@ -12,7 +12,6 @@
 // 山口担当分で必要なインクルード
 #include "field.h"
 #include "wall.h"
-
 // デバッグ用
 #ifdef _DEBUG
 #include "debugproc.h"
