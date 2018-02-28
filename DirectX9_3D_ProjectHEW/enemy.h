@@ -23,6 +23,7 @@
 #define	ENEMY_SIZE_Y		(20.0f)							// エネミーの高さ
 
 #define	ENEMY_ANIM_MAX		(12)							// エネミーのアニメーションパターン数
+#define	ENEMY_ANIM_SEC		(1)								// アニメーション一巡にかかる秒数
 
 //*****************************************************************************
 // 構造体宣言
@@ -54,8 +55,5 @@ void UpdateEnemy(void);
 void DrawEnemy(void);
 
 ENEMY *GetEnemy(int no);
-
-D3DXMATRIX* EnemyLookAtMatrix(D3DXMATRIX *pout, D3DXVECTOR3 *pEye, D3DXVECTOR3 *pAt, D3DXVECTOR3 *pUp);
-
 
 #endif

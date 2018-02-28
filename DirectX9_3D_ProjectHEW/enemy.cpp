@@ -16,6 +16,8 @@
 //*****************************************************************************
 // プロトタイプ宣言
 //*****************************************************************************
+void SetEnemyAnimation(int sec);
+D3DXMATRIX* EnemyLookAtMatrix(D3DXMATRIX *pout, D3DXVECTOR3 *pEye, D3DXVECTOR3 *pAt, D3DXVECTOR3 *pUp);
 
 
 //*****************************************************************************
@@ -80,11 +82,6 @@ HRESULT InitEnemy(void)
 		{
 			return E_FAIL;
 		}
-
-		// テクスチャの読み込み
-		//D3DXCreateTextureFromFile(pDevice,						// デバイスへのポインタ
-		//	TEXTURE_ENEMY,			// ファイルの名前
-		//	&g_pD3DTextureEnemy);	// 読み込むメモリー
 
 #if 0
 		// テクスチャの読み込み
@@ -159,24 +156,15 @@ void UpdateEnemy(void)
 	ENEMY *enemy = &enemyWk[0];
 	CAMERA *camera = GetCamera();
 
-	// エネミーをカメラの注視点にセット
+	// エネミーの座標ををカメラの注視点にセット
 	enemy->EnemyEye = camera->posCameraAt;
 	enemy->EnemyEye.y = 5.0f;
 
 	// アニメーション
-	animCnt++;
+	SetEnemyAnimation(ENEMY_ANIM_SEC);
 
-	if (animCnt % 5 == 0)
-	{	// カウントを進める
-		enemy->anim++;
-		if (enemy->anim > 11)
-		{
-			enemy->anim = 0;
-		}
-	}
 
 	enemy = &enemyWk[0];
-
 #ifdef _DEBUG
 	PrintDebugProc("[エネミーの位置  ：(%f : %f : %f)]\n", enemy->EnemyEye.x, enemy->EnemyEye.y, enemy->EnemyEye.z);
 	PrintDebugProc("\n");
@@ -292,4 +280,30 @@ D3DXMATRIX* EnemyLookAtMatrix(D3DXMATRIX *pout, D3DXVECTOR3 *pEye, D3DXVECTOR3 *
 	pout->_41 = 0.0f; pout->_42 = 0.0f; pout->_43 = 0.0f; pout->_44 = 1.0f;
 
 	return pout;
+}
+//=============================================================================
+// エネミーアニメーション設定関数（引数：アニメーション一巡にかかる秒数）
+//=============================================================================
+void SetEnemyAnimation(int sec)
+{
+	ENEMY *enemy = &enemyWk[0];
+
+	// アニメーションカウント
+	animCnt++;
+
+	// 秒数の絶対値を求める
+	sec = abs(sec);
+
+	// アニメーションを切り替えるフレーム数を求める
+	sec = (60 * sec) / ENEMY_ANIM_MAX;
+
+	if (animCnt % sec == 0)
+	{	// アニメーションを切り替える
+		enemy->anim++;
+		if (enemy->anim >= ENEMY_ANIM_MAX)
+		{	// 一巡したら最初に戻す
+			enemy->anim = 0;
+		}
+	}
+
 }
