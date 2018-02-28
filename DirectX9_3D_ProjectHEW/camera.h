@@ -36,13 +36,13 @@
 
 #define ROOT_2					(1.414213f)
 
-#define	POS_X_CAM				(PANEL_SIZE_X*PANEL_NUM_X/2)					// カメラの初期位置(X座標)
+#define	POS_X_CAM				(PANEL_SIZE_X*PANEL_NUM_X/2-PANEL_SIZE_Z/2)					// カメラの初期位置(X座標)
 #define	POS_Y_CAM				(500.0f)										// カメラの初期位置(Y座標)
 #define	POS_Z_CAM				(-100.0f)										// カメラの初期位置(Z座標)
 
 #define	POS_X_CAM_AT			(POS_X_CAM)
 #define	POS_Y_CAM_AT			(0.0f)
-#define	POS_Z_CAM_AT			(PANEL_SIZE_Z*PANEL_NUM_Z/2+52)
+#define	POS_Z_CAM_AT			(PANEL_SIZE_Z*PANEL_NUM_Z/2+32)
 
 #define	VIEW_ANGLE				(D3DXToRadian(35.0f))							// ビュー平面の視野角
 #define	VIEW_ASPECT				((float)SCREEN_WIDTH / (float)SCREEN_HEIGHT)	// ビュー平面のアスペクト比	

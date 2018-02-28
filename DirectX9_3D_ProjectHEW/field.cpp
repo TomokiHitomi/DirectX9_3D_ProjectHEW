@@ -172,10 +172,10 @@ HRESULT MakeVertexField(LPDIRECT3DDEVICE9 pDevice)
 		{
 
 			// 頂点座標の設定
-			pVtx[0].vtx = D3DXVECTOR3(0, 0, PANEL_SIZE_Z);
-			pVtx[1].vtx = D3DXVECTOR3(PANEL_SIZE_X, 0, PANEL_SIZE_Z);
-			pVtx[2].vtx = D3DXVECTOR3(0, 0, 0);
-			pVtx[3].vtx = D3DXVECTOR3(PANEL_SIZE_X, 0, 0);
+			pVtx[0].vtx = D3DXVECTOR3(-PANEL_SIZE_X / 2, 0.0f, PANEL_SIZE_Z/2);
+			pVtx[1].vtx = D3DXVECTOR3(PANEL_SIZE_X/2, 0.0f, PANEL_SIZE_Z/2);
+			pVtx[2].vtx = D3DXVECTOR3(-PANEL_SIZE_X / 2, 0.0f, -PANEL_SIZE_Z / 2);
+			pVtx[3].vtx = D3DXVECTOR3(PANEL_SIZE_X/2, 0.0f, -PANEL_SIZE_Z / 2);
 
 			// 法線ベクトルの設定
 			pVtx[0].nor = D3DXVECTOR3(0.0f, 1.0f, 0.0f);
