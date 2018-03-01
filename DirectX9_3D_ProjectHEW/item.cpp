@@ -89,7 +89,7 @@ HRESULT InitItem(void)
 	}
 
 
-	SetItem(D3DXVECTOR3(0.0f, 10.0f, 0.0f), ITEMTYPE_COIN, ITEM_LIFE);
+	SetItem(D3DXVECTOR3(0.0f, 30.0f, 0.0f), ITEMTYPE_COIN, ITEM_LIFE);
 
 	return S_OK;
 }
@@ -143,10 +143,22 @@ void UpdateItem(void)
 			item->life--;
 
 			if (item->life <= 0)
-			{	// 寿命が尽きたアイテムを消去
-				item->use = false;
+			{	// アイテムを徐々に下方向に移動
+				item->pos.y -= VALUE_MOVE_ITEM;
 			}
 
+
+			//if (item->life <= 0)
+			//{	// 寿命が尽きたアイテムを消去
+			//	item->use = false;
+			//}
+
+			// 完全にフィールドの下に行ったら消去
+			if (item->pos.y < -ITEM_SIZE_Y)
+			{
+				item->use = false;
+
+			}
 
 			// 影の位置設定
 			//SetPositionShadow(item->nIdxShadow, D3DXVECTOR3(item->pos.x, 0.1f, item->pos.z));

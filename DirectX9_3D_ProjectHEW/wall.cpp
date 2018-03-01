@@ -1,7 +1,7 @@
 //=============================================================================
 //
 // メッシュ壁の処理 [wall.cpp]
-// Author : 
+// Author : GP11B243　32 山口輝明
 //
 //=============================================================================
 #include "wall.h"
@@ -218,7 +218,7 @@ void DrawMeshWall(void)
 	int nCntMeshField;
 
 	// ライティングを無効に
-	pDevice->SetRenderState(D3DRS_LIGHTING, FALSE);
+	//pDevice->SetRenderState(D3DRS_LIGHTING, FALSE);
 
 
 	for (nCntMeshField = 0; nCntMeshField < g_nNumMeshField; nCntMeshField++)
@@ -255,7 +255,7 @@ void DrawMeshWall(void)
 		pDevice->DrawIndexedPrimitive(D3DPT_TRIANGLESTRIP, 0, 0, pMesh->nNumVertex, 0, pMesh->nNumPolygon);
 	}
 	// ライティングを有効に
-	pDevice->SetRenderState(D3DRS_LIGHTING, TRUE);
+	//pDevice->SetRenderState(D3DRS_LIGHTING, TRUE);
 
 }
 
