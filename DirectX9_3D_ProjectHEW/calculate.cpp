@@ -178,7 +178,7 @@ D3DXCOLOR SetColorPallet(int nColor)
 	case COLOR_PALLET_BLACK:		// ブラック
 		temp = D3DXCOLOR(0.0f, 0.0f, 0.0f, 1.0f);
 		break;
-	case COLOR_PALLET_LIGHTBLUE:	// ブルー
+	case COLOR_PALLET_LIGHTBLUE:	// ライトブルー
 		temp = D3DXCOLOR(0.4f, 0.7f, 1.0f, 1.0f);
 		break;
 	case COLOR_PALLET_GRAY:			// グレイ

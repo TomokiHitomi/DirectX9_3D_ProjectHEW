@@ -6,6 +6,7 @@
 //=============================================================================
 #include "field.h"
 #include "debugproc.h"
+#include "calculate.h"
 
 //*****************************************************************************
 // マクロ定義
@@ -47,6 +48,7 @@ HRESULT InitField(void)
 		panel->Pos.z = i / PANEL_NUM_X * PANEL_SIZE_Z;	//Z座標の設定
 		panel->PanelType = PANEL_NORMAL;				//パネルタイプ　基本はノーマル
 		panel->PanelCol = D3DXCOLOR(1.0f, 1.0f, 1.0f, 1.0f);//パネルカラー 基本は白
+		panel->ItemSet = false;
 	}
 
 	return S_OK;
@@ -83,11 +85,11 @@ void UpdateField(void)
 	{
 		if (panel->PanelType == PANEL_1P)	//パネルタイプが1Pに変わったら
 		{
-			panel->PanelCol = PANEL_COL_1P;	//パネルカラーを1Pに
+			panel->PanelCol = SetColorPallet(COLOR_PALLET_RED);	//パネルカラーを赤に
 		}
 		else if (panel->PanelType == PANEL_2P)	//パネルタイプが2Pになったら
 		{
-			panel->PanelCol = PANEL_COL_2P;		//パネルカラーを2Pに
+			panel->PanelCol = SetColorPallet(COLOR_PALLET_BLUE);//パネルカラーを青に
 		}
 		SetDiffuseField(i, panel->PanelCol);
 	}
