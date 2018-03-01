@@ -35,9 +35,12 @@ typedef struct		// エネミー構造体
 
 	D3DXVECTOR3		scl;							// スケール
 
-	D3DXVECTOR3		EnemyEye;						// エネミーの視点
-	D3DXVECTOR3		EnemyAt;						// エネミーの注視点
-	D3DXVECTOR3		EnemyUp;						// エネミーの上方向
+	D3DXVECTOR3		Eye;							// エネミーの視点
+	D3DXVECTOR3		At;								// エネミーの注視点
+	D3DXVECTOR3		Up;								// エネミーの上方向
+	D3DXVECTOR3		rot;							// エネミーの向き
+	D3DXVECTOR3		move;							// エネミーの移動量
+
 
 	VERTEX_2D		vertexWk[NUM_VERTEX];			// 頂点情報格納ワーク
 

@@ -6,6 +6,7 @@
 //=============================================================================
 #include "camera.h"
 #include "debugproc.h"
+#include "input.h"
 #include "enemy.h"
 
 
@@ -96,11 +97,16 @@ HRESULT InitEnemy(void)
 	for (int i = 0; i < ENEMY_MAX; i++, enemy++)
 	{
 		// エネミーの視点の初期化
-		enemy->EnemyEye = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
+		enemy->Eye = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
 		// エネミーの注視点の初期化
-		enemy->EnemyAt = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
+		enemy->At = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
 		// エネミーの上方向の初期化
-		enemy->EnemyUp = D3DXVECTOR3(0.0f, 1.0f, 0.0f);
+		enemy->Up = D3DXVECTOR3(0.0f, 1.0f, 0.0f);
+
+		// エネミーの向きの初期化
+		enemy->rot = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
+		// エネミーの移動量の初期化
+		enemy->move = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
 
 		// エネミーのスケールの初期化
 		enemy->scl = D3DXVECTOR3(1.0f, 1.0f, 1.0f);
@@ -156,16 +162,106 @@ void UpdateEnemy(void)
 	ENEMY *enemy = &enemyWk[0];
 	CAMERA *camera = GetCamera();
 
+
 	// エネミーの座標ををカメラの注視点にセット
-	enemy->EnemyEye = camera->posCameraAt;
+	//enemy->Eye = camera->posCameraAt;
+
+	// エネミーの注視点をカメラの注視点にセット
+	enemy->At = camera->posCameraAt;
 
 	// アニメーション
 	SetEnemyAnimation(ENEMY_ANIM_SEC);
 
+#ifdef _DEBUG
+	// デバッグ時に手動でエネミー移動
+	if(GetKeyboardPress(DIK_LEFT))
+	{
+		if(GetKeyboardPress(DIK_UP))
+		{// 左前移動
+			enemy->move.x -= cosf(camera->rotCamera.y + D3DX_PI * 0.25f) * VALUE_MOVE_ENEMY;
+			enemy->move.z += sinf(camera->rotCamera.y + D3DX_PI * 0.25f) * VALUE_MOVE_ENEMY;
+		}
+		else if(GetKeyboardPress(DIK_DOWN))
+		{// 左後移動
+			enemy->move.x -= cosf(camera->rotCamera.y - D3DX_PI * 0.25f) * VALUE_MOVE_ENEMY;
+			enemy->move.z += sinf(camera->rotCamera.y - D3DX_PI * 0.25f) * VALUE_MOVE_ENEMY;
+		}
+		else
+		{// 左移動
+			enemy->move.x -= cosf(camera->rotCamera.y) * VALUE_MOVE_ENEMY;
+			enemy->move.z += sinf(camera->rotCamera.y) * VALUE_MOVE_ENEMY;
+		}
+	}
+	else if(GetKeyboardPress(DIK_RIGHT))
+	{
+		if(GetKeyboardPress(DIK_UP))
+		{// 右前移動
+			enemy->move.x += cosf(camera->rotCamera.y - D3DX_PI * 0.25f) * VALUE_MOVE_ENEMY;
+			enemy->move.z -= sinf(camera->rotCamera.y - D3DX_PI * 0.25f) * VALUE_MOVE_ENEMY;
+		}
+		else if(GetKeyboardPress(DIK_DOWN))
+		{// 右後移動
+			enemy->move.x += cosf(camera->rotCamera.y + D3DX_PI * 0.25f) * VALUE_MOVE_ENEMY;
+			enemy->move.z -= sinf(camera->rotCamera.y + D3DX_PI * 0.25f) * VALUE_MOVE_ENEMY;
+		}
+		else
+		{// 右移動
+			enemy->move.x += cosf(camera->rotCamera.y) * VALUE_MOVE_ENEMY;
+			enemy->move.z -= sinf(camera->rotCamera.y) * VALUE_MOVE_ENEMY;
+		}
+	}
+	else if(GetKeyboardPress(DIK_UP))
+	{// 前移動
+		enemy->move.x += sinf(camera->rotCamera.y) * VALUE_MOVE_ENEMY;
+		enemy->move.z += cosf(camera->rotCamera.y) * VALUE_MOVE_ENEMY;
+	}
+	else if(GetKeyboardPress(DIK_DOWN))
+	{// 後移動
+		enemy->move.x -= sinf(camera->rotCamera.y) * VALUE_MOVE_ENEMY;
+		enemy->move.z -= cosf(camera->rotCamera.y) * VALUE_MOVE_ENEMY;
+	}
+
+	// 移動量に慣性をかける
+	enemy->move.x += (0.0f - enemy->move.x) * RATE_MOVE_ENEMY;
+	enemy->move.y += (0.0f - enemy->move.y) * RATE_MOVE_ENEMY;
+	enemy->move.z += (0.0f - enemy->move.z) * RATE_MOVE_ENEMY;
+
+	//if (enemy->Eye.x < -310.0f)
+	//{
+	//	enemy->Eye.x = -310.0f;
+	//}
+	//if (enemy->Eye.x > 310.0f)
+	//{
+	//	enemy->Eye.x = 310.0f;
+	//}
+	//if (enemy->Eye.z < -310.0f)
+	//{
+	//	enemy->Eye.z = -310.0f;
+	//}
+	//if (enemy->Eye.z > 310.0f)
+	//{
+	//	enemy->Eye.z = 310.0f;
+	//}
+
+
+	/// 位置移動
+	enemy->Eye.x += enemy->move.x;
+	enemy->Eye.y += enemy->move.y;
+	//if (enemy->Eye.y < 5.0f)
+	//{
+	//	enemy->Eye.y = 5.0f;
+	//}
+	//if (enemy->Eye.y > 75.0f)
+	//{
+	//	enemy->Eye.y = 75.0f;
+	//}
+	enemy->Eye.z += enemy->move.z;
+
+#endif
 
 	enemy = &enemyWk[0];
 #ifdef _DEBUG
-	PrintDebugProc("[エネミーの位置  ：(%f : %f : %f)]\n", enemy->EnemyEye.x, enemy->EnemyEye.y, enemy->EnemyEye.z);
+	PrintDebugProc("[エネミーの位置  ：(%f : %f : %f)]\n", enemy->Eye.x, enemy->Eye.y, enemy->Eye.z);
 	//PrintDebugProc("\n");
 #endif
 
@@ -205,11 +301,11 @@ void DrawEnemy(void)
 			// 回転を反映
 			//D3DXMatrixRotationYawPitchRoll(&mtxRot, enemy->rot.y, enemy->rot.x, enemy->rot.z);
 			//D3DXMatrixMultiply(&g_mtxWorldEnemy, &g_mtxWorldEnemy, &mtxRot);
-			EnemyLookAtMatrix(&mtxRot, &enemy->EnemyEye, &enemy->EnemyAt, &enemy->EnemyUp);
+			EnemyLookAtMatrix(&mtxRot, &enemy->Eye, &enemy->At, &enemy->Up);
 			D3DXMatrixMultiply(&g_mtxWorldEnemy, &g_mtxWorldEnemy, &mtxRot);
 			
 			//// 移動を反映
-			D3DXMatrixTranslation(&mtxTranslate, enemy->EnemyEye.x, enemy->EnemyEye.y, enemy->EnemyEye.z);
+			D3DXMatrixTranslation(&mtxTranslate, enemy->Eye.x, enemy->Eye.y, enemy->Eye.z);
 			D3DXMatrixMultiply(&g_mtxWorldEnemy, &g_mtxWorldEnemy, &mtxTranslate);
 
 			// ワールドマトリックスの設定
