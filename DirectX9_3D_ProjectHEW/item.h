@@ -12,10 +12,10 @@
 //*****************************************************************************
 // マクロ定義
 //*****************************************************************************
-#define	MAX_ITEM				(5)						// アイテム最大数
-#define	MAX_ITEM_POP			(5)							// アイテム同時存在可能数
-#define	NUM_POP					(4)							// SetItem関数で一回当たりポップさせる数
-#define	ITEM_LIFE				(300)						// アイテムの寿命
+#define	MAX_ITEM				(256)						// アイテム最大数
+#define	MAX_ITEM_POP			(105)							// アイテム同時存在可能数
+#define	NUM_POP					(5)							// SetItem関数で一回当たりポップさせる数
+#define	ITEM_LIFE				(30)						// アイテムの寿命
 #define	VALUE_MOVE_ITEM			(0.5f)						// アイテムの移動速度
 #define	ITEM_SIZE_X				(40.0f)						// アイテムの幅
 #define	ITEM_SIZE_Y				(40.0f)						// アイテムの高さ
