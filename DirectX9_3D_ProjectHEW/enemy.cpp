@@ -177,47 +177,47 @@ void UpdateEnemy(void)
 	{
 		if(GetKeyboardPress(DIK_UP))
 		{// 左前移動
-			enemy->move.x -= cosf(enemy->rot.y + D3DX_PI * 0.25f) * VALUE_MOVE_ENEMY;
-			enemy->move.z += sinf(enemy->rot.y + D3DX_PI * 0.25f) * VALUE_MOVE_ENEMY;
+			enemy->move.x -= cosf(camera->rotCamera.y + D3DX_PI * 0.25f) * VALUE_MOVE_ENEMY;
+			enemy->move.z += sinf(camera->rotCamera.y + D3DX_PI * 0.25f) * VALUE_MOVE_ENEMY;
 		}
 		else if(GetKeyboardPress(DIK_DOWN))
 		{// 左後移動
-			enemy->move.x -= cosf(enemy->rot.y - D3DX_PI * 0.25f) * VALUE_MOVE_ENEMY;
-			enemy->move.z += sinf(enemy->rot.y - D3DX_PI * 0.25f) * VALUE_MOVE_ENEMY;
+			enemy->move.x -= cosf(camera->rotCamera.y - D3DX_PI * 0.25f) * VALUE_MOVE_ENEMY;
+			enemy->move.z += sinf(camera->rotCamera.y - D3DX_PI * 0.25f) * VALUE_MOVE_ENEMY;
 		}
 		else
 		{// 左移動
-			enemy->move.x -= cosf(enemy->rot.y) * VALUE_MOVE_ENEMY;
-			enemy->move.z += sinf(enemy->rot.y) * VALUE_MOVE_ENEMY;
+			enemy->move.x -= cosf(camera->rotCamera.y) * VALUE_MOVE_ENEMY;
+			enemy->move.z += sinf(camera->rotCamera.y) * VALUE_MOVE_ENEMY;
 		}
 	}
 	else if(GetKeyboardPress(DIK_RIGHT))
 	{
 		if(GetKeyboardPress(DIK_UP))
 		{// 右前移動
-			enemy->move.x += cosf(enemy->rot.y - D3DX_PI * 0.25f) * VALUE_MOVE_ENEMY;
-			enemy->move.z -= sinf(enemy->rot.y - D3DX_PI * 0.25f) * VALUE_MOVE_ENEMY;
+			enemy->move.x += cosf(camera->rotCamera.y - D3DX_PI * 0.25f) * VALUE_MOVE_ENEMY;
+			enemy->move.z -= sinf(camera->rotCamera.y - D3DX_PI * 0.25f) * VALUE_MOVE_ENEMY;
 		}
 		else if(GetKeyboardPress(DIK_DOWN))
 		{// 右後移動
-			enemy->move.x += cosf(enemy->rot.y + D3DX_PI * 0.25f) * VALUE_MOVE_ENEMY;
-			enemy->move.z -= sinf(enemy->rot.y + D3DX_PI * 0.25f) * VALUE_MOVE_ENEMY;
+			enemy->move.x += cosf(camera->rotCamera.y + D3DX_PI * 0.25f) * VALUE_MOVE_ENEMY;
+			enemy->move.z -= sinf(camera->rotCamera.y + D3DX_PI * 0.25f) * VALUE_MOVE_ENEMY;
 		}
 		else
 		{// 右移動
-			enemy->move.x += cosf(enemy->rot.y) * VALUE_MOVE_ENEMY;
-			enemy->move.z -= sinf(enemy->rot.y) * VALUE_MOVE_ENEMY;
+			enemy->move.x += cosf(camera->rotCamera.y) * VALUE_MOVE_ENEMY;
+			enemy->move.z -= sinf(camera->rotCamera.y) * VALUE_MOVE_ENEMY;
 		}
 	}
 	else if(GetKeyboardPress(DIK_UP))
 	{// 前移動
-		enemy->move.x += sinf(enemy->rot.y) * VALUE_MOVE_ENEMY;
-		enemy->move.z += cosf(enemy->rot.y) * VALUE_MOVE_ENEMY;
+		enemy->move.x += sinf(camera->rotCamera.y) * VALUE_MOVE_ENEMY;
+		enemy->move.z += cosf(camera->rotCamera.y) * VALUE_MOVE_ENEMY;
 	}
 	else if(GetKeyboardPress(DIK_DOWN))
 	{// 後移動
-		enemy->move.x -= sinf(enemy->rot.y) * VALUE_MOVE_ENEMY;
-		enemy->move.z -= cosf(enemy->rot.y) * VALUE_MOVE_ENEMY;
+		enemy->move.x -= sinf(camera->rotCamera.y) * VALUE_MOVE_ENEMY;
+		enemy->move.z -= cosf(camera->rotCamera.y) * VALUE_MOVE_ENEMY;
 	}
 
 	// 移動量に慣性をかける
