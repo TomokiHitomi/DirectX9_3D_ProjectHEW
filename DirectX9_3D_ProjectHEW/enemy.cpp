@@ -7,6 +7,7 @@
 #include "camera.h"
 #include "debugproc.h"
 #include "input.h"
+#include "player.h"
 #include "enemy.h"
 
 
@@ -123,6 +124,11 @@ HRESULT InitEnemy(void)
 
 		// アニメーションカウント初期化
 		animCnt = 0;
+
+		// ランダムで最初に追尾するプレイヤーを選ぶ
+
+
+
 	}
 
 
@@ -170,7 +176,12 @@ void UpdateEnemy(void)
 	//enemy->Eye = camera->posCameraAt;
 
 	// エネミーの注視点をカメラの注視点にセット
-	enemy->At = camera->posCameraAt;
+	//enemy->At = camera->posCameraAt;
+
+	// エネミーの注視点をプレイヤーにセット
+	enemy->At = GetPosPlayer();
+
+
 
 	// アニメーション
 	SetEnemyAnimation(ENEMY_ANIM_SEC);
@@ -261,6 +272,7 @@ void UpdateEnemy(void)
 	enemy->Eye.z += enemy->move.z;
 
 #endif
+
 
 	enemy = &enemyWk[0];
 #ifdef _DEBUG
