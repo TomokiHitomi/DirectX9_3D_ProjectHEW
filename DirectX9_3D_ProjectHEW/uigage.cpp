@@ -122,6 +122,30 @@ void UninitUigage(void)
 //=============================================================================
 void UpdateUigage(void)
 {
+	GAGE *gage = GetGage(0);
+
+	for (int i = 0; i < MAX_GAGE; i++, gage++)
+	{
+		if (GetKeyboardPress(DIK_Y))
+		{
+			gage->GageLong -= 10;
+			if (gage->GageLong <= 0)
+			{
+				gage->GageLong = 0;
+			}
+
+		}
+		else if (GetKeyboardPress(DIK_U))
+		{
+			gage->GageLong += 10;
+			if (gage->GageLong >= TEXTURE_GAGEFRAME_WIDTH)
+			{
+				gage->GageLong = TEXTURE_GAGEFRAME_WIDTH;
+			}
+		}
+		SetVertexGage(i);
+
+	}
 }
 
 //=============================================================================
@@ -297,7 +321,7 @@ HRESULT MakeVertexUigage(LPDIRECT3DDEVICE9 pDevice)
 //================================================================
 void SetVertexGage(int no)
 {
-	GAGE *gage = GetGage(0);
+	GAGE *gage = GetGage(no);
 
 	//頂点バッファの中身を埋める
 	VERTEX_2D *pVtx;
