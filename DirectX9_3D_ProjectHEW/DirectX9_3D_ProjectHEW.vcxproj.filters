@@ -46,6 +46,9 @@
     <Filter Include="ソース ファイル\Stage\Game\Effect">
       <UniqueIdentifier>{982b7955-cda3-43b4-a983-ed29c000a64d}</UniqueIdentifier>
     </Filter>
+    <Filter Include="ソース ファイル\Shadow">
+      <UniqueIdentifier>{9e00e4f4-2562-4d54-b4bb-b4fec94fc9b4}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="main.h">
@@ -144,6 +147,12 @@
     <ClInclude Include="resultlogo.h">
       <Filter>ソース ファイル\Stage\Result</Filter>
     </ClInclude>
+    <ClInclude Include="workChisaka.h">
+      <Filter>ヘッダー ファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="shadow.h">
+      <Filter>ソース ファイル\Shadow</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -241,6 +250,9 @@
     </ClCompile>
     <ClCompile Include="resultlogo.cpp">
       <Filter>ソース ファイル\Stage\Result</Filter>
+    </ClCompile>
+    <ClCompile Include="shadow.cpp">
+      <Filter>ソース ファイル\Shadow</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

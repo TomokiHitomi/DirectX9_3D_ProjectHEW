@@ -170,6 +170,7 @@
     <ClInclude Include="resultlogo.h" />
     <ClInclude Include="result.h" />
     <ClInclude Include="resultwin.h" />
+    <ClInclude Include="shadow.h" />
     <ClInclude Include="sound.h" />
     <ClInclude Include="stage.h" />
     <ClInclude Include="title.h" />
@@ -204,6 +205,7 @@
     <ClCompile Include="resultlogo.cpp" />
     <ClCompile Include="result.cpp" />
     <ClCompile Include="resultwin.cpp" />
+    <ClCompile Include="shadow.cpp" />
     <ClCompile Include="sound.cpp" />
     <ClCompile Include="stage.cpp" />
     <ClCompile Include="title.cpp" />
@@ -212,8 +214,6 @@
     <ClCompile Include="uiframe.cpp" />
     <ClCompile Include="uigage.cpp" />
     <ClCompile Include="wall.cpp" />
-    <ClCompile Include="workChisaka.cpp" />
-    <ClCompile Include="workChisaka.cpp" />
     <ClCompile Include="workHitomi.cpp" />
     <ClCompile Include="workHoriguchi.cpp" />
     <ClCompile Include="workYamaguchi.cpp" />

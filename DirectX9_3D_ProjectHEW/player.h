@@ -12,10 +12,10 @@
 //*******************************************************************
 // マクロ定義
 //*******************************************************************
-#define MODEL_PLAYER		"data/MODEL/PLAYER/player01.x"		// 読み込むモデル
-#define PLAYER_RADIUS		(10.0f)									// 半径
-#define VALUE_MOVE_PLAYER	(1.0f)									// 移動速度
-//#define PLAYER_MAX			(2)									// プレイヤーの最大数
+//#define MODEL_PLAYER		"data/MODEL/PLAYER/player01.x"		// 読み込むモデル
+#define PLAYER_RADIUS		(10.0f)								// 半径
+#define VALUE_MOVE_PLAYER	(1.5f)								// 移動速度
+#define PLAYER_MAX			(2)									// プレイヤーの最大数
 
 //*******************************************************************
 // 構造体宣言
