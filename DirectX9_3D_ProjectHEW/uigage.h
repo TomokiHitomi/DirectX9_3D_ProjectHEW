@@ -21,7 +21,7 @@
 
 #define	TEXTURE_GAGE				"data/TEXTURE/gage.png"				//読み込むテクスチャファイル名
 #define	TEXTURE_SIZECHANGE			(7.5f)
-#define	TEXTURE_GAGE_WIDTH			(TEXTURE_GAGEFRAME_WIDTH-TEXTURE_SIZECHANGE)			//ゲージ横サイズ
+#define	TEXTURE_GAGE_WIDTH			(TEXTURE_GAGEFRAME_WIDTH)			//ゲージ横サイズ
 #define	TEXTURE_GAGE_HEIGHT			(TEXTURE_GAGEFRAME_HEIGHT-TEXTURE_SIZECHANGE)			//ゲージ縦サイズ
 #define	MAX_GAGE					(2)									//ゲージ使用数
 #define	GAGE_ALPHA					(0.6f)

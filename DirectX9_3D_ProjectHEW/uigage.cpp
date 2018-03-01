@@ -6,6 +6,10 @@
 //=============================================================================
 #include "uigage.h"
 
+#ifdef _DEBUG
+#include "input.h"
+#endif
+
 //*****************************************************************************
 // マクロ定義
 //*****************************************************************************
@@ -14,6 +18,8 @@
 // プロトタイプ宣言
 //*****************************************************************************
 HRESULT MakeVertexUigage(LPDIRECT3DDEVICE9 pDevice);
+void SetVertexGage(int no);
+
 
 //*****************************************************************************
 // グローバル変数
@@ -241,16 +247,11 @@ HRESULT MakeVertexUigage(LPDIRECT3DDEVICE9 pDevice)
 		for (int i = 0; i < MAX_GAGE; i++, gage++, pVtx += 4)
 		{
 			// 頂点座標の設定
-			//pVtx[0].vtx = D3DXVECTOR3(gage->GagePos.x - gage->GageLong, gage->GagePos.y - TEXTURE_GAGE_HEIGHT / 2, 0.0f);
-			//pVtx[1].vtx = D3DXVECTOR3(gage->GagePos.x , gage->GagePos.y - TEXTURE_GAGE_HEIGHT / 2, 0.0f);
-			//pVtx[2].vtx = D3DXVECTOR3(gage->GagePos.x  - gage->GageLong, gage->GagePos.y + TEXTURE_GAGE_HEIGHT / 2, 0.0f);
-			//pVtx[3].vtx = D3DXVECTOR3(gage->GagePos.x, gage->GagePos.y + TEXTURE_GAGE_HEIGHT / 2, 0.0f);
-
 			pVtx[0].vtx.x = gage->GagePos.x;
 			pVtx[0].vtx.y = gage->GagePos.y-cosf(gage->GageRot)*TEXTURE_GAGE_HEIGHT / 2;
 			pVtx[0].vtx.z = 0.0f;
 			
-			pVtx[1].vtx.x = gage->GagePos.x+gage->GageLong;
+			pVtx[1].vtx.x = gage->GagePos.x+cosf(gage->GageRot)*gage->GageLong;
 			pVtx[1].vtx.y = gage->GagePos.y - cosf(gage->GageRot)*TEXTURE_GAGE_HEIGHT / 2;
 			pVtx[1].vtx.z = 0.0f;
 			
@@ -258,7 +259,7 @@ HRESULT MakeVertexUigage(LPDIRECT3DDEVICE9 pDevice)
 			pVtx[2].vtx.y = gage->GagePos.y + cosf(gage->GageRot)*TEXTURE_GAGE_HEIGHT / 2;
 			pVtx[2].vtx.z = 0.0f;
 			
-			pVtx[3].vtx.x = gage->GagePos.x + gage->GageLong;
+			pVtx[3].vtx.x = gage->GagePos.x +cosf(gage->GageRot)* gage->GageLong;
 			pVtx[3].vtx.y = gage->GagePos.y + cosf(gage->GageRot)*TEXTURE_GAGE_HEIGHT / 2;
 			pVtx[3].vtx.z = 0.0f;
 
@@ -291,6 +292,43 @@ HRESULT MakeVertexUigage(LPDIRECT3DDEVICE9 pDevice)
 	return S_OK;
 }
 
+//================================================================
+//座標設定
+//================================================================
+void SetVertexGage(int no)
+{
+	GAGE *gage = GetGage(0);
+
+	//頂点バッファの中身を埋める
+	VERTEX_2D *pVtx;
+
+
+	// 頂点データの範囲をロックし、頂点バッファへのポインタを取得
+	g_pD3DVtxBuffUigage->Lock(0, 0, (void**)&pVtx, 0);
+	pVtx += (no * 4);
+
+
+	// 頂点座標の設定
+	pVtx[0].vtx.x = gage->GagePos.x;
+	pVtx[0].vtx.y = gage->GagePos.y - cosf(gage->GageRot)*TEXTURE_GAGE_HEIGHT / 2;
+	pVtx[0].vtx.z = 0.0f;
+
+	pVtx[1].vtx.x = gage->GagePos.x + cosf(gage->GageRot)*gage->GageLong;
+	pVtx[1].vtx.y = gage->GagePos.y - cosf(gage->GageRot)*TEXTURE_GAGE_HEIGHT / 2;
+	pVtx[1].vtx.z = 0.0f;
+
+	pVtx[2].vtx.x = gage->GagePos.x;
+	pVtx[2].vtx.y = gage->GagePos.y + cosf(gage->GageRot)*TEXTURE_GAGE_HEIGHT / 2;
+	pVtx[2].vtx.z = 0.0f;
+
+	pVtx[3].vtx.x = gage->GagePos.x + cosf(gage->GageRot)* gage->GageLong;
+	pVtx[3].vtx.y = gage->GagePos.y + cosf(gage->GageRot)*TEXTURE_GAGE_HEIGHT / 2;
+	pVtx[3].vtx.z = 0.0f;
+
+	// 頂点データをアンロックする
+	g_pD3DVtxBuffUigage->Unlock();
+
+}
 //================================================================
 //ゲージフレームの取得
 //================================================================
