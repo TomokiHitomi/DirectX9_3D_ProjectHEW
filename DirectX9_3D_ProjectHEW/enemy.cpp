@@ -38,6 +38,8 @@ ENEMY				enemyWk[ENEMY_MAX];		// エネミー格納ワーク
 
 int					animCnt;		// アニメカウント
 
+int		key;
+
 const char *FileNameEnemy[ENEMY_ANIM_MAX] =
 {
 	"data/MODEL/ENEMY/enemy_a00.x",		// 直立
@@ -63,6 +65,7 @@ HRESULT InitEnemy(void)
 	LPDIRECT3DDEVICE9 pDevice = GetDevice();
 	ENEMY *enemy = &enemyWk[0];
 
+	key = 0;
 
 	for (int nCntEnemyAnim = 0; nCntEnemyAnim < ENEMY_ANIM_MAX; nCntEnemyAnim++)
 	{
@@ -172,8 +175,8 @@ void UpdateEnemy(void)
 	// アニメーション
 	SetEnemyAnimation(ENEMY_ANIM_SEC);
 
-#ifdef _DEBUG
 	// デバッグ時に手動でエネミー移動
+#ifdef _DEBUG
 	if(GetKeyboardPress(DIK_LEFT))
 	{
 		if(GetKeyboardPress(DIK_UP))
@@ -302,6 +305,7 @@ void DrawEnemy(void)
 			//D3DXMatrixRotationYawPitchRoll(&mtxRot, enemy->rot.y, enemy->rot.x, enemy->rot.z);
 			//D3DXMatrixMultiply(&g_mtxWorldEnemy, &g_mtxWorldEnemy, &mtxRot);
 			EnemyLookAtMatrix(&mtxRot, &enemy->Eye, &enemy->At, &enemy->Up);
+
 			D3DXMatrixMultiply(&g_mtxWorldEnemy, &g_mtxWorldEnemy, &mtxRot);
 			
 			//// 移動を反映
