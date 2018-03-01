@@ -129,8 +129,9 @@ void UninitItem(void)
 void UpdateItem(void)
 {
 	ITEM *item = &itemWk[0];
-	
-	if(poptime % 420 == 0)
+	PANEL *panel = GetPanel(0);
+
+	if(poptime % 20 == 0)
 	{	
 		SetItem(D3DXVECTOR3(0.0f, 10.0f, 0.0f), ITEMTYPE_COIN, ITEM_LIFE);
 		poptime = 0;
@@ -165,7 +166,11 @@ void UpdateItem(void)
 			// 完全にフィールドの下に行ったら消去
 			if (item->pos.y < -ITEM_SIZE_Y)
 			{
+				// アイテムを消去
 				item->use = false;
+
+				// パネルをセット状態から解放してあげる
+				panel[item->no].ItemSet = false;
 
 			}
 
@@ -281,27 +286,31 @@ void SetItem(D3DXVECTOR3 pos, int nType, int life)
 
 		item = &itemWk[0];
 
-		item->no = rand() % PANEL_MAX;
+		while (1)
+		{
+			no = rand() % PANEL_MAX;
 
-		panel = GetPanel(item->no);
+			panel = GetPanel(no);
+
+			// 選ばれたパネルが使用中かどうかのチェック
+			if (!panel->ItemSet)
+			{	// 未使用ならば
+
+				// アイテムセット状態にする
+				panel->ItemSet = true;
+
+
+				break;
+			}
+
+		}
 
 		for (int nCntItem = 0; nCntItem < MAX_ITEM; nCntItem++, item++)
 		{
 			if (!item->use)
 			{
-				//// ポップしているパネル番号を入れる
-				//for (int j = 0; j < nCntItem;)
-				//{
-				//	if (item[nCntItem].no == item[j].no)
-				//	{
-				//		item->no = rand() % PANEL_MAX;
-				//		j = 0;
-				//	}
-				//	else if (item[nCntItem].no != item[j].no)
-				//	{
-				//		j++;
-				//	}
-				//}
+				// アイテムをセットしたパネルの番号を保存
+				item->no = no;
 
 				// ポップ位置の設定
 				item->pos = panel->Pos;		// ランダムで選んだパネルの座標にセット
@@ -323,7 +332,7 @@ void SetItem(D3DXVECTOR3 pos, int nType, int life)
 		}
 
 		// アイテムの生存数がMAXになったら抜ける
-		//if (GetExistItemNum() >= MAX_ITEM_POP) break;
+		if (GetExistItemNum() >= MAX_ITEM_POP) break;
 
 	}
 }
