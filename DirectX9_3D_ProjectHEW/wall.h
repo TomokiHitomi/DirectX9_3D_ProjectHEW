@@ -1,7 +1,7 @@
 //=============================================================================
 //
 // メッシュ壁の処理 [wall.h]
-// Author : 
+// Author : GP11B243　32 山口輝明
 //
 //=============================================================================
 #ifndef _WALL_H_
@@ -11,7 +11,7 @@
 #include "field.h"
 
 #define	MAX_MESH_WALL		(10)							// 壁の総数
-#define	TEXTURE_FILENAME	"data/TEXTURE/wall000.jpg"		// 読み込むテクスチャファイル名
+#define	TEXTURE_FILENAME	"data/TEXTURE/wall.jpg"		// 読み込むテクスチャファイル名
 
 #define	WALL_NUM_X			(PANEL_NUM_X)					//壁の使用枚数
 #define	WALL_NUM_Y			(1)								//壁の使用枚数

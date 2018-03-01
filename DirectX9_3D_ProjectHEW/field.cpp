@@ -95,16 +95,16 @@ void UpdateField(void)
 
 #ifdef _DEBUG
 	//パネル位置確認用
-	PANEL *panelcheck1 = GetPanel(GetPanelNumber(1, 1));
-	PANEL *panelcheck2 = GetPanel(GetPanelNumber(1, 15));
-	PANEL *panelcheck3 = GetPanel(GetPanelNumber(7, 1));
-	PANEL *panelcheck4 = GetPanel(GetPanelNumber(7, 15));
-	PrintDebugProc("パネル[ 1][ 1] : (%f,%f,%f)\n", panelcheck1->Pos.x, panelcheck1->Pos.y, panelcheck1->Pos.z);
-	PrintDebugProc("パネル[ 1][15] : (%f,%f,%f)\n", panelcheck2->Pos.x, panelcheck2->Pos.y, panelcheck2->Pos.z);
-	PrintDebugProc("パネル[ 7][ 1] : (%f,%f,%f)\n", panelcheck3->Pos.x, panelcheck3->Pos.y, panelcheck3->Pos.z);
-	PrintDebugProc("パネル[ 7][15] : (%f,%f,%f)\n", panelcheck4->Pos.x, panelcheck4->Pos.y, panelcheck4->Pos.z);
+	//PANEL *panelcheck1 = GetPanel(GetPanelNumber(1, 1));
+	//PANEL *panelcheck2 = GetPanel(GetPanelNumber(1, 15));
+	//PANEL *panelcheck3 = GetPanel(GetPanelNumber(7, 1));
+	//PANEL *panelcheck4 = GetPanel(GetPanelNumber(7, 15));
+	//PrintDebugProc("パネル[ 1][ 1] : (%f,%f,%f)\n", panelcheck1->Pos.x, panelcheck1->Pos.y, panelcheck1->Pos.z);
+	//PrintDebugProc("パネル[ 1][15] : (%f,%f,%f)\n", panelcheck2->Pos.x, panelcheck2->Pos.y, panelcheck2->Pos.z);
+	//PrintDebugProc("パネル[ 7][ 1] : (%f,%f,%f)\n", panelcheck3->Pos.x, panelcheck3->Pos.y, panelcheck3->Pos.z);
+	//PrintDebugProc("パネル[ 7][15] : (%f,%f,%f)\n", panelcheck4->Pos.x, panelcheck4->Pos.y, panelcheck4->Pos.z);
 
-
+	/*GetPanel(1)->PanelCol = D3DXCOLOR(0.0f, 0.0f, 1.0f, 1.0f);*/
 
 #endif
 }
