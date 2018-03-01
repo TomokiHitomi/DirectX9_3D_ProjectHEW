@@ -214,6 +214,7 @@
     <ClCompile Include="uiframe.cpp" />
     <ClCompile Include="uigage.cpp" />
     <ClCompile Include="wall.cpp" />
+    <ClCompile Include="workChisaka.cpp" />
     <ClCompile Include="workHitomi.cpp" />
     <ClCompile Include="workHoriguchi.cpp" />
     <ClCompile Include="workYamaguchi.cpp" />

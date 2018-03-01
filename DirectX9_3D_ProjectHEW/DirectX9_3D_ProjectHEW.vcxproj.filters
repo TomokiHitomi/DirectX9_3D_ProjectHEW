@@ -153,6 +153,9 @@
     <ClInclude Include="shadow.h">
       <Filter>ソース ファイル\Shadow</Filter>
     </ClInclude>
+    <ClInclude Include="workChisaka.h">
+      <Filter>ヘッダー ファイル</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -203,9 +206,6 @@
     <ClCompile Include="workYoshida.cpp">
       <Filter>ソース ファイル\Work</Filter>
     </ClCompile>
-    <ClCompile Include="workChisaka.cpp">
-      <Filter>ソース ファイル\Work</Filter>
-    </ClCompile>
     <ClCompile Include="uiframe.cpp">
       <Filter>ソース ファイル\Stage\Game\Ui</Filter>
     </ClCompile>
@@ -253,6 +253,9 @@
     </ClCompile>
     <ClCompile Include="shadow.cpp">
       <Filter>ソース ファイル\Shadow</Filter>
+    </ClCompile>
+    <ClCompile Include="workChisaka.cpp">
+      <Filter>ソース ファイル\Work</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>
