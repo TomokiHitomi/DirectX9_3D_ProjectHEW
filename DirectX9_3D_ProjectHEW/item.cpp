@@ -131,7 +131,7 @@ void UpdateItem(void)
 	ITEM *item = &itemWk[0];
 	PANEL *panel = GetPanel(0);
 
-	if(poptime % 20 == 0)
+	if(poptime % 420 == 0)
 	{	
 		SetItem(D3DXVECTOR3(0.0f, 10.0f, 0.0f), ITEMTYPE_COIN, ITEM_LIFE);
 		poptime = 0;
