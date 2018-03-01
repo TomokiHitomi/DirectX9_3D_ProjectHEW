@@ -123,35 +123,26 @@ void UpdatePlayer(void)
 	// ƒJƒƒ‰‚ÌŒü‚«æ“¾
 	rotCamera = GetRotCamera();
 
-	// ˆÚ“®ˆ—
-	if (GetKeyboardPress(DIK_A))
+	for (int i = 0; i < PLAYER_MAX; i++, player++)
 	{
-		for (int i = 0;i < PLAYER_MAX;i++, player++)
+		// ˆÚ“®ˆ—
+		if (GetKeyboardPress(DIK_A) || IsButtonPressed(i, BUTTON_POV_LEFT) || IsButtonPressed(i, BUTTON_LEFT))
 		{
 			player->pos.x -= VALUE_MOVE_PLAYER;
 			player->rot.y = rotCamera.y + D3DX_PI * 0.5f;
 		}
-	}
-	else if (GetKeyboardPress(DIK_D))
-	{
-		for (int i = 0;i < PLAYER_MAX;i++, player++)
+		else if (GetKeyboardPress(DIK_D) || IsButtonPressed(i, BUTTON_POV_RIGHT) || IsButtonPressed(i, BUTTON_RIGHT))
 		{
 			player->pos.x += VALUE_MOVE_PLAYER;
 			player->rot.y = rotCamera.y - D3DX_PI * 0.5f;
 		}
-	}
-	
-	if (GetKeyboardPress(DIK_W))
-	{
-		for (int i = 0;i < PLAYER_MAX;i++, player++)
+
+		if (GetKeyboardPress(DIK_W) || IsButtonPressed(i, BUTTON_POV_UP) || IsButtonPressed(i, BUTTON_UP))
 		{
 			player->pos.z += VALUE_MOVE_PLAYER;
 			player->rot.y = rotCamera.y + D3DX_PI * 1.0f;
 		}
-	}
-	else if (GetKeyboardPress(DIK_S))
-	{
-		for (int i = 0;i < PLAYER_MAX;i++, player++)
+		else if (GetKeyboardPress(DIK_S) || IsButtonPressed(i, BUTTON_POV_DOWN) || IsButtonPressed(i, BUTTON_DOWN))
 		{
 			player->pos.z -= VALUE_MOVE_PLAYER;
 			player->rot.y = rotCamera.y + D3DX_PI * 0.0f;
