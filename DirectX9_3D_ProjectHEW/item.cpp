@@ -35,9 +35,10 @@ D3DXMATRIX			g_mtxWorldItem;						// ワールドマトリックス
 
 ITEM				itemWk[MAX_ITEM];					// アイテムワーク
 
+int					poptime;							// ポップする間隔
 const char *FileNameItem[ITEMTYPE_MAX] =
 {
-	"data/MODEL/ITEM/item000.x",		// コイン
+	"data/MODEL/ITEM/item.x",			// コイン
 	"data/MODEL/ITEM/item001.x",		// ライフ
 	"data/MODEL/ITEM/item002.x"			// タイマー
 };
@@ -49,6 +50,7 @@ HRESULT InitItem(void)
 {
 	LPDIRECT3DDEVICE9 pDevice = GetDevice();
 	ITEM *item = &itemWk[0];
+	int one = 0;
 
 	for (int nCntItemType = 0; nCntItemType < ITEMTYPE_MAX; nCntItemType++)
 	{
@@ -85,11 +87,11 @@ HRESULT InitItem(void)
 		item->nIdxShadow = -1;
 		item->nType = ITEMTYPE_COIN;
 		item->life = 0;
+		item->no = PANEL_MAX;
 		item->use = false;
 	}
 
-
-	SetItem(D3DXVECTOR3(0.0f, 30.0f, 0.0f), ITEMTYPE_COIN, ITEM_LIFE);
+	poptime = 0;
 
 	return S_OK;
 }
@@ -127,6 +129,13 @@ void UninitItem(void)
 void UpdateItem(void)
 {
 	ITEM *item = &itemWk[0];
+	
+	if(poptime % 420 == 0)
+	{	
+		SetItem(D3DXVECTOR3(0.0f, 10.0f, 0.0f), ITEMTYPE_COIN, ITEM_LIFE);
+		poptime = 0;
+	}
+	poptime++;
 
 	for (int nCntItem = 0; nCntItem < MAX_ITEM; nCntItem++,item++)
 	{
@@ -272,15 +281,28 @@ void SetItem(D3DXVECTOR3 pos, int nType, int life)
 
 		item = &itemWk[0];
 
-		// ランダムでアイテムをポップさせるパネルを選択
-		no = rand() % PANEL_MAX;
-		panel = GetPanel(no);
-		// 
-		
+		item->no = rand() % PANEL_MAX;
+
+		panel = GetPanel(item->no);
+
 		for (int nCntItem = 0; nCntItem < MAX_ITEM; nCntItem++, item++)
 		{
 			if (!item->use)
 			{
+				//// ポップしているパネル番号を入れる
+				//for (int j = 0; j < nCntItem;)
+				//{
+				//	if (item[nCntItem].no == item[j].no)
+				//	{
+				//		item->no = rand() % PANEL_MAX;
+				//		j = 0;
+				//	}
+				//	else if (item[nCntItem].no != item[j].no)
+				//	{
+				//		j++;
+				//	}
+				//}
+
 				// ポップ位置の設定
 				item->pos = panel->Pos;		// ランダムで選んだパネルの座標にセット
 				// ポップ位置を微調整
@@ -301,7 +323,7 @@ void SetItem(D3DXVECTOR3 pos, int nType, int life)
 		}
 
 		// アイテムの生存数がMAXになったら抜ける
-		if (GetExistItemNum() >= MAX_ITEM_POP) break;
+		//if (GetExistItemNum() >= MAX_ITEM_POP) break;
 
 	}
 }

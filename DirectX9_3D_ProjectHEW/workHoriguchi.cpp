@@ -10,6 +10,8 @@
 #include "fade.h"
 
 // 堀口担当分で必要なインクルード
+#include "player.h"
+#include "bullet.h"
 
 // デバッグ用
 #ifdef _DEBUG
@@ -30,6 +32,8 @@
 //=============================================================================
 HRESULT InitWorkHoriguchi(int nType)
 {
+	InitPlayer();
+
 	return S_OK;
 }
 
@@ -38,6 +42,7 @@ HRESULT InitWorkHoriguchi(int nType)
 //=============================================================================
 void UninitWorkHoriguchi(void)
 {
+	UninitPlayer();
 }
 
 //=============================================================================
@@ -50,6 +55,7 @@ void UpdateWorkHoriguchi(void)
 	case STAGE_TITLE:
 		break;
 	case STAGE_GAME:
+		UpdatePlayer();
 		break;
 	case STAGE_RESULT:
 		break;
@@ -66,6 +72,7 @@ void DrawWorkHoriguchi(void)
 	case STAGE_TITLE:
 		break;
 	case STAGE_GAME:
+		DrawPlayer();
 		break;
 	case STAGE_RESULT:
 		break;
