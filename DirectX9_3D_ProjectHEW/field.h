@@ -15,8 +15,6 @@
 #define	PANEL_MAX		(PANEL_NUM_X*PANEL_NUM_Z)	//使用する枚数
 #define	PANEL_SIZE_X	(35)						//パネルサイズ横
 #define	PANEL_SIZE_Z	(PANEL_SIZE_X)				//パネルサイズ縦
-#define	PANEL_COL_1P	(D3DXCOLOR(1.0f,0.0f,0.0f,1.0f))//1Pカラー
-#define	PANEL_COL_2P	(D3DXCOLOR(0.0f,0.0f,1.0f,1.0f))//2Pカラー
 
 typedef struct
 {
@@ -25,6 +23,8 @@ typedef struct
 	D3DXVECTOR3	Pos;					//ポジション
 	int			PanelType;				//パネルタイプ
 	D3DXCOLOR	PanelCol;				//パネルカラー
+
+	bool		ItemSet;				//アイテムがセットされてるか否か
 }PANEL;
 
 enum PANEL_TYPE		//パネルタイプ

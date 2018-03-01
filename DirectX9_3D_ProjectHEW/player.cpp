@@ -17,19 +17,19 @@
 //*******************************************************************
 // グローバル変数
 //*******************************************************************
-LPDIRECT3DTEXTURE9	D3DTexturePlayer/*[PLAYER_MAX]*/;		// テクスチャ読み込み場所
-LPD3DXMESH			D3DXMeshPlayer/*[PLAYER_MAX]*/;			// ID3DXMeshインターフェイスへのポインタ
-LPD3DXBUFFER		D3DXMatBuffPlayer/*[PLAYER_MAX]*/;		// メッシュのマテリアル情報を格納
-DWORD				NumMatPlayer/*[PLAYER_MAX]*/;			// 属性情報の総数
+LPDIRECT3DTEXTURE9	D3DTexturePlayer[PLAYER_MAX];		// テクスチャ読み込み場所
+LPD3DXMESH			D3DXMeshPlayer[PLAYER_MAX];			// ID3DXMeshインターフェイスへのポインタ
+LPD3DXBUFFER		D3DXMatBuffPlayer[PLAYER_MAX];		// メッシュのマテリアル情報を格納
+DWORD				NumMatPlayer[PLAYER_MAX];			// 属性情報の総数
 
 D3DXMATRIX			MtxWorldPlayer;						// ワールドマトリックス
-PLAYER				PlayerWk/*[PLAYER_MAX]*/;				// プレイヤーワーク
+PLAYER				PlayerWk[PLAYER_MAX];				// プレイヤーワーク
 
-//const char *FileNamePlayer/*[PLAYER_MAX]*/ =
-//{
-//	"data/MODEL/PLAYER/player01.x",
-//	"data/MODEL/PLAYER/player02.x"
-//};
+char *FileNamePlayer[PLAYER_MAX] =
+{
+	"data/MODEL/PLAYER/player01.x",
+	"data/MODEL/PLAYER/player02.x"
+};
 
 //===================================================================
 // 初期化処理
@@ -37,24 +37,24 @@ PLAYER				PlayerWk/*[PLAYER_MAX]*/;				// プレイヤーワーク
 HRESULT InitPlayer(void)
 {
 	LPDIRECT3DDEVICE9 Device = GetDevice();
-	PLAYER *player = &PlayerWk/*[0]*/;
+	PLAYER *player = &PlayerWk[0];
 
-	//for (int i = 0; i < PLAYER_MAX; i++)
-	//{
+	for (int i = 0; i < PLAYER_MAX; i++)
+	{
 
-		D3DTexturePlayer/*[i]*/ = NULL;
-		D3DXMeshPlayer/*[i]*/ = NULL;
-		D3DXMatBuffPlayer/*[i]*/ = NULL;
+		D3DTexturePlayer[i] = NULL;
+		D3DXMeshPlayer[i] = NULL;
+		D3DXMatBuffPlayer[i] = NULL;
 
 		// Xファイルの読み込み
-		if (FAILED(D3DXLoadMeshFromX(MODEL_PLAYER/*FileNamePlayer*//*[i]*/,
-			D3DXMESH_SYSTEMMEM,
-			Device,
-			NULL,
-			&D3DXMatBuffPlayer/*[i]*/,
-			NULL,
-			&NumMatPlayer/*[i]*/,
-			&D3DXMeshPlayer/*[i]*/)))
+		if (FAILED(D3DXLoadMeshFromX(FileNamePlayer[i],		// モデルデータ
+			D3DXMESH_SYSTEMMEM,								// 使用するメモリのオプション
+			Device,											// デバイス
+			NULL,											// 未使用
+			&D3DXMatBuffPlayer[i],							// マテリアルデータへのポインタ
+			NULL,											// 未使用
+			&NumMatPlayer[i],								// D3DXMATERIAL構造体の数
+			&D3DXMeshPlayer[i])))							// メッシュデータへのポインタ
 		{
 			return E_FAIL;
 		}
@@ -65,18 +65,19 @@ HRESULT InitPlayer(void)
 			TEXTURE_FILENAME,
 			&D3DTexturePlayer);
 #endif
-	//}
+	}
 
 	//プレイヤーの初期化処理
-	//for (int i = 0; i < PLAYER_MAX; i++, player++)
-	//{
-		player->use = true;									// useフラグ
-		player->pos = D3DXVECTOR3(100.0f, 0.0f, 50.0f);		// 位置
-		player->rot = D3DXVECTOR3(0.0f, 0.0f, 0.0f);		// 角度
-		player->scl = D3DXVECTOR3(1.0f, 1.0f, 1.0f);		// スケール
-		player->radius = PLAYER_RADIUS;						// 半径
-		player->item = 0.0f;								// アイテムを0に
-	//}
+	for (int i = 0; i < PLAYER_MAX; i++, player++)
+	{
+		player->use = true;											// useフラグをtrueに
+		player->pos = D3DXVECTOR3((i+1)*165.0f, 0.0f, 100.0f);		// 位置
+		player->rot = D3DXVECTOR3(0.0f, 0.0f, 0.0f);				// 角度
+		player->scl = D3DXVECTOR3(1.0f, 1.0f, 1.0f);				// スケール
+		player->radius = PLAYER_RADIUS;								// 半径
+		player->item = 0.0f;										// アイテムを0に
+	}
+
 	return S_OK;
 }
 
@@ -85,29 +86,29 @@ HRESULT InitPlayer(void)
 //===================================================================
 void UninitPlayer(void)
 {
-	//for (int i = 0; i < PLAYER_MAX; i++)
-	//{
-		if (D3DTexturePlayer != NULL)
+	for (int i = 0; i < PLAYER_MAX; i++)
+	{
+		if (D3DTexturePlayer[i] != NULL)
 		{
 			// テクスチャの開放
-			D3DTexturePlayer/*[i]*/->Release();
-			D3DTexturePlayer/*[i]*/ = NULL;
+			D3DTexturePlayer[i]->Release();
+			D3DTexturePlayer[i] = NULL;
 		}
 
-		if (D3DXMeshPlayer != NULL)
+		if (D3DXMeshPlayer[i] != NULL)
 		{
 			// メッシュの開放
-			D3DXMeshPlayer/*[i]*/->Release();
-			D3DXMeshPlayer/*[i]*/ = NULL;
+			D3DXMeshPlayer[i]->Release();
+			D3DXMeshPlayer[i] = NULL;
 		}
 
-		if (D3DXMatBuffPlayer != NULL)
+		if (D3DXMatBuffPlayer[i] != NULL)
 		{
 			// マテリアルの開放
-			D3DXMatBuffPlayer/*[i]*/->Release();
-			D3DXMatBuffPlayer/*[i]*/ = NULL;
+			D3DXMatBuffPlayer[i]->Release();
+			D3DXMatBuffPlayer[i] = NULL;
 		}
-	//}
+	}
 }
 
 //===================================================================
@@ -115,42 +116,46 @@ void UninitPlayer(void)
 //===================================================================
 void UpdatePlayer(void)
 {
-	PLAYER *player = &PlayerWk/*[0]*/;
+	PLAYER *player = &PlayerWk[0];
 	CAMERA *camera = GetCamera();
 	D3DXVECTOR3 rotCamera;
 
 	// カメラの向き取得
 	rotCamera = GetRotCamera();
 
-	bool key = false;
-
-	//キー入力があったら
-	if (GetKeyboardPress)
-	{
-		key = true;
-	}
-
-
 	// 移動処理
 	if (GetKeyboardPress(DIK_A))
 	{
-		player->pos.x -= VALUE_MOVE_PLAYER;
-		player->rot.y = rotCamera.y + D3DX_PI * 0.5f;
+		for (int i = 0;i < PLAYER_MAX;i++, player++)
+		{
+			player->pos.x -= VALUE_MOVE_PLAYER;
+			player->rot.y = rotCamera.y + D3DX_PI * 0.5f;
+		}
 	}
 	else if (GetKeyboardPress(DIK_D))
 	{
-		player->pos.x += VALUE_MOVE_PLAYER;
-		player->rot.y = rotCamera.y - D3DX_PI * 0.5f;
+		for (int i = 0;i < PLAYER_MAX;i++, player++)
+		{
+			player->pos.x += VALUE_MOVE_PLAYER;
+			player->rot.y = rotCamera.y - D3DX_PI * 0.5f;
+		}
 	}
-	else if (GetKeyboardPress(DIK_W))
+	
+	if (GetKeyboardPress(DIK_W))
 	{
-		player->pos.z += VALUE_MOVE_PLAYER;
-		player->rot.y = rotCamera.y + D3DX_PI * 1.0f;
+		for (int i = 0;i < PLAYER_MAX;i++, player++)
+		{
+			player->pos.z += VALUE_MOVE_PLAYER;
+			player->rot.y = rotCamera.y + D3DX_PI * 1.0f;
+		}
 	}
 	else if (GetKeyboardPress(DIK_S))
 	{
-		player->pos.z -= VALUE_MOVE_PLAYER;
-		player->rot.y = rotCamera.y + D3DX_PI * 0.0f;
+		for (int i = 0;i < PLAYER_MAX;i++, player++)
+		{
+			player->pos.z -= VALUE_MOVE_PLAYER;
+			player->rot.y = rotCamera.y + D3DX_PI * 0.0f;
+		}
 	}
 
 #ifdef _DEBUG
@@ -166,9 +171,9 @@ void UpdatePlayer(void)
 
 
 #ifdef _DEBUG
-	PrintDebugProc("[プレイヤー座標 ：(X:%f Y: %f Z: %f)]\n", player->pos.x, player->pos.y, player->pos.z);
-	PrintDebugProc("プレイヤー移動 : WASDQE : 前左後右上下\n");
-	PrintDebugProc("\n");
+		PrintDebugProc("[プレイヤー座標 ：(X:%f Y: %f Z: %f)]\n", player->pos.x, player->pos.y, player->pos.z);
+		PrintDebugProc("プレイヤー移動 : WSADQE : 前後左右上下\n");
+		PrintDebugProc("\n");
 #endif
 
 
@@ -190,10 +195,10 @@ void DrawPlayer(void)
 	D3DXMATERIAL *D3DXMat;
 	D3DMATERIAL9 matDef;
 
-	PLAYER *player = &PlayerWk/*[0]*/;
+	PLAYER *player = &PlayerWk[0];
 
-	//for (int i = 0; i < PLAYER_MAX; i++, player++)
-	//{
+	for (int i = 0; i < PLAYER_MAX; i++, player++)
+	{
 		if (player->use == true)
 		{
 			// ライトをON
@@ -221,24 +226,26 @@ void DrawPlayer(void)
 			Device->GetMaterial(&matDef);
 
 			// マテリアル情報に対するポインタを取得
-			D3DXMat = (D3DXMATERIAL*)D3DXMatBuffPlayer/*[i]*/->GetBufferPointer();
+			D3DXMat = (D3DXMATERIAL*)D3DXMatBuffPlayer[i]->GetBufferPointer();
 
-			for (int cntMat = 0; cntMat < (int)NumMatPlayer; cntMat++)
+			for (int cntMat = 0; cntMat < (int)NumMatPlayer[i]; cntMat++)
 			{
 				// マテリアルの設定
 				Device->SetMaterial(&D3DXMat[cntMat].MatD3D);
 
 				// テクスチャの設定
-				Device->SetTexture(0, D3DTexturePlayer/*[i]*/);
+				Device->SetTexture(0, D3DTexturePlayer[i]);
 
 				// 描画
-				D3DXMeshPlayer/*[i]*/->DrawSubset(cntMat);
+				D3DXMeshPlayer[i]->DrawSubset(cntMat);
 			}
 
 			// ライトをOFF
 			Device->SetRenderState(D3DRS_LIGHTING, FALSE);
 		}
-	//}
+	}
+
+
 	// マテリアルをデフォルトに戻す
 	{
 		D3DXMATERIAL mat;
@@ -255,9 +262,9 @@ void DrawPlayer(void)
 //===================================================================
 // プレイヤー取得
 //===================================================================
-PLAYER *GetPlayer(void/*int no*/)
+PLAYER *GetPlayer(int no)
 {
-	return &PlayerWk;
+	return &PlayerWk[no];
 }
 
 //===================================================================
@@ -265,7 +272,7 @@ PLAYER *GetPlayer(void/*int no*/)
 //===================================================================
 D3DXVECTOR3 GetPosPlayer(void)
 {
-	PLAYER *player = &PlayerWk/*[0]*/;
+	PLAYER *player = &PlayerWk[0];
 	return player->pos;
 }
 
@@ -274,6 +281,6 @@ D3DXVECTOR3 GetPosPlayer(void)
 //===================================================================
 D3DXVECTOR3 GetRotPlayer(void)
 {
-	PLAYER *player = &PlayerWk/*[0]*/;
+	PLAYER *player = &PlayerWk[0];
 	return player->rot;
 }

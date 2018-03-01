@@ -12,13 +12,13 @@
 //*****************************************************************************
 // マクロ定義
 //*****************************************************************************
-#define	MAX_ITEM				(128)						// アイテム最大数
+#define	MAX_ITEM				(5)						// アイテム最大数
 #define	MAX_ITEM_POP			(5)							// アイテム同時存在可能数
-#define	NUM_POP					(2)							// SetItem関数で一回当たりポップさせる数
+#define	NUM_POP					(4)							// SetItem関数で一回当たりポップさせる数
 #define	ITEM_LIFE				(300)						// アイテムの寿命
 #define	VALUE_MOVE_ITEM			(0.5f)						// アイテムの移動速度
-#define	ITEM_SIZE_X				(20.0f)						// アイテムの幅
-#define	ITEM_SIZE_Y				(20.0f)						// アイテムの高さ
+#define	ITEM_SIZE_X				(40.0f)						// アイテムの幅
+#define	ITEM_SIZE_Y				(40.0f)						// アイテムの高さ
 
 
 //**************************************
@@ -43,6 +43,7 @@ typedef struct
 	int nIdxShadow;			// 影ID
 	int nType;				// 種類
 	int life;				// 寿命
+	int no;					// ポップしているパネル番号
 	bool use;				// 使用しているかどうか
 } ITEM;
 
