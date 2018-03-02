@@ -26,6 +26,7 @@ typedef struct		// プレイヤー構造体
 	D3DXVECTOR3	pos;		// 位置
 	D3DXVECTOR3	rot;		// 角度
 	D3DXVECTOR3	scl;		// スケール
+	D3DXVECTOR3	move;		// 移動量
 	float		radius;		// 半径
 	float		item;		// アイテム
 } PLAYER;

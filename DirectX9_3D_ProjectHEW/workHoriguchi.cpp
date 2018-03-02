@@ -33,7 +33,7 @@
 HRESULT InitWorkHoriguchi(int nType)
 {
 	InitPlayer();
-
+	InitBullet();
 	return S_OK;
 }
 
@@ -43,6 +43,7 @@ HRESULT InitWorkHoriguchi(int nType)
 void UninitWorkHoriguchi(void)
 {
 	UninitPlayer();
+	UninitBullet();
 }
 
 //=============================================================================
@@ -56,6 +57,7 @@ void UpdateWorkHoriguchi(void)
 		break;
 	case STAGE_GAME:
 		UpdatePlayer();
+		UpdateBullet();
 		break;
 	case STAGE_RESULT:
 		break;
