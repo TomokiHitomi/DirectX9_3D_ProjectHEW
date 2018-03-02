@@ -10,14 +10,42 @@
 #include "main.h"
 
 //*******************************************************************
-//
+// マクロ定義
 //*******************************************************************
+#define TEXTURE_BULLET			"data/TEXTURE/bullet000.png"		// 読み込むテクスチャファイル名
+#define BULLET_SIZE_X			(50.0f)								// ビルボードの幅
+#define BULLET_SIZE_Y			(50.0f)								// ビルボードの高さ
+#define VALUE_MOVE_BULLET		(2.0f)								// 移動速度
 
-
+#define MAX_BULLET				(6)									// バレットの最大数
+#define BULLET_TYPE				(2)									// バレットの種類
 
 //*******************************************************************
-//
+// 構造体定義
 //*******************************************************************
+typedef struct
+{
+	D3DXVECTOR3 pos;		// 位置
+	D3DXVECTOR3 rot;		// 回転
+	D3DXVECTOR3 scl;		// スケール
+	D3DXVECTOR3 move;		// 移動量
+	float fSizeX;			// 幅
+	float fSizeY;			// 高さ
+	int nTimer;				// タイマー
+	int nIdxShadow;			// 影ID
+	bool bUse;				// 使用しているかどうか
+} BULLET;
+
+//*******************************************************************
+// プロトタイプ宣言
+//*******************************************************************
+HRESULT InitBullet(void);
+void UninitBullet(void);
+void UpdateBullet(void);
+void DrawBullet(void);
+
+int SetBullet(D3DXVECTOR3 pos, D3DXVECTOR3 move, float fSizeX, float fSizeY, int nTimer);
+void DeleteBullet(int nIdxBullet);
 
 
 
