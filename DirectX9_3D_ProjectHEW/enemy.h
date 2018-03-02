@@ -12,18 +12,21 @@
 // マクロ定義
 //*****************************************************************************
 
-#define	VALUE_MOVE_ENEMY	(1.50f)							// 移動速度係数
-#define	RATE_MOVE_ENEMY		(0.20f)							// 移動慣性係数
-#define	VALUE_ROTATE_ENEMY	(D3DX_PI * 0.05f)				// 回転速度
-#define	RATE_ROTATE_ENEMY	(0.20f)							// 回転慣性係数
+#define	VALUE_MOVE_ENEMY		(0.50f)							// 移動速度係数
+#define	RATE_MOVE_ENEMY			(0.20f)							// 移動慣性係数
+#define	VALUE_ROTATE_ENEMY		(D3DX_PI * 0.05f)				// 回転速度
+#define	RATE_ROTATE_ENEMY		(0.20f)							// 回転慣性係数
 
-#define	ENEMY_MAX			(1)								// エネミーの最大数
+#define	ENEMY_MAX				(1)								// エネミーの最大数
 
-#define	ENEMY_SIZE_X		(20.0f)							// エネミーの幅
-#define	ENEMY_SIZE_Y		(20.0f)							// エネミーの高さ
+#define	ENEMY_SIZE_X			(20.0f)							// エネミーの幅
+#define	ENEMY_SIZE_Y			(20.0f)							// エネミーの高さ
 
-#define	ENEMY_ANIM_MAX		(12)							// エネミーのアニメーションパターン数
-#define	ENEMY_ANIM_SEC		(1)								// アニメーション一巡にかかる秒数
+#define	ENEMY_ANIM_MAX			(12)							// エネミーのアニメーションパターン数
+#define	ENEMY_ANIM_SEC			(1)								// アニメーション一巡にかかる秒数
+
+#define	ENEMY_SPEED_FREQUENCY	(60*10)							// エネミーの移動速度の更新頻度(フレーム×秒数)
+#define	ENEMY_SPEEDUP			(0.5f)							// エネミーの移動速度変化量
 
 //*****************************************************************************
 // 構造体宣言
@@ -40,11 +43,12 @@ typedef struct		// エネミー構造体
 	D3DXVECTOR3		Up;								// エネミーの上方向
 	D3DXVECTOR3		rot;							// エネミーの向き
 	D3DXVECTOR3		move;							// エネミーの移動量
-
-
+	
 	VERTEX_2D		vertexWk[NUM_VERTEX];			// 頂点情報格納ワーク
 
 	int				anim;							// アニメーション番号
+
+	float			speed;							// 移動速度係数
 
 } ENEMY;
 
