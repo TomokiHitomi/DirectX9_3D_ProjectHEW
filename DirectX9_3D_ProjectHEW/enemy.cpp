@@ -101,8 +101,9 @@ HRESULT InitEnemy(void)
 	// エネミーの初期化処理
 	for (int i = 0; i < ENEMY_MAX; i++, enemy++)
 	{
+		PANEL *panel = GetPanel(GetPanelNumber(1, 8));
 		// エネミーの視点の初期化
-		enemy->Eye = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
+		enemy->Eye = panel->Pos;
 		// エネミーの注視点の初期化
 		enemy->At = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
 		// エネミーの上方向の初期化
