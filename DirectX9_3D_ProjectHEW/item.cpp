@@ -83,6 +83,7 @@ HRESULT InitItem(void)
 	{
 		item->pos = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
 		item->rot = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
+		item->scl = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
 		item->fRadius = 0.0f;
 		item->nIdxShadow = -1;
 		item->nType = ITEMTYPE_COIN;
@@ -149,8 +150,22 @@ void UpdateItem(void)
 				item->rot.y -= D3DX_PI * 2.0f;
 			}
 
-			// アイテムの寿命を減らす
-			item->life--;
+			// スケールを少しづつ拡大
+			item->scl.x += 0.05f;
+			item->scl.y += 0.05f;
+			item->scl.z += 0.05f;
+
+			// アイテムが完全にポップしたら（スケールが最大まで拡大されたら）
+			if (item->scl.x >= 1.0f)
+			{
+				// スケールをそれ以上大きくならないようにする
+				item->scl = D3DXVECTOR3(1.0f, 1.0f, 1.0f);
+
+				// アイテムの寿命を減らす
+				item->life--;
+
+			}
+			
 
 			if (item->life <= 0)
 			{	// アイテムを徐々に下方向に移動
@@ -213,7 +228,7 @@ void UpdateItem(void)
 void DrawItem(void)
 {
 	LPDIRECT3DDEVICE9 pDevice = GetDevice();
-	D3DXMATRIX mtxRot, mtxTranslate;
+	D3DXMATRIX mtxRot, mtxTranslate, mtxScale;
 	ITEM *item = &itemWk[0];
 
 
@@ -226,6 +241,13 @@ void DrawItem(void)
 
 			// ワールドマトリックスの初期化
 			D3DXMatrixIdentity(&g_mtxWorldItem);
+
+			// スケールを反映
+			D3DXMatrixScaling(&mtxScale, item->scl.x,
+				item->scl.y,
+				item->scl.z);
+			D3DXMatrixMultiply(&g_mtxWorldItem,
+				&g_mtxWorldItem, &mtxScale);
 
 			// 回転を反映
 			D3DXMatrixRotationYawPitchRoll(&mtxRot, item->rot.y, item->rot.x, item->rot.z);
@@ -311,6 +333,9 @@ void SetItem(D3DXVECTOR3 pos, int nType, int life)
 			{
 				// アイテムをセットしたパネルの番号を保存
 				item->no = no;
+
+				// アイテムのスケールをゼロにする
+				item->scl = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
 
 				// ポップ位置の設定
 				item->pos = panel->Pos;		// ランダムで選んだパネルの座標にセット
