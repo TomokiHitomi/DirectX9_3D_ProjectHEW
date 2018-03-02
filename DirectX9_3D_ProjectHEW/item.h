@@ -59,7 +59,7 @@ void UpdateItem(void);
 void DrawItem(void);
 
 void SetItem(D3DXVECTOR3 pos, int nType, int life);
-ITEM *GetItem(void);
+ITEM *GetItem(int no);
 int GetExistItemNum(void);
 
 #endif
