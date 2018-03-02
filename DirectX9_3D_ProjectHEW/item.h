@@ -37,14 +37,16 @@ enum
 //*****************************************************************************
 typedef struct
 {
-	D3DXVECTOR3 pos;		// 現在の位置
-	D3DXVECTOR3 rot;		// 現在の向き
-	float fRadius;			// 半径
-	int nIdxShadow;			// 影ID
-	int nType;				// 種類
-	int life;				// 寿命
-	int no;					// ポップしているパネル番号
-	bool use;				// 使用しているかどうか
+	D3DXVECTOR3	pos;				// 現在の位置
+	D3DXVECTOR3	rot;				// 現在の向き
+	D3DXVECTOR3	scl;				// スケール
+
+	float		fRadius;			// 半径
+	int			nIdxShadow;			// 影ID
+	int			nType;				// 種類
+	int			life;				// 寿命
+	int			no;					// ポップしているパネル番号
+	bool		use;				// 使用しているかどうか
 } ITEM;
 
 //*****************************************************************************
