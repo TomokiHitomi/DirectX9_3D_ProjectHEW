@@ -134,7 +134,7 @@ void UpdateItem(void)
 	PANEL *panel = GetPanel(0);
 
 
-	// アイテムをポップさせる
+	// アイテムを一定間隔でポップさせる
 	if(poptime % ITEM_POP_FREQUENCY == 0)
 	{	
 		SetItem(D3DXVECTOR3(0.0f, 10.0f, 0.0f), ITEMTYPE_COIN, ITEM_LIFE);

@@ -129,15 +129,14 @@ HRESULT InitEnemy(void)
 		// アニメーションカウント初期化
 		animCnt = 0;
 
-		// なんか初期化
-		key = 0;
-
 		// 更新頻度初期化
 		sp_Update = 0;
 
-
+		// 追尾プレイヤー番号初期化
+		key = 0;
 		// ランダムで最初に追尾するプレイヤーを選ぶ
-		
+		key = rand() % PLAYER_MAX;
+
 
 	}
 
@@ -185,7 +184,9 @@ void UpdateEnemy(void)
 	// アニメーション
 	SetEnemyAnimation(ENEMY_ANIM_SEC);
 
+
 	// ボタンで追尾対象切り替える
+#ifdef _DEBUG
 	if (GetKeyboardTrigger(DIK_1))
 	{
 		key = 0;
@@ -194,6 +195,7 @@ void UpdateEnemy(void)
 	{
 		key = 1;
 	}
+#endif
 
 	// 追尾をセット
 	SetEnemyHoming(key, ENEMY_SPEED_FREQUENCY, ENEMY_SPEEDUP);
