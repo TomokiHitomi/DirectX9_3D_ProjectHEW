@@ -20,6 +20,7 @@
 //*****************************************************************************
 void SetEnemyAnimation(int sec);
 D3DXMATRIX* EnemyLookAtMatrix(D3DXMATRIX *pout, D3DXVECTOR3 *pEye, D3DXVECTOR3 *pAt, D3DXVECTOR3 *pUp);
+void SetEnemyHoming(int no);
 
 
 //*****************************************************************************
@@ -126,8 +127,7 @@ HRESULT InitEnemy(void)
 		animCnt = 0;
 
 		// ランダムで最初に追尾するプレイヤーを選ぶ
-
-
+		
 
 	}
 
@@ -185,17 +185,18 @@ void UpdateEnemy(void)
 	// アニメーション
 	SetEnemyAnimation(ENEMY_ANIM_SEC);
 
-	// 追尾
+	// ボタンで追尾対象切り替える
+	if (GetKeyboardTrigger(DIK_1))
+	{
+		key = 0;
+	}
+	if (GetKeyboardTrigger(DIK_2))
+	{
+		key = 1;
+	}
 
-	// 追尾対象にエネミーの注視点をセット
-	enemy->At = GetPosPlayer(0);
-
-	// 追尾対象への移動ベクトルを求める
-	enemy->move = GetPosPlayer(0) - enemy->Eye;
-
-	// 移動ベクトルを正規化
-	D3DXVec3Normalize(&enemy->move, &enemy->move);
-
+	// 追尾をセット
+	SetEnemyHoming(key);
 
 	// デバッグ時に手動でエネミー移動
 #ifdef _DEBUG
@@ -435,5 +436,24 @@ void SetEnemyAnimation(int sec)
 			enemy->anim = 0;
 		}
 	}
+
+}
+//=============================================================================
+// エネミー追尾設定関数（引数：追尾したいプレイヤー番号）
+//=============================================================================
+void SetEnemyHoming(int no)
+{
+	ENEMY *enemy = &enemyWk[0];
+
+	// 追尾対象にエネミーの注視点をセット
+	enemy->At = GetPosPlayer(no);
+
+	// 追尾対象への移動ベクトルを求める
+	enemy->move = GetPosPlayer(no) - enemy->Eye;
+
+	// 移動ベクトルを正規化
+	D3DXVec3Normalize(&enemy->move, &enemy->move);
+
+	enemy->move *= VALUE_MOVE_ENEMY;
 
 }

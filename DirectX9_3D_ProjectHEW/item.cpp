@@ -36,6 +36,7 @@ D3DXMATRIX			g_mtxWorldItem;						// ワールドマトリックス
 ITEM				itemWk[MAX_ITEM];					// アイテムワーク
 
 int					poptime;							// ポップする間隔
+
 const char *FileNameItem[ITEMTYPE_MAX] =
 {
 	"data/MODEL/ITEM/item.x",			// コイン
@@ -79,7 +80,7 @@ HRESULT InitItem(void)
 #endif
 	}
 
-	for (int nCntItem = 0; nCntItem < MAX_ITEM; nCntItem++)
+	for (int nCntItem = 0; nCntItem < MAX_ITEM; nCntItem++,item++)
 	{
 		item->pos = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
 		item->rot = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
@@ -88,7 +89,7 @@ HRESULT InitItem(void)
 		item->nIdxShadow = -1;
 		item->nType = ITEMTYPE_COIN;
 		item->life = 0;
-		item->no = PANEL_MAX;
+		item->no = 0;
 		item->use = false;
 	}
 

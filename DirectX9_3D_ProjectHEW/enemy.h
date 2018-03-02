@@ -12,7 +12,7 @@
 // マクロ定義
 //*****************************************************************************
 
-#define	VALUE_MOVE_ENEMY	(0.50f)							// 移動速度係数
+#define	VALUE_MOVE_ENEMY	(1.50f)							// 移動速度係数
 #define	RATE_MOVE_ENEMY		(0.20f)							// 移動慣性係数
 #define	VALUE_ROTATE_ENEMY	(D3DX_PI * 0.05f)				// 回転速度
 #define	RATE_ROTATE_ENEMY	(0.20f)							// 回転慣性係数
