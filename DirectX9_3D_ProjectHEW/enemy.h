@@ -19,7 +19,7 @@
 
 #define	ENEMY_MAX				(1)								// エネミーの最大数
 
-#define	ENEMY_SIZE_X			(20.0f)							// エネミーの幅
+#define	ENEMY_SIZE_X			(10.0f)							// エネミーの幅
 #define	ENEMY_SIZE_Y			(20.0f)							// エネミーの高さ
 
 #define	ENEMY_ANIM_MAX			(12)							// エネミーのアニメーションパターン数
