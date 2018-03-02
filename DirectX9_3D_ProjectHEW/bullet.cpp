@@ -100,14 +100,17 @@ void UpdateBullet(void)
 		if (g_aBullet[i].bUse)
 		{
 			g_aBullet[i].pos.x += g_aBullet[i].move.x;
+			g_aBullet[i].pos.y += g_aBullet[i].move.y;
 			g_aBullet[i].pos.z += g_aBullet[i].move.z;
+			
+			g_aBullet[i].move.y -= VALUE_GRAVITY;
 
-			g_aBullet[i].nTimer--;
-			if (g_aBullet[i].nTimer <= 0)
-			{
-				//DeleteShadow(g_aBullet[i].nIdxShadow);
-				g_aBullet[i].bUse = false;
-			}
+			//g_aBullet[i].nTimer--;
+			//if (g_aBullet[i].nTimer <= 0)
+			//{
+			//	//DeleteShadow(g_aBullet[i].nIdxShadow);
+			//	g_aBullet[i].bUse = false;
+			//}
 			//else
 			//{
 				//// ‰e‚ÌˆÊ’uÝ’è
@@ -126,6 +129,7 @@ void UpdateBullet(void)
 			{
 				
 				DeleteBullet(i);
+				//DeleteShadow(g_aBullet[i].nIdxShadow);
 
 			}
 
@@ -142,11 +146,11 @@ void UpdateBullet(void)
 
 			//SetVertexShadow(g_aBullet[i].nIdxShadow, fSizeX, fSizeY);
 
-			float colA = (200.0f - (g_aBullet[i].pos.y - 4.0f)) / 400.0f;
-			if (colA < 0.0f)
-			{
-				colA = 0.0f;
-			}
+			//float colA = (200.0f - (g_aBullet[i].pos.y - 4.0f)) / 400.0f;
+			//if (colA < 0.0f)
+			//{
+			//	colA = 0.0f;
+			//}
 			//SetColorShadow(g_aBullet[i].nIdxShadow, D3DXCOLOR(1.0f, 1.0f, 1.0f, colA));
 		}
 	}
@@ -310,7 +314,7 @@ void SetVertexBullet(int nIdxBullet, float fSizeX, float fSizeY)
 //===================================================================
 // ’e‚ÌÝ’è
 //===================================================================
-int SetBullet(D3DXVECTOR3 pos, D3DXVECTOR3 move, float fSizeX, float fSizeY, int nTimer)
+int SetBullet(D3DXVECTOR3 pos, D3DXVECTOR3 move, float fSizeX, float fSizeY)
 {
 	int nIdxBullet = -1;
 
@@ -324,7 +328,6 @@ int SetBullet(D3DXVECTOR3 pos, D3DXVECTOR3 move, float fSizeX, float fSizeY, int
 			g_aBullet[i].move = move;
 			g_aBullet[i].fSizeX = fSizeX;
 			g_aBullet[i].fSizeY = fSizeY;
-			g_aBullet[i].nTimer = nTimer;
 			g_aBullet[i].bUse = true;
 
 			//// ‰e‚ÌÝ’è

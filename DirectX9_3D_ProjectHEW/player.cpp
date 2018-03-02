@@ -175,14 +175,14 @@ void UpdatePlayer(void)
 		D3DXVECTOR3 move;
 
 		pos.x = player->pos.x - sinf(player->rot.y) * 10.0f;
-		pos.y = player->pos.y;
+		pos.y = player->pos.y + 20.0f;
 		pos.z = player->pos.z - cosf(player->rot.y) * 10.0f;
 
 		move.x = -sinf(player->rot.y) * VALUE_MOVE_BULLET;
 		move.y = 0.0f;
 		move.z = -cosf(player->rot.y) * VALUE_MOVE_BULLET;
 
-		SetBullet(pos, move, 4.0f, 4.0f, 60 * 4);
+		SetBullet(pos, move, 4.0f, 4.0f);
 
 	}
 }

@@ -20,6 +20,8 @@
 #define MAX_BULLET				(6)									// バレットの最大数
 #define BULLET_TYPE				(2)									// バレットの種類
 
+#define	VALUE_GRAVITY			(0.45f)								// 重力
+
 //*******************************************************************
 // 構造体定義
 //*******************************************************************
@@ -44,7 +46,7 @@ void UninitBullet(void);
 void UpdateBullet(void);
 void DrawBullet(void);
 
-int SetBullet(D3DXVECTOR3 pos, D3DXVECTOR3 move, float fSizeX, float fSizeY, int nTimer);
+int SetBullet(D3DXVECTOR3 pos, D3DXVECTOR3 move, float fSizeX, float fSizeY);
 void DeleteBullet(int nIdxBullet);
 
 
