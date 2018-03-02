@@ -7,7 +7,10 @@
 #include "bullet.h"
 #include "camera.h"
 #include "debugproc.h"
+#include "enemy.h"
+#include "field.h"
 #include "input.h"
+#include "item.h"
 #include "player.h"
 
 //*******************************************************************
@@ -119,6 +122,8 @@ void UpdatePlayer(void)
 	PLAYER *player = &PlayerWk[0];
 	CAMERA *camera = GetCamera();
 	D3DXVECTOR3 rotCamera;
+	PANEL *panel = GetPanel(0);
+
 
 	// カメラの向き取得
 	rotCamera = GetRotCamera();
@@ -130,23 +135,53 @@ void UpdatePlayer(void)
 		{
 			player->pos.x -= VALUE_MOVE_PLAYER;
 			player->rot.y = rotCamera.y + D3DX_PI * 0.5f;
+
+			panel = GetPanel(GetPanelNumber(1, 1));
+			if (player->pos.x < -panel->Pos.x)
+			{
+				player->pos.x = panel->Pos.x;
+			}
+
 		}
 		else if (GetKeyboardPress(DIK_D) || IsButtonPressed(i, BUTTON_POV_RIGHT) || IsButtonPressed(i, BUTTON_RIGHT))
 		{
 			player->pos.x += VALUE_MOVE_PLAYER;
 			player->rot.y = rotCamera.y - D3DX_PI * 0.5f;
-		}
 
-		if (GetKeyboardPress(DIK_W) || IsButtonPressed(i, BUTTON_POV_UP) || IsButtonPressed(i, BUTTON_UP))
+			panel = GetPanel(GetPanelNumber(PANEL_NUM_Z, PANEL_NUM_X));
+			if (player->pos.x > panel->Pos.x)
+			{
+				player->pos.x = panel->Pos.x;
+			}
+
+		}
+		else if (GetKeyboardPress(DIK_W) || IsButtonPressed(i, BUTTON_POV_UP) || IsButtonPressed(i, BUTTON_UP))
 		{
 			player->pos.z += VALUE_MOVE_PLAYER;
 			player->rot.y = rotCamera.y + D3DX_PI * 1.0f;
+
+			panel = GetPanel(GetPanelNumber(PANEL_NUM_Z, PANEL_NUM_X));
+			if (player->pos.z > panel->Pos.z)
+			{
+				player->pos.z = panel->Pos.z;
+			}
+
 		}
 		else if (GetKeyboardPress(DIK_S) || IsButtonPressed(i, BUTTON_POV_DOWN) || IsButtonPressed(i, BUTTON_DOWN))
 		{
 			player->pos.z -= VALUE_MOVE_PLAYER;
 			player->rot.y = rotCamera.y + D3DX_PI * 0.0f;
+
+			panel = GetPanel(GetPanelNumber(1, 1));
+			if (player->pos.z < -panel->Pos.z)
+			{
+				player->pos.z = panel->Pos.z;
+			}
 		}
+#ifdef _DEBUG
+			PrintDebugProc("[プレイヤー座標 ：(X:%f Y: %f Z: %f)]\n", player->pos.x, player->pos.y, player->pos.z);
+#endif
+
 	}
 
 #ifdef _DEBUG
@@ -160,31 +195,72 @@ void UpdatePlayer(void)
 	}
 #endif
 
+		// アイテム取得
+		for (int i = 0; i < PLAYER_MAX; i++, player++)
+		{
+			// アイテムとの当たり判定
+			{
+				ITEM *pItem;
 
+				// アイテムを取得
+				pItem = GetItem();
+				for (int cntItem = 0; cntItem < MAX_ITEM; cntItem++, pItem++)
+				{
+					if (pItem->use == true)
+					{
+						float length;
+
+						length = (player->pos.x - pItem->pos.x) * (player->pos.x - pItem->pos.x)
+								+ (player->pos.y - pItem->pos.y) * (player->pos.y - pItem->pos.y)
+								+ (player->pos.z - pItem->pos.z) * (player->pos.z - pItem->pos.z);
+						if (length < (player->radius + pItem->fRadius) * (player->radius + pItem->fRadius))
+						{
+							player->item += 1.0f;
+
+							//// アイテム消去
+							//DeleteItem(cntItem);
+
+							//// SE再生
+							//PlaySound(SOUND_LABEL_SE_COIN);
+						}
+					}
+				}
+			}
+		}
+
+	// 弾発射処理
+		for (int i = 0; i < PLAYER_MAX; i++, player++)
+		{
+			if (GetKeyboardTrigger(DIK_SPACE))
+			{
+				D3DXVECTOR3 pos;
+				D3DXVECTOR3 move;
+
+				pos.x = player->pos.x - sinf(player->rot.y) * 10.0f;
+				pos.y = player->pos.y + 20.0f;
+				pos.z = player->pos.z - cosf(player->rot.y) * 10.0f;
+
+				move.x = -sinf(player->rot.y) * VALUE_MOVE_BULLET;
+				move.y = 0.0f;
+				move.z = -cosf(player->rot.y) * VALUE_MOVE_BULLET;
+
+				SetBullet(pos, move, 4.0f, 4.0f);
+
+				player->item -= 1.0f;
+			}
+		}
+
+	// エネミーとぶつかったら
+
+
+
+		// デバッグ表示
 #ifdef _DEBUG
 		PrintDebugProc("[プレイヤー座標 ：(X:%f Y: %f Z: %f)]\n", player->pos.x, player->pos.y, player->pos.z);
 		PrintDebugProc("プレイヤー移動 : WSADQE : 前後左右上下\n");
 		PrintDebugProc("\n");
 #endif
 
-
-	//弾発射処理
-	if (GetKeyboardTrigger(DIK_SPACE))
-	{
-		D3DXVECTOR3 pos;
-		D3DXVECTOR3 move;
-
-		pos.x = player->pos.x - sinf(player->rot.y) * 10.0f;
-		pos.y = player->pos.y + 20.0f;
-		pos.z = player->pos.z - cosf(player->rot.y) * 10.0f;
-
-		move.x = -sinf(player->rot.y) * VALUE_MOVE_BULLET;
-		move.y = 0.0f;
-		move.z = -cosf(player->rot.y) * VALUE_MOVE_BULLET;
-
-		SetBullet(pos, move, 4.0f, 4.0f);
-
-	}
 }
 
 //===================================================================
