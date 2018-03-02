@@ -181,16 +181,6 @@ void UpdateEnemy(void)
 	ENEMY *enemy = &enemyWk[0];
 	CAMERA *camera = GetCamera();
 	PANEL *panel = GetPanel(0);
-
-
-	// エネミーの座標ををカメラの注視点にセット
-	//enemy->Eye = camera->posCameraAt;
-
-	// エネミーの注視点をカメラの注視点にセット
-	//enemy->At = camera->posCameraAt;
-
-	// エネミーの注視点をプレイヤーにセット
-	//enemy->At = GetPosPlayer();
 	
 	// アニメーション
 	SetEnemyAnimation(ENEMY_ANIM_SEC);
