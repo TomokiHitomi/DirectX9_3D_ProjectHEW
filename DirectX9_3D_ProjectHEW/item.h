@@ -17,7 +17,7 @@
 #define	NUM_POP					(2)							// SetItem関数で一回当たりポップさせる数
 #define	ITEM_LIFE				(300)						// アイテムの寿命
 #define	VALUE_MOVE_ITEM			(0.5f)						// アイテムの移動速度
-#define	ITEM_SIZE_X				(40.0f)						// アイテムの幅
+#define	ITEM_SIZE_X				(10.0f)						// アイテムの幅
 #define	ITEM_SIZE_Y				(40.0f)						// アイテムの高さ
 #define	ITEM_POP_FREQUENCY		(60*6)						// アイテムのポップ頻度(フレーム×秒数)
 
