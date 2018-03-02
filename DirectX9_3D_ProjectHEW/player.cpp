@@ -168,12 +168,23 @@ void UpdatePlayer(void)
 #endif
 
 
-	////’e”­ŽËˆ—
-	//if (GetKeyboardTrigger(DIK_SPACE))
-	//{
+	//’e”­ŽËˆ—
+	if (GetKeyboardTrigger(DIK_SPACE))
+	{
+		D3DXVECTOR3 pos;
+		D3DXVECTOR3 move;
 
+		pos.x = player->pos.x - sinf(player->rot.y) * 10.0f;
+		pos.y = player->pos.y + 20.0f;
+		pos.z = player->pos.z - cosf(player->rot.y) * 10.0f;
 
-	//}
+		move.x = -sinf(player->rot.y) * VALUE_MOVE_BULLET;
+		move.y = 0.0f;
+		move.z = -cosf(player->rot.y) * VALUE_MOVE_BULLET;
+
+		SetBullet(pos, move, 4.0f, 4.0f);
+
+	}
 }
 
 //===================================================================
@@ -261,17 +272,17 @@ PLAYER *GetPlayer(int no)
 //===================================================================
 // ˆÊ’uŽæ“¾
 //===================================================================
-D3DXVECTOR3 GetPosPlayer(void)
+D3DXVECTOR3 GetPosPlayer(int no)
 {
-	PLAYER *player = &PlayerWk[0];
+	PLAYER *player = &PlayerWk[no];
 	return player->pos;
 }
 
 //===================================================================
 // Œü‚«Žæ“¾
 //===================================================================
-D3DXVECTOR3 GetRotPlayer(void)
+D3DXVECTOR3 GetRotPlayer(int no)
 {
-	PLAYER *player = &PlayerWk[0];
+	PLAYER *player = &PlayerWk[no];
 	return player->rot;
 }
