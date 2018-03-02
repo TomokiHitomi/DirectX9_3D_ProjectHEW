@@ -196,6 +196,8 @@ void UpdatePlayer(void)
 	}
 #endif
 
+	player = &PlayerWk[0];
+
 		// アイテム取得
 		for (int i = 0; i < PLAYER_MAX; i++, player++)
 		{
@@ -206,7 +208,7 @@ void UpdatePlayer(void)
 					// 当たり判定
 					if (item->use == true)
 					{
-						float length = 0 ;
+						float length = 0 ;		// 多分おかしい（でかい）
 
 						length = (player->pos.x - item->pos.x) * (player->pos.x - item->pos.x)
 								+ (player->pos.y - item->pos.y) * (player->pos.y - item->pos.y)
@@ -229,6 +231,8 @@ void UpdatePlayer(void)
 					}
 				}
 		}
+
+		//player = &PlayerWk[0];
 
 	// 弾発射処理
 		for (int i = 0; i < PLAYER_MAX; i++, player++)
