@@ -113,7 +113,7 @@ HRESULT InitEnemy(void)
 		enemy->move = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
 
 		// エネミーのスケールの初期化
-		enemy->scl = D3DXVECTOR3(1.0f, 1.0f, 1.0f);
+		enemy->scl = D3DXVECTOR3(0.9f, 0.9f, 0.9f);
 
 		// useフラグをtrueに設定
 		enemy->use = true;
@@ -170,6 +170,7 @@ void UpdateEnemy(void)
 {
 	ENEMY *enemy = &enemyWk[0];
 	CAMERA *camera = GetCamera();
+	PANEL *panel = GetPanel(0);
 
 
 	// エネミーの座標ををカメラの注視点にセット
@@ -179,12 +180,22 @@ void UpdateEnemy(void)
 	//enemy->At = camera->posCameraAt;
 
 	// エネミーの注視点をプレイヤーにセット
-	enemy->At = GetPosPlayer();
-
-
-
+	//enemy->At = GetPosPlayer();
+	
 	// アニメーション
 	SetEnemyAnimation(ENEMY_ANIM_SEC);
+
+	// 追尾
+
+	// 追尾対象にエネミーの注視点をセット
+	enemy->At = GetPosPlayer(0);
+
+	// 追尾対象への移動ベクトルを求める
+	enemy->move = GetPosPlayer(0) - enemy->Eye;
+
+	// 移動ベクトルを正規化
+	D3DXVec3Normalize(&enemy->move, &enemy->move);
+
 
 	// デバッグ時に手動でエネミー移動
 #ifdef _DEBUG
@@ -240,24 +251,6 @@ void UpdateEnemy(void)
 	enemy->move.y += (0.0f - enemy->move.y) * RATE_MOVE_ENEMY;
 	enemy->move.z += (0.0f - enemy->move.z) * RATE_MOVE_ENEMY;
 
-	//if (enemy->Eye.x < -310.0f)
-	//{
-	//	enemy->Eye.x = -310.0f;
-	//}
-	//if (enemy->Eye.x > 310.0f)
-	//{
-	//	enemy->Eye.x = 310.0f;
-	//}
-	//if (enemy->Eye.z < -310.0f)
-	//{
-	//	enemy->Eye.z = -310.0f;
-	//}
-	//if (enemy->Eye.z > 310.0f)
-	//{
-	//	enemy->Eye.z = 310.0f;
-	//}
-
-
 	/// 位置移動
 	enemy->Eye.x += enemy->move.x;
 	enemy->Eye.y += enemy->move.y;
@@ -270,6 +263,32 @@ void UpdateEnemy(void)
 	//	enemy->Eye.y = 75.0f;
 	//}
 	enemy->Eye.z += enemy->move.z;
+
+
+	// エネミーの移動制限（場外に行かないようにする）
+	// Z座標のマックスとX座標のマックスで制限かける
+	panel = GetPanel(GetPanelNumber(PANEL_NUM_Z, PANEL_NUM_X));		// 右上
+	if (enemy->Eye.x > panel->Pos.x)
+	{
+		enemy->Eye.x = panel->Pos.x;
+	}
+	if (enemy->Eye.z > panel->Pos.z)
+	{
+		enemy->Eye.z = panel->Pos.z;
+	}
+
+	// Z座標のミニマムとX座標のミニマムで制限かける
+	panel = GetPanel(GetPanelNumber(1,1));							// 左下
+	if (enemy->Eye.x < -panel->Pos.x)
+	{
+		enemy->Eye.x = -panel->Pos.x;
+	}
+	if (enemy->Eye.z < -panel->Pos.z)
+	{
+		enemy->Eye.z = -panel->Pos.z;
+	}
+
+
 
 #endif
 
