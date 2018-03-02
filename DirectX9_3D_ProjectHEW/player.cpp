@@ -11,6 +11,7 @@
 #include "field.h"
 #include "input.h"
 #include "item.h"
+#include "stage.h"
 #include "player.h"
 
 //*******************************************************************
@@ -196,9 +197,9 @@ void UpdatePlayer(void)
 	}
 #endif
 
-	player = &PlayerWk[0];
-
 		// アイテム取得
+	player = &PlayerWk[0];		// プレイヤー取得
+
 		for (int i = 0; i < PLAYER_MAX; i++, player++)
 		{
 				ITEM *item = GetItem(0);
@@ -264,6 +265,36 @@ void UpdatePlayer(void)
 		}
 
 	// エネミーとぶつかったら
+	player = &PlayerWk[0];		// プレイヤー取得
+	for (int i = 0; i < PLAYER_MAX; i++, player++)
+	{
+		ENEMY *enemy = GetEnemy(0);
+
+		for (int cntItem = 0; cntItem < MAX_ITEM; cntItem++, enemy++)
+		{
+			// 当たり判定
+			if (enemy->use == true)
+			{
+				float length = 0;		// 多分おかしい（でかい）
+
+				length = (player->pos.x - enemy->Eye.x) * (player->pos.x - enemy->Eye.x)
+					+ (player->pos.y - enemy->Eye.y) * (player->pos.y - enemy->Eye.y)
+					+ (player->pos.z - enemy->Eye.z) * (player->pos.z - enemy->Eye.z);
+
+				if (length < (player->radius + ENEMY_SIZE_X) * (player->radius + ENEMY_SIZE_X))
+				{
+					// プレイヤーを消す
+					player->use = false;
+
+					// 残っている方を渡す
+					SetStageWinPlayer(i+1);
+
+					//// SE再生
+					//PlaySound(SOUND_LABEL_SE_COIN);
+				}
+			}
+		}
+	}
 
 
 
