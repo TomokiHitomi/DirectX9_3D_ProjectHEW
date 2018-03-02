@@ -12,9 +12,8 @@
 //*******************************************************************
 // マクロ定義
 //*******************************************************************
-//#define MODEL_PLAYER		"data/MODEL/PLAYER/player01.x"		// 読み込むモデル
-#define PLAYER_RADIUS		(10.0f)								// 半径
-#define VALUE_MOVE_PLAYER	(1.5f)								// 移動速度
+#define PLAYER_RADIUS		(0.03f)								// 半径
+#define VALUE_MOVE_PLAYER	(2.0f)								// 移動速度
 #define PLAYER_MAX			(2)									// プレイヤーの最大数
 
 //*******************************************************************
@@ -26,7 +25,6 @@ typedef struct		// プレイヤー構造体
 	D3DXVECTOR3	pos;		// 位置
 	D3DXVECTOR3	rot;		// 角度
 	D3DXVECTOR3	scl;		// スケール
-	D3DXVECTOR3	move;		// 移動量
 	float		radius;		// 半径
 	float		item;		// アイテム
 } PLAYER;

@@ -130,7 +130,7 @@ void UpdatePlayer(void)
 
 	for (int i = 0; i < PLAYER_MAX; i++, player++)
 	{
-		// 移動処理
+		// 移動処理（移動範囲の制限も同時にやってるけど、違う気がする）
 		if (GetKeyboardPress(DIK_A) || IsButtonPressed(i, BUTTON_POV_LEFT) || IsButtonPressed(i, BUTTON_LEFT))
 		{
 			player->pos.x -= VALUE_MOVE_PLAYER;
@@ -177,11 +177,12 @@ void UpdatePlayer(void)
 			{
 				player->pos.z = panel->Pos.z;
 			}
+
 		}
+
 #ifdef _DEBUG
 			PrintDebugProc("[プレイヤー座標 ：(X:%f Y: %f Z: %f)]\n", player->pos.x, player->pos.y, player->pos.z);
 #endif
-
 	}
 
 #ifdef _DEBUG
@@ -195,38 +196,43 @@ void UpdatePlayer(void)
 	}
 #endif
 
+	player = &PlayerWk[0];
+
 		// アイテム取得
 		for (int i = 0; i < PLAYER_MAX; i++, player++)
 		{
-			// アイテムとの当たり判定
-			{
-				ITEM *pItem;
+				ITEM *item = GetItem(0);
 
-				// アイテムを取得
-				pItem = GetItem();
-				for (int cntItem = 0; cntItem < MAX_ITEM; cntItem++, pItem++)
+				for (int cntItem = 0; cntItem < MAX_ITEM; cntItem++, item++)
 				{
-					if (pItem->use == true)
+					// 当たり判定
+					if (item->use == true)
 					{
-						float length;
+						float length = 0 ;		// 多分おかしい（でかい）
 
-						length = (player->pos.x - pItem->pos.x) * (player->pos.x - pItem->pos.x)
-								+ (player->pos.y - pItem->pos.y) * (player->pos.y - pItem->pos.y)
-								+ (player->pos.z - pItem->pos.z) * (player->pos.z - pItem->pos.z);
-						if (length < (player->radius + pItem->fRadius) * (player->radius + pItem->fRadius))
+						length = (player->pos.x - item->pos.x) * (player->pos.x - item->pos.x)
+								+ (player->pos.y - item->pos.y) * (player->pos.y - item->pos.y)
+								+ (player->pos.z - item->pos.z) * (player->pos.z - item->pos.z);
+
+						if (length < (player->radius + ITEM_SIZE_X) * (player->radius + ITEM_SIZE_X))
 						{
+							// 所持アイテム数の増加
 							player->item += 1.0f;
 
 							//// アイテム消去
-							//DeleteItem(cntItem);
+							item->use = false;
+
+							// パネルをセット状態から解放
+							panel[item->no].ItemSet = false;
 
 							//// SE再生
 							//PlaySound(SOUND_LABEL_SE_COIN);
 						}
 					}
 				}
-			}
 		}
+
+		//player = &PlayerWk[0];
 
 	// 弾発射処理
 		for (int i = 0; i < PLAYER_MAX; i++, player++)
@@ -236,17 +242,24 @@ void UpdatePlayer(void)
 				D3DXVECTOR3 pos;
 				D3DXVECTOR3 move;
 
-				pos.x = player->pos.x - sinf(player->rot.y) * 10.0f;
-				pos.y = player->pos.y + 20.0f;
-				pos.z = player->pos.z - cosf(player->rot.y) * 10.0f;
+				//pos.x = player->pos.x - sinf(player->rot.y) * 10.0f;
+				//pos.y = player->pos.y + 20.0f;
+				//pos.z = player->pos.z - cosf(player->rot.y) * 10.0f;
 
-				move.x = -sinf(player->rot.y) * VALUE_MOVE_BULLET;
-				move.y = 0.0f;
-				move.z = -cosf(player->rot.y) * VALUE_MOVE_BULLET;
+				pos.x = player->pos.x;
+				pos.y = player->pos.y + 100.0f;
+				pos.z = player->pos.z;
+
+				//move.x = -sinf(player->rot.y) * VALUE_MOVE_BULLET;
+				//move.y = 0.0f;
+				//move.z = -cosf(player->rot.y) * VALUE_MOVE_BULLET;
+
+				move.x += 0.0f;
+				move.x += 0.0f;
+				move.z += VALUE_MOVE_BULLET;
 
 				SetBullet(pos, move, 4.0f, 4.0f);
 
-				player->item -= 1.0f;
 			}
 		}
 
