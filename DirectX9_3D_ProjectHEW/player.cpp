@@ -17,6 +17,8 @@
 //*******************************************************************
 // プロトタイプ宣言
 //*******************************************************************
+void HitEnemy(void);
+void HitItem(void);
 
 //*******************************************************************
 // グローバル変数
@@ -125,7 +127,6 @@ void UpdatePlayer(void)
 	D3DXVECTOR3 rotCamera;
 	PANEL *panel = GetPanel(0);
 
-
 	// カメラの向き取得
 	rotCamera = GetRotCamera();
 
@@ -197,45 +198,46 @@ void UpdatePlayer(void)
 	}
 #endif
 
-		// アイテム取得
-	player = &PlayerWk[0];		// プレイヤー取得
+	//	// アイテム取得
+	HitItem();
+	//player = &PlayerWk[0];		// プレイヤー取得
 
-		for (int i = 0; i < PLAYER_MAX; i++, player++)
-		{
-				ITEM *item = GetItem(0);
+	//	for (int i = 0; i < PLAYER_MAX; i++, player++)
+	//	{
+	//			ITEM *item = GetItem(0);
 
-				for (int cntItem = 0; cntItem < MAX_ITEM; cntItem++, item++)
-				{
-					// 当たり判定
-					if (item->use == true)
-					{
-						float length = 0 ;		// 多分おかしい（でかい）
+	//			for (int cntItem = 0; cntItem < MAX_ITEM; cntItem++, item++)
+	//			{
+	//				// 当たり判定
+	//				if (item->use == true)
+	//				{
+	//					float length = 0 ;		// 多分おかしい（でかい）
 
-						length = (player->pos.x - item->pos.x) * (player->pos.x - item->pos.x)
-								+ (player->pos.y - item->pos.y) * (player->pos.y - item->pos.y)
-								+ (player->pos.z - item->pos.z) * (player->pos.z - item->pos.z);
+	//					length = (player->pos.x - item->pos.x) * (player->pos.x - item->pos.x)
+	//							+ (player->pos.y - item->pos.y) * (player->pos.y - item->pos.y)
+	//							+ (player->pos.z - item->pos.z) * (player->pos.z - item->pos.z);
 
-						if (length < (player->radius + ITEM_SIZE_X) * (player->radius + ITEM_SIZE_X))
-						{
-							// 所持アイテム数の増加
-							player->item += 1.0f;
+	//					if (length < (player->radius + ITEM_SIZE_X) * (player->radius + ITEM_SIZE_X))
+	//					{
+	//						// 所持アイテム数の増加
+	//						player->item += 1.0f;
 
-							//// アイテム消去
-							item->use = false;
+	//						//// アイテム消去
+	//						item->use = false;
 
-							// パネルをセット状態から解放
-							panel[item->no].ItemSet = false;
+	//						// パネルをセット状態から解放
+	//						panel[item->no].ItemSet = false;
 
-							//// SE再生
-							//PlaySound(SOUND_LABEL_SE_COIN);
-						}
-					}
-				}
-		}
-
-		//player = &PlayerWk[0];
+	//						//// SE再生
+	//						//PlaySound(SOUND_LABEL_SE_COIN);
+	//					}
+	//				}
+	//			}
+	//	}
 
 	// 弾発射処理
+		player = &PlayerWk[0];		// プレイヤー取得
+
 		for (int i = 0; i < PLAYER_MAX; i++, player++)
 		{
 			if (GetKeyboardTrigger(DIK_SPACE))
@@ -264,39 +266,9 @@ void UpdatePlayer(void)
 			}
 		}
 
-	// エネミーとぶつかったら
-	player = &PlayerWk[0];		// プレイヤー取得
-	for (int i = 0; i < PLAYER_MAX; i++, player++)
-	{
-		ENEMY *enemy = GetEnemy(0);
 
-		for (int cntItem = 0; cntItem < MAX_ITEM; cntItem++, enemy++)
-		{
-			// 当たり判定
-			if (enemy->use == true)
-			{
-				float length = 0;		// 多分おかしい（でかい）
-
-				length = (player->pos.x - enemy->Eye.x) * (player->pos.x - enemy->Eye.x)
-					+ (player->pos.y - enemy->Eye.y) * (player->pos.y - enemy->Eye.y)
-					+ (player->pos.z - enemy->Eye.z) * (player->pos.z - enemy->Eye.z);
-
-				if (length < (player->radius + ENEMY_SIZE_X) * (player->radius + ENEMY_SIZE_X))
-				{
-					// プレイヤーを消す
-					player->use = false;
-
-					// 残っている方を渡す
-					SetStageWinPlayer(i+1);
-
-					//// SE再生
-					//PlaySound(SOUND_LABEL_SE_COIN);
-				}
-			}
-		}
-	}
-
-
+	//// エネミーとぶつかったら
+		HitEnemy();
 
 		// デバッグ表示
 #ifdef _DEBUG
@@ -406,3 +378,88 @@ D3DXVECTOR3 GetRotPlayer(int no)
 	PLAYER *player = &PlayerWk[no];
 	return player->rot;
 }
+
+//===================================================================
+// エネミーとの当たり判定
+//===================================================================
+void HitEnemy(void)
+{
+	// エネミーとぶつかったら
+	PLAYER *player = &PlayerWk[0];		// プレイヤー取得
+	for (int i = 0; i < PLAYER_MAX; i++, player++)
+	{
+		ENEMY *enemy = GetEnemy(0);
+
+		for (int cntItem = 0; cntItem < MAX_ITEM; cntItem++, enemy++)
+		{
+			// 当たり判定
+			if (enemy->use == true)
+			{
+				float length = 0;		// 多分おかしい（でかい）
+
+				length = (player->pos.x - enemy->Eye.x) * (player->pos.x - enemy->Eye.x)
+					+ (player->pos.y - enemy->Eye.y) * (player->pos.y - enemy->Eye.y)
+					+ (player->pos.z - enemy->Eye.z) * (player->pos.z - enemy->Eye.z);
+
+				if (length < (player->radius + ENEMY_SIZE_X) * (player->radius + ENEMY_SIZE_X))
+				{
+					// プレイヤーを消す
+					player->use = false;
+
+					// 残っている方を渡す
+					SetStageWinPlayer(i + 1);
+
+					//// SE再生
+					//PlaySound(SOUND_LABEL_SE_COIN);
+				}
+			}
+		}
+	}
+	return;
+}
+
+//===================================================================
+// アイテムとの当たり判定
+//===================================================================
+void HitItem(void)
+{
+	PLAYER *player = &PlayerWk[0];		// プレイヤー取得
+	PANEL *panel = GetPanel(0);
+
+
+	for (int i = 0; i < PLAYER_MAX; i++, player++)
+	{
+		ITEM *item = GetItem(0);
+
+		for (int cntItem = 0; cntItem < MAX_ITEM; cntItem++, item++)
+		{
+			// 当たり判定
+			if (item->use == true)
+			{
+				float length = 0;		// 多分おかしい（でかい）
+
+				length = (player->pos.x - item->pos.x) * (player->pos.x - item->pos.x)
+					+ (player->pos.y - item->pos.y) * (player->pos.y - item->pos.y)
+					+ (player->pos.z - item->pos.z) * (player->pos.z - item->pos.z);
+
+				if (length < (player->radius + ITEM_SIZE_X) * (player->radius + ITEM_SIZE_X))
+				{
+					// 所持アイテム数の増加
+					player->item += 1.0f;
+
+					//// アイテム消去
+					item->use = false;
+
+					// パネルをセット状態から解放
+					panel[item->no].ItemSet = false;
+
+					//// SE再生
+					//PlaySound(SOUND_LABEL_SE_COIN);
+				}
+			}
+		}
+	}
+	return;
+}
+
+
