@@ -123,29 +123,47 @@ void UninitUigage(void)
 void UpdateUigage(void)
 {
 	GAGE *gage = GetGage(0);
+	GAGE *gage1 = GetGage(1);
 
-	for (int i = 0; i < MAX_GAGE; i++, gage++)
+	if (GetKeyboardTrigger(DIK_Y))
 	{
-		if (GetKeyboardPress(DIK_Y))
+		gage->GageLong -= TEXTURE_GAGE_WIDTH / 6;
+		if (gage->GageLong <= 0)
 		{
-			gage->GageLong -= 10;
-			if (gage->GageLong <= 0)
-			{
-				gage->GageLong = 0;
-			}
-
+			gage->GageLong = 0;
 		}
-		else if (GetKeyboardPress(DIK_U))
-		{
-			gage->GageLong += 10;
-			if (gage->GageLong >= TEXTURE_GAGEFRAME_WIDTH)
-			{
-				gage->GageLong = TEXTURE_GAGEFRAME_WIDTH;
-			}
-		}
-		SetVertexGage(i);
 
 	}
+	else if (GetKeyboardTrigger(DIK_U))
+	{
+		gage->GageLong += TEXTURE_GAGE_WIDTH / 6;
+		if (gage->GageLong >= TEXTURE_GAGEFRAME_WIDTH)
+		{
+			gage->GageLong = TEXTURE_GAGEFRAME_WIDTH;
+		}
+	}
+
+	if (GetKeyboardTrigger(DIK_H))
+	{
+		gage1->GageLong -= TEXTURE_GAGE_WIDTH / 6;
+		if (gage1->GageLong <= 0)
+		{
+			gage1->GageLong = 0;
+		}
+
+	}
+	else if (GetKeyboardTrigger(DIK_J))
+	{
+		gage1->GageLong += TEXTURE_GAGE_WIDTH / 6;
+		if (gage1->GageLong >= TEXTURE_GAGEFRAME_WIDTH)
+		{
+			gage1->GageLong = TEXTURE_GAGEFRAME_WIDTH;
+		}
+	}
+
+	SetVertexGage(0);
+	SetVertexGage(1);
+
 }
 
 //=============================================================================
@@ -294,7 +312,7 @@ HRESULT MakeVertexUigage(LPDIRECT3DDEVICE9 pDevice)
 				pVtx[3].rhw = 1.0f;
 
 			D3DXCOLOR col;
-			col = D3DXCOLOR(gage->GageCol.r, gage->GageCol.g, gage->GageCol.b, 0.6f);
+			col = D3DXCOLOR(gage->GageCol.r, gage->GageCol.g, gage->GageCol.b, 0.5f);
 			// ”½ËŒõ‚Ìİ’è
 			pVtx[0].diffuse =
 				pVtx[1].diffuse =
