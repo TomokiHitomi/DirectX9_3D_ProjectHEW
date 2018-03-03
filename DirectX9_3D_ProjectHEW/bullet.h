@@ -17,7 +17,7 @@
 #define BULLET_SIZE_Y			(50.0f)								// ビルボードの高さ
 #define VALUE_MOVE_BULLET		(2.0f)								// 移動速度
 
-#define MAX_BULLET				(6)									// バレットの最大数
+#define MAX_BULLET				(3)									// バレットの最大数
 #define BULLET_TYPE				(2)									// バレットの種類
 
 #define	VALUE_GRAVITY			(0.45f)								// 重力
@@ -33,7 +33,6 @@ typedef struct
 	D3DXVECTOR3 move;		// 移動量
 	float fSizeX;			// 幅
 	float fSizeY;			// 高さ
-	int nTimer;				// タイマー
 	int nIdxShadow;			// 影ID
 	bool bUse;				// 使用しているかどうか
 } BULLET;

@@ -5,8 +5,9 @@
 //
 //-------------------------------------------------------------------
 #include "bullet.h"
-#include "player.h"
 #include "camera.h"
+#include "field.h"
+#include "player.h"
 
 //*******************************************************************
 // プロトタイプ宣言
@@ -102,8 +103,8 @@ void UpdateBullet(void)
 			g_aBullet[i].pos.x += g_aBullet[i].move.x;
 			g_aBullet[i].pos.y += g_aBullet[i].move.y;
 			g_aBullet[i].pos.z += g_aBullet[i].move.z;
-			
-			g_aBullet[i].move.y -= VALUE_GRAVITY;
+
+			//g_aBullet[i].move.y -= VALUE_GRAVITY;
 
 			//g_aBullet[i].nTimer--;
 			//if (g_aBullet[i].nTimer <= 0)
@@ -125,15 +126,15 @@ void UpdateBullet(void)
 				//	D3DXCOLOR(0.05f, 0.45f, 0.45f, 0.20f), 6.0f, 6.0f, 30);
 			//}
 
-			if (g_aBullet[i].pos.y < 0.0f)
-			{
-				
-				DeleteBullet(i);
-				//DeleteShadow(g_aBullet[i].nIdxShadow);
+			//if (g_aBullet[i].pos.y < 0.0f)
+			//{
+			//	
+			//	DeleteBullet(i);
+			//	//DeleteShadow(g_aBullet[i].nIdxShadow);
 
-			}
+			//}
 
-			float fSizeX = 8.0f + (g_aBullet[i].pos.y - 4.0f) * 0.05f;
+			/*float fSizeX = 8.0f + (g_aBullet[i].pos.y - 4.0f) * 0.05f;
 			if (fSizeX < 8.0f)
 			{
 				fSizeX = 8.0f;
@@ -142,7 +143,7 @@ void UpdateBullet(void)
 			if (fSizeY < 8.0f)
 			{
 				fSizeY = 8.0f;
-			}
+			}*/
 
 			//SetVertexShadow(g_aBullet[i].nIdxShadow, fSizeX, fSizeY);
 
@@ -235,11 +236,11 @@ HRESULT MakeVertexBullet(LPDIRECT3DDEVICE9 Device)
 {
 	// オブジェクトの頂点バッファを生成
 	if (FAILED(Device->CreateVertexBuffer(sizeof(VERTEX_3D) * NUM_VERTEX * MAX_BULLET,	// 頂点データ用に確保するバッファサイズ(バイト単位)
-		D3DUSAGE_WRITEONLY,							// 頂点バッファの使用法　
-		FVF_VERTEX_3D,								// 使用する頂点フォーマット
-		D3DPOOL_MANAGED,							// リソースのバッファを保持するメモリクラスを指定
-		&D3DVtxBuffBullet,						// 頂点バッファインターフェースへのポインタ
-		NULL)))										// NULLに設定
+											D3DUSAGE_WRITEONLY,							// 頂点バッファの使用法　
+											FVF_VERTEX_3D,								// 使用する頂点フォーマット
+											D3DPOOL_MANAGED,							// リソースのバッファを保持するメモリクラスを指定
+											&D3DVtxBuffBullet,						// 頂点バッファインターフェースへのポインタ
+											NULL)))										// NULLに設定
 	{
 		return E_FAIL;
 	}
@@ -355,19 +356,4 @@ void DeleteBullet(int nIdxBullet)
 		//DeleteShadow(g_aBullet[nIdxBullet].nIdxShadow);
 		g_aBullet[nIdxBullet].bUse = false;
 	}
-}
-
-
-//===================================================================
-// 弾の位置取得
-//===================================================================
-void GetPosBullet(D3DXVECTOR3 posX, D3DXVECTOR3 posY)
-{
-
-
-
-
-
-
-
 }

@@ -75,6 +75,7 @@ void DrawWorkYoshida(void)
 		break;
 	case STAGE_RESULT:
 		DrawResultlogo();		// ƒŠƒUƒ‹ƒgƒƒS
+
 		break;
 	}
 

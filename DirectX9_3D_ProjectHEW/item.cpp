@@ -133,7 +133,9 @@ void UpdateItem(void)
 	ITEM *item = &itemWk[0];
 	PANEL *panel = GetPanel(0);
 
-	if(poptime % 420 == 0)
+
+	// アイテムを一定間隔でポップさせる
+	if(poptime % ITEM_POP_FREQUENCY == 0)
 	{	
 		SetItem(D3DXVECTOR3(0.0f, 10.0f, 0.0f), ITEMTYPE_COIN, ITEM_LIFE);
 		poptime = 0;
@@ -365,9 +367,9 @@ void SetItem(D3DXVECTOR3 pos, int nType, int life)
 //=============================================================================
 // アイテムの取得
 //=============================================================================
-ITEM *GetItem(void)
+ITEM *GetItem(int no)
 {
-	return &itemWk[0];
+	return &itemWk[no];
 }
 //=============================================================================
 // アイテムの生存数取得

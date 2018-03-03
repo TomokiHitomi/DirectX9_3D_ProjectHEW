@@ -7,12 +7,18 @@
 #include "bullet.h"
 #include "camera.h"
 #include "debugproc.h"
+#include "enemy.h"
+#include "field.h"
 #include "input.h"
+#include "item.h"
+#include "stage.h"
 #include "player.h"
 
 //*******************************************************************
 // プロトタイプ宣言
 //*******************************************************************
+void HitEnemy(void);
+void HitItem(void);
 
 //*******************************************************************
 // グローバル変数
@@ -119,34 +125,66 @@ void UpdatePlayer(void)
 	PLAYER *player = &PlayerWk[0];
 	CAMERA *camera = GetCamera();
 	D3DXVECTOR3 rotCamera;
+	PANEL *panel = GetPanel(0);
 
 	// カメラの向き取得
 	rotCamera = GetRotCamera();
 
 	for (int i = 0; i < PLAYER_MAX; i++, player++)
 	{
-		// 移動処理
+		// 移動処理（移動範囲の制限も同時にやってるけど、違う気がする）
 		if (GetKeyboardPress(DIK_A) || IsButtonPressed(i, BUTTON_POV_LEFT) || IsButtonPressed(i, BUTTON_LEFT))
 		{
 			player->pos.x -= VALUE_MOVE_PLAYER;
 			player->rot.y = rotCamera.y + D3DX_PI * 0.5f;
+
+			panel = GetPanel(GetPanelNumber(1, 1));
+			if (player->pos.x < -panel->Pos.x)
+			{
+				player->pos.x = panel->Pos.x;
+			}
+
 		}
 		else if (GetKeyboardPress(DIK_D) || IsButtonPressed(i, BUTTON_POV_RIGHT) || IsButtonPressed(i, BUTTON_RIGHT))
 		{
 			player->pos.x += VALUE_MOVE_PLAYER;
 			player->rot.y = rotCamera.y - D3DX_PI * 0.5f;
-		}
 
-		if (GetKeyboardPress(DIK_W) || IsButtonPressed(i, BUTTON_POV_UP) || IsButtonPressed(i, BUTTON_UP))
+			panel = GetPanel(GetPanelNumber(PANEL_NUM_Z, PANEL_NUM_X));
+			if (player->pos.x > panel->Pos.x)
+			{
+				player->pos.x = panel->Pos.x;
+			}
+
+		}
+		else if (GetKeyboardPress(DIK_W) || IsButtonPressed(i, BUTTON_POV_UP) || IsButtonPressed(i, BUTTON_UP))
 		{
 			player->pos.z += VALUE_MOVE_PLAYER;
 			player->rot.y = rotCamera.y + D3DX_PI * 1.0f;
+
+			panel = GetPanel(GetPanelNumber(PANEL_NUM_Z, PANEL_NUM_X));
+			if (player->pos.z > panel->Pos.z)
+			{
+				player->pos.z = panel->Pos.z;
+			}
+
 		}
 		else if (GetKeyboardPress(DIK_S) || IsButtonPressed(i, BUTTON_POV_DOWN) || IsButtonPressed(i, BUTTON_DOWN))
 		{
 			player->pos.z -= VALUE_MOVE_PLAYER;
 			player->rot.y = rotCamera.y + D3DX_PI * 0.0f;
+
+			panel = GetPanel(GetPanelNumber(1, 1));
+			if (player->pos.z < -panel->Pos.z)
+			{
+				player->pos.z = panel->Pos.z;
+			}
+
 		}
+
+#ifdef _DEBUG
+			PrintDebugProc("[プレイヤー座標 ：(X:%f Y: %f Z: %f)]\n", player->pos.x, player->pos.y, player->pos.z);
+#endif
 	}
 
 #ifdef _DEBUG
@@ -160,31 +198,85 @@ void UpdatePlayer(void)
 	}
 #endif
 
+	//	// アイテム取得
+	HitItem();
+	//player = &PlayerWk[0];		// プレイヤー取得
 
+	//	for (int i = 0; i < PLAYER_MAX; i++, player++)
+	//	{
+	//			ITEM *item = GetItem(0);
+
+	//			for (int cntItem = 0; cntItem < MAX_ITEM; cntItem++, item++)
+	//			{
+	//				// 当たり判定
+	//				if (item->use == true)
+	//				{
+	//					float length = 0 ;		// 多分おかしい（でかい）
+
+	//					length = (player->pos.x - item->pos.x) * (player->pos.x - item->pos.x)
+	//							+ (player->pos.y - item->pos.y) * (player->pos.y - item->pos.y)
+	//							+ (player->pos.z - item->pos.z) * (player->pos.z - item->pos.z);
+
+	//					if (length < (player->radius + ITEM_SIZE_X) * (player->radius + ITEM_SIZE_X))
+	//					{
+	//						// 所持アイテム数の増加
+	//						player->item += 1.0f;
+
+	//						//// アイテム消去
+	//						item->use = false;
+
+	//						// パネルをセット状態から解放
+	//						panel[item->no].ItemSet = false;
+
+	//						//// SE再生
+	//						//PlaySound(SOUND_LABEL_SE_COIN);
+	//					}
+	//				}
+	//			}
+	//	}
+
+	// 弾発射処理
+		player = &PlayerWk[0];		// プレイヤー取得
+
+		for (int i = 0; i < PLAYER_MAX; i++, player++)
+		{
+			if (GetKeyboardTrigger(DIK_SPACE))
+			{
+				D3DXVECTOR3 pos;
+				D3DXVECTOR3 move;
+
+				//pos.x = player->pos.x - sinf(player->rot.y) * 10.0f;
+				//pos.y = player->pos.y + 20.0f;
+				//pos.z = player->pos.z - cosf(player->rot.y) * 10.0f;
+
+				pos.x = player->pos.x;
+				pos.y = player->pos.y + 100.0f;
+				pos.z = player->pos.z;
+
+				//move.x = -sinf(player->rot.y) * VALUE_MOVE_BULLET;
+				//move.y = 0.0f;
+				//move.z = -cosf(player->rot.y) * VALUE_MOVE_BULLET;
+
+				move.x += 0.0f;
+				move.x += 0.0f;
+				move.z += VALUE_MOVE_BULLET;
+
+				SetBullet(pos, move, 4.0f, 4.0f);
+
+			}
+		}
+
+
+	//// エネミーとぶつかったら
+		HitEnemy();
+
+		// デバッグ表示
 #ifdef _DEBUG
 		PrintDebugProc("[プレイヤー座標 ：(X:%f Y: %f Z: %f)]\n", player->pos.x, player->pos.y, player->pos.z);
 		PrintDebugProc("プレイヤー移動 : WSADQE : 前後左右上下\n");
 		PrintDebugProc("\n");
 #endif
 
-
-	//弾発射処理
-	if (GetKeyboardTrigger(DIK_SPACE))
-	{
-		D3DXVECTOR3 pos;
-		D3DXVECTOR3 move;
-
-		pos.x = player->pos.x - sinf(player->rot.y) * 10.0f;
-		pos.y = player->pos.y + 20.0f;
-		pos.z = player->pos.z - cosf(player->rot.y) * 10.0f;
-
-		move.x = -sinf(player->rot.y) * VALUE_MOVE_BULLET;
-		move.y = 0.0f;
-		move.z = -cosf(player->rot.y) * VALUE_MOVE_BULLET;
-
-		SetBullet(pos, move, 4.0f, 4.0f);
-
-	}
 }
 
 //===================================================================
@@ -286,3 +378,88 @@ D3DXVECTOR3 GetRotPlayer(int no)
 	PLAYER *player = &PlayerWk[no];
 	return player->rot;
 }
+
+//===================================================================
+// エネミーとの当たり判定
+//===================================================================
+void HitEnemy(void)
+{
+	// エネミーとぶつかったら
+	PLAYER *player = &PlayerWk[0];		// プレイヤー取得
+	for (int i = 0; i < PLAYER_MAX; i++, player++)
+	{
+		ENEMY *enemy = GetEnemy(0);
+
+		for (int cntItem = 0; cntItem < MAX_ITEM; cntItem++, enemy++)
+		{
+			// 当たり判定
+			if (enemy->use == true)
+			{
+				float length = 0;		// 多分おかしい（でかい）
+
+				length = (player->pos.x - enemy->Eye.x) * (player->pos.x - enemy->Eye.x)
+					+ (player->pos.y - enemy->Eye.y) * (player->pos.y - enemy->Eye.y)
+					+ (player->pos.z - enemy->Eye.z) * (player->pos.z - enemy->Eye.z);
+
+				if (length < (player->radius + ENEMY_SIZE_X) * (player->radius + ENEMY_SIZE_X))
+				{
+					// プレイヤーを消す
+					player->use = false;
+
+					// 残っている方を渡す
+					SetStageWinPlayer(i + 1);
+
+					//// SE再生
+					//PlaySound(SOUND_LABEL_SE_COIN);
+				}
+			}
+		}
+	}
+	return;
+}
+
+//===================================================================
+// アイテムとの当たり判定
+//===================================================================
+void HitItem(void)
+{
+	PLAYER *player = &PlayerWk[0];		// プレイヤー取得
+	PANEL *panel = GetPanel(0);
+
+
+	for (int i = 0; i < PLAYER_MAX; i++, player++)
+	{
+		ITEM *item = GetItem(0);
+
+		for (int cntItem = 0; cntItem < MAX_ITEM; cntItem++, item++)
+		{
+			// 当たり判定
+			if (item->use == true)
+			{
+				float length = 0;		// 多分おかしい（でかい）
+
+				length = (player->pos.x - item->pos.x) * (player->pos.x - item->pos.x)
+					+ (player->pos.y - item->pos.y) * (player->pos.y - item->pos.y)
+					+ (player->pos.z - item->pos.z) * (player->pos.z - item->pos.z);
+
+				if (length < (player->radius + ITEM_SIZE_X) * (player->radius + ITEM_SIZE_X))
+				{
+					// 所持アイテム数の増加
+					player->item += 1.0f;
+
+					//// アイテム消去
+					item->use = false;
+
+					// パネルをセット状態から解放
+					panel[item->no].ItemSet = false;
+
+					//// SE再生
+					//PlaySound(SOUND_LABEL_SE_COIN);
+				}
+			}
+		}
+	}
+	return;
+}
+
+

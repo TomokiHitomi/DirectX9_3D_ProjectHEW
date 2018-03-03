@@ -20,7 +20,7 @@
 //*****************************************************************************
 void SetEnemyAnimation(int sec);
 D3DXMATRIX* EnemyLookAtMatrix(D3DXMATRIX *pout, D3DXVECTOR3 *pEye, D3DXVECTOR3 *pAt, D3DXVECTOR3 *pUp);
-void SetEnemyHoming(int no);
+void SetEnemyHoming(int no, int frequency, float speedup);
 
 
 //*****************************************************************************
@@ -31,16 +31,17 @@ LPD3DXMESH			g_pD3DXMeshEnemy[ENEMY_ANIM_MAX];			// ID3DXMeshƒCƒ“ƒ^[ƒtƒFƒCƒX‚Ö‚
 LPD3DXBUFFER		g_pD3DXBuffMatEnemy[ENEMY_ANIM_MAX];		// ƒƒbƒVƒ…‚Ìƒ}ƒeƒŠƒAƒ‹î•ñ‚ğŠi”[
 DWORD				g_nNumMatEnemy[ENEMY_ANIM_MAX];				// ‘®«î•ñ‚Ì‘”
 
-D3DXMATRIX			g_mtxWorldEnemy;			// ƒ[ƒ‹ƒhƒ}ƒgƒŠƒbƒNƒX
+D3DXMATRIX			g_mtxWorldEnemy;							// ƒ[ƒ‹ƒhƒ}ƒgƒŠƒbƒNƒX
 
-float				g_fSizeShadowE;				// ‰e‚ÌƒTƒCƒY
-D3DXCOLOR			g_colShadowE;				// ‰e‚ÌF
+float				g_fSizeShadowE;								// ‰e‚ÌƒTƒCƒY
+D3DXCOLOR			g_colShadowE;								// ‰e‚ÌF
 
-ENEMY				enemyWk[ENEMY_MAX];		// ƒGƒlƒ~[Ši”[ƒ[ƒN
+ENEMY				enemyWk[ENEMY_MAX];							// ƒGƒlƒ~[Ši”[ƒ[ƒN
 
-int					animCnt;		// ƒAƒjƒƒJƒEƒ“ƒg
+int					animCnt;									// ƒAƒjƒƒJƒEƒ“ƒg
+int					key;										// ƒtƒŒ[ƒ€ƒJƒEƒ“ƒg
+int					sp_Update;									// XV•p“xŒvZ—p
 
-int		key;
 
 const char *FileNameEnemy[ENEMY_ANIM_MAX] =
 {
@@ -67,7 +68,6 @@ HRESULT InitEnemy(void)
 	LPDIRECT3DDEVICE9 pDevice = GetDevice();
 	ENEMY *enemy = &enemyWk[0];
 
-	key = 0;
 
 	for (int nCntEnemyAnim = 0; nCntEnemyAnim < ENEMY_ANIM_MAX; nCntEnemyAnim++)
 	{
@@ -101,8 +101,9 @@ HRESULT InitEnemy(void)
 	// ƒGƒlƒ~[‚Ì‰Šú‰»ˆ—
 	for (int i = 0; i < ENEMY_MAX; i++, enemy++)
 	{
+		PANEL *panel = GetPanel(GetPanelNumber(1, 8));
 		// ƒGƒlƒ~[‚Ì‹“_‚Ì‰Šú‰»
-		enemy->Eye = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
+		enemy->Eye = panel->Pos;
 		// ƒGƒlƒ~[‚Ì’‹“_‚Ì‰Šú‰»
 		enemy->At = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
 		// ƒGƒlƒ~[‚Ìã•ûŒü‚Ì‰Šú‰»
@@ -119,6 +120,9 @@ HRESULT InitEnemy(void)
 		// useƒtƒ‰ƒO‚ğtrue‚Éİ’è
 		enemy->use = true;
 
+		// ƒGƒlƒ~[‚ÌˆÚ“®‘¬“x‰Šú‰»
+		enemy->speed = VALUE_MOVE_ENEMY;
+
 		// ƒAƒjƒ[ƒVƒ‡ƒ“”Ô†‰Šú‰»
 		// Å‰‚Í’¼—§ó‘Ô‚Éİ’è
 		enemy->anim = 0;
@@ -126,8 +130,14 @@ HRESULT InitEnemy(void)
 		// ƒAƒjƒ[ƒVƒ‡ƒ“ƒJƒEƒ“ƒg‰Šú‰»
 		animCnt = 0;
 
+		// XV•p“x‰Šú‰»
+		sp_Update = 0;
+
+		// ’Ç”öƒvƒŒƒCƒ„[”Ô†‰Šú‰»
+		key = 0;
 		// ƒ‰ƒ“ƒ_ƒ€‚ÅÅ‰‚É’Ç”ö‚·‚éƒvƒŒƒCƒ„[‚ğ‘I‚Ô
-		
+		key = rand() % PLAYER_MAX;
+
 
 	}
 
@@ -171,21 +181,13 @@ void UpdateEnemy(void)
 	ENEMY *enemy = &enemyWk[0];
 	CAMERA *camera = GetCamera();
 	PANEL *panel = GetPanel(0);
-
-
-	// ƒGƒlƒ~[‚ÌÀ•W‚ğ‚ğƒJƒƒ‰‚Ì’‹“_‚ÉƒZƒbƒg
-	//enemy->Eye = camera->posCameraAt;
-
-	// ƒGƒlƒ~[‚Ì’‹“_‚ğƒJƒƒ‰‚Ì’‹“_‚ÉƒZƒbƒg
-	//enemy->At = camera->posCameraAt;
-
-	// ƒGƒlƒ~[‚Ì’‹“_‚ğƒvƒŒƒCƒ„[‚ÉƒZƒbƒg
-	//enemy->At = GetPosPlayer();
 	
 	// ƒAƒjƒ[ƒVƒ‡ƒ“
 	SetEnemyAnimation(ENEMY_ANIM_SEC);
 
+
 	// ƒ{ƒ^ƒ“‚Å’Ç”ö‘ÎÛØ‚è‘Ö‚¦‚é
+#ifdef _DEBUG
 	if (GetKeyboardTrigger(DIK_1))
 	{
 		key = 0;
@@ -194,9 +196,10 @@ void UpdateEnemy(void)
 	{
 		key = 1;
 	}
+#endif
 
 	// ’Ç”ö‚ğƒZƒbƒg
-	SetEnemyHoming(key);
+	SetEnemyHoming(key, ENEMY_SPEED_FREQUENCY, ENEMY_SPEEDUP);
 
 	// ƒfƒoƒbƒO‚Éè“®‚ÅƒGƒlƒ~[ˆÚ“®
 #ifdef _DEBUG
@@ -413,7 +416,8 @@ D3DXMATRIX* EnemyLookAtMatrix(D3DXMATRIX *pout, D3DXVECTOR3 *pEye, D3DXVECTOR3 *
 	return pout;
 }
 //=============================================================================
-// ƒGƒlƒ~[ƒAƒjƒ[ƒVƒ‡ƒ“İ’èŠÖ”iˆø”FƒAƒjƒ[ƒVƒ‡ƒ“ˆê„‚É‚©‚©‚é•b”j
+// ƒGƒlƒ~[ƒAƒjƒ[ƒVƒ‡ƒ“İ’èŠÖ”
+// ˆø”FƒAƒjƒ[ƒVƒ‡ƒ“ˆê„‚É‚©‚©‚é•b”j
 //=============================================================================
 void SetEnemyAnimation(int sec)
 {
@@ -439,11 +443,17 @@ void SetEnemyAnimation(int sec)
 
 }
 //=============================================================================
-// ƒGƒlƒ~[’Ç”öİ’èŠÖ”iˆø”F’Ç”ö‚µ‚½‚¢ƒvƒŒƒCƒ„[”Ô†j
+// ƒGƒlƒ~[’Ç”öİ’èŠÖ”
+// ˆø”‚PF’Ç”ö‚µ‚½‚¢ƒvƒŒƒCƒ„[”Ô†
+// ˆø”‚QFˆÚ“®‘¬“x‚ÌXV•p“xi‚Æ‚è‚ÜƒtƒŒ[ƒ€”“n‚·j
+// ˆø”‚RFXVˆê‰ñ“–‚½‚è‚ÌˆÚ“®‘¬“x‚Ì•Ï‰»—Ê
 //=============================================================================
-void SetEnemyHoming(int no)
+void SetEnemyHoming(int no, int frequency, float speedup)
 {
 	ENEMY *enemy = &enemyWk[0];
+
+	// ˆÚ“®‘¬“xXV•p“xƒJƒEƒ“ƒg
+	sp_Update++;
 
 	// ’Ç”ö‘ÎÛ‚ÉƒGƒlƒ~[‚Ì’‹“_‚ğƒZƒbƒg
 	enemy->At = GetPosPlayer(no);
@@ -454,6 +464,17 @@ void SetEnemyHoming(int no)
 	// ˆÚ“®ƒxƒNƒgƒ‹‚ğ³‹K‰»
 	D3DXVec3Normalize(&enemy->move, &enemy->move);
 
-	enemy->move *= VALUE_MOVE_ENEMY;
+	// ƒGƒlƒ~[‚Ì‘¬“x’²®
+
+	// ‘¬“x‚ğˆê’èŠÔŠu‚ÅXV
+	if (sp_Update % frequency == 0)
+	{	// ‘¬“xup
+		enemy->speed += speedup;
+		// ˆÚ“®‘¬“xXV•p“xƒJƒEƒ“ƒg‚ğƒ[ƒ‚É–ß‚·
+		sp_Update = 0;
+	}
+
+	// ‘¬“xİ’è
+	enemy->move *= enemy->speed;
 
 }

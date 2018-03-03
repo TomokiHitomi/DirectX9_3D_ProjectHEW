@@ -149,7 +149,7 @@ D3DXCOLOR SetColorPallet(int nColor)
 		temp = D3DXCOLOR(1.0f, 1.0f, 1.0f, 1.0f);
 		break;
 	case COLOR_PALLET_RED:			// レッド
-		temp = D3DXCOLOR(1.0f, 0.0f, 0.0f, 1.0f);
+		temp = D3DXCOLOR(0.8f, 0.2f, 0.0f, 1.0f);
 		break;
 	case COLOR_PALLET_YELLOW:		// イエロー
 		temp = D3DXCOLOR(0.9f, 0.9f, 0.0f, 1.0f);
@@ -161,7 +161,7 @@ D3DXCOLOR SetColorPallet(int nColor)
 		temp = D3DXCOLOR(0.0f, 0.9f, 0.9f, 1.0f);
 		break;
 	case COLOR_PALLET_BLUE:			// ブルー
-		temp = D3DXCOLOR(0.1f, 0.1f, 1.0f, 1.0f);
+		temp = D3DXCOLOR(0.0f, 0.2f, 0.8f, 1.0f);
 		break;
 	case COLOR_PALLET_MAGENTA:		// マゼンダ
 		temp = D3DXCOLOR(1.0f, 0.0f, 1.0f, 1.0f);
