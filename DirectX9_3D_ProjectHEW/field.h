@@ -61,5 +61,7 @@ PANEL *GetPanel(int no);
 HIT_PANEL *GetHitPanel(int no);
 
 int GetPanelNumber(int height, int width);
+void SetHitPanel(int no, int playernum);
+
 
 #endif
