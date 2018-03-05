@@ -20,7 +20,7 @@
 #define BULLET_HIGHT			(20.0f)								// バレット発射時の高さ
 #define BULLET_ANGLE_Y			(2.0f)								// 上方向への射角
 
-#define BULLET_MAX				(2)									// バレットの最大数
+#define BULLET_MAX				(6)									// バレットの最大数
 #define BULLET_TYPE				(2)									// バレットの種類
 
 #define	VALUE_GRAVITY			(0.45f)								// 重力

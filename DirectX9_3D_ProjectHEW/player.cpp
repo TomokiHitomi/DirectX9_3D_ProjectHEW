@@ -419,7 +419,7 @@ void FireBullet(int playernum)
 
 			player->type = playernum;
 
-			SetBullet(pos, move, 20.0f, 20.0f, player->type);
+			SetBullet(pos, move, 20.0f, 20.0f, playernum);
 
 	return;
 }

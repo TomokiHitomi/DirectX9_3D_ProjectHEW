@@ -63,6 +63,7 @@ HRESULT InitBullet(void)
 		bullet->fSizeX = BULLET_SIZE_X;
 		bullet->fSizeY = BULLET_SIZE_Y;
 		bullet->use = false;
+		bullet->type = 0;
 	}
 
 	return S_OK;
@@ -127,12 +128,9 @@ void UpdateBullet(void)
 				{
 					if (CheckHitPanelBullet(bullet[i].pos, panel->Pos) == true)
 					{
-						SetHitPanel(cntPanel, 1);		// パネルの色変更
+						SetHitPanel(cntPanel, bullet->type);		// パネルの色変更
+						DeleteBullet(i);							// バレットの削除
 					}
-
-					// バレットの削除
-					DeleteBullet(i);
-
 				}
 			}
 		}
@@ -308,22 +306,21 @@ void SetVertexBullet(int nIdxBullet, float fSizeX, float fSizeY)
 int SetBullet(D3DXVECTOR3 pos, D3DXVECTOR3 move, float fSizeX, float fSizeY, int type)
 {
 	BULLET *bullet = GetBullet(0);
-	PLAYER *player = GetPlayer(0);
 
 	int nIdxBullet = -1;
 
-	for (int i = 0; i < BULLET_MAX; i++)
+	for (int i = 0; i < BULLET_MAX; i++, bullet++)
 	{
-		if (!bullet[i].use)
+		if (!bullet->use)
 		{
-			bullet[i].pos = pos;
-			bullet[i].rot = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
-			bullet[i].scl = D3DXVECTOR3(1.0f, 1.0f, 1.0f);
-			bullet[i].move = move;
-			bullet[i].fSizeX = fSizeX;
-			bullet[i].fSizeY = fSizeY;
-			bullet[i].use = true;
-			bullet[i].type = type;
+			bullet->pos = pos;
+			bullet->rot = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
+			bullet->scl = D3DXVECTOR3(1.0f, 1.0f, 1.0f);
+			bullet->move = move;
+			bullet->fSizeX = fSizeX;
+			bullet->fSizeY = fSizeY;
+			bullet->use = true;
+			bullet->type = type;
 
 			//// 影の設定
 			//bullet[i].nIdxShadow = SetShadow(pos, 8.0f, 8.0f);		// 影の設定
@@ -367,12 +364,13 @@ bool CheckHitPanelBullet(D3DXVECTOR3 pos1, D3DXVECTOR3 pos2)
 //===================================================================
 void DeleteBullet(int nIdxBullet)
 {
-	BULLET *bullet = GetBullet(0);
+	BULLET *bullet = GetBullet(nIdxBullet);
 
 	if (nIdxBullet >= 0 && nIdxBullet < BULLET_MAX)
 	{
 		//DeleteShadow(bullet[nIdxBullet].nIdxShadow);
-		bullet[nIdxBullet].use = false;
+		bullet->use = false;
+		bullet->type = 0;
 	}
 }
 

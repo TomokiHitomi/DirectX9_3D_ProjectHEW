@@ -9,6 +9,11 @@
 #include "calculate.h"
 #include "input.h"
 
+/* Debug */
+#ifdef _DEBUG
+#include "debugproc.h"
+#endif
+
 //*****************************************************************************
 // マクロ定義
 //*****************************************************************************
@@ -140,6 +145,9 @@ void UpdateField(void)
 
 	for (int i = 0; i < PANEL_MAX; i++, panel++, hitpanel++)
 	{
+#ifdef _DEBUG
+		PrintDebugProc("%d", panel->PanelType);
+#endif
 		if (hitpanel->Use == true)//ヒットパネルがonの時
 		{
 			hitpanel->Size.x++;//ヒットパネルのサイズを少しずつ大きく
