@@ -37,66 +37,16 @@ long g_nVol[SOUND_BGM_MAX];
 
 // サウンドファイルのパス（sound.hの通しナンバーと順番を合わせること）
 const TCHAR* c_soundFilename[] = {
-	// Atmospheres
-	_T("data/SOUND/BGM/Atmospheres/ATM 004 D# 138BPM.wav"),
-	_T("data/SOUND/BGM/Atmospheres/ATM 013 F# 138BPM.wav"),//
-	// Basslines
-	_T("data/SOUND/BGM/Basslines/MUFX1 LOOP 027 138BPM.wav"),
-	_T("data/SOUND/BGM/Basslines/BA 028 G#.wav"),//
-	_T("data/SOUND/BGM/Basslines/BA 043 B.wav"),//
-	_T("data/SOUND/BGM/Basslines/BA 072 A#.wav"),//
-	_T("data/SOUND/BGM/Basslines/BL 010 G 138BPM.wav"),//
-	_T("data/SOUND/BGM/Basslines/BASS 010 F# 138BPM.wav"),//
-	_T("data/SOUND/BGM/Basslines/BA 014 C.wav"),//
-	// Drumloops
-	_T("data/SOUND/BGM/Drumloops/DL 003 138BPM.wav"),
-	_T("data/SOUND/BGM/Drumloops/MSD2 Drum Loop 138 BPM 036.wav"),
-	// Sequences
-	_T("data/SOUND/BGM/Sequences/SEQ 104 C.wav"),
-	_T("data/SOUND/BGM/Sequences/SEQ 144 D#.wav"),
-	_T("data/SOUND/BGM/Sequences/SEQ 131 B.wav"),//
-	_T("data/SOUND/BGM/Sequences/SQ 013 A# 138BPM.wav"),//
-	_T("data/SOUND/BGM/Sequences/SQ 017 G 138BPM.wav"),//
-	_T("data/SOUND/BGM/Sequences/SEQ 098 B.wav"),//
-	_T("data/SOUND/BGM/Sequences/SQ 001 F# 138BPM.wav"),//
-	_T("data/SOUND/BGM/Sequences/SQ 016 A# 138BPM.wav"),//
-	_T("data/SOUND/BGM/Sequences/SQ 035 C 138BPM.wav"),//
-	_T("data/SOUND/BGM/Sequences/SQ 062 G 138BPM.wav"),//
-	_T("data/SOUND/BGM/Sequences/SQ 065 G# 138BPM.wav"),//
-	// TCE
-	_T("data/SOUND/BGM/TCE/TCE3 06 Piano 138 BPM G# Wet.wav"),//
+	// BGM
+	_T("data/SOUND/BGM/bgm_maoudamashii_ethnic25.wav"),
+	_T("data/SOUND/BGM/bgm_maoudamashii_ethnic13.wav"),
+	_T("data/SOUND/BGM/bgm_maoudamashii_ethnic31.wav"),
 	// SE
-	_T("data/SOUND/SE/close.wav"),
-	_T("data/SOUND/SE/select.wav"),
-	_T("data/SOUND/SE/decision.wav"),
-	_T("data/SOUND/SE/pause.wav"),
-	_T("data/SOUND/SE/nogravity.wav"),
-	_T("data/SOUND/SE/gravity.wav"),
-	_T("data/SOUND/SE/enemybullet00.wav"),
-	_T("data/SOUND/SE/result.wav"),
-	_T("data/SOUND/SE/playerbullet00.wav"),
-	_T("data/SOUND/SE/alert.wav"),
-	_T("data/SOUND/SE/jump.wav"),
-	_T("data/SOUND/SE/hit.wav"),
-	_T("data/SOUND/SE/enemyfalse.wav"),
-	_T("data/SOUND/SE/enemybulletreversal.wav"),
-	_T("data/SOUND/SE/se_maoudamashii_onepoint33.wav"),
-	_T("data/SOUND/SE/TC/Crash.wav"),
-	_T("data/SOUND/SE/TC/MRE Open Hat 009.wav"),
-	_T("data/SOUND/SE/TC/MUFX1 EXPL 045.wav"),
-	_T("data/SOUND/SE/TC/MRE Clap 009.wav"),
-	// VOICE
-	_T("data/SOUND/VOICE/fire_01.wav"),
-	_T("data/SOUND/VOICE/thunder_01.wav"),
-	_T("data/SOUND/VOICE/ice_01.wav"),
-	_T("data/SOUND/VOICE/storm_01.wav"),
-	_T("data/SOUND/VOICE/water_01.wav"),
-	_T("data/SOUND/VOICE/daichiyo_01.wav"),
-	_T("data/SOUND/VOICE/powerup_02.wav"),
-	_T("data/SOUND/VOICE/warenichikarawo_01.wav"),
-	_T("data/SOUND/VOICE/stageclear_01.wav"),
-	_T("data/SOUND/VOICE/gameover_02.wav"),
-	_T("data/SOUND/VOICE/ittaa_01.wav")
+	_T("data/SOUND/SE/decision26.wav"),
+	_T("data/SOUND/SE/decision15.wav"),
+	_T("data/SOUND/SE/punch-swing1.wav"),
+	_T("data/SOUND/SE/bomb2.wav"),
+	_T("data/SOUND/SE/nyu3.wav")
 };
 
 // グローバル変数
@@ -262,266 +212,19 @@ void UpdateSoundBgm(void)
 	switch (g_nBgmFlag)
 	{
 	case SOUND_BGM_TITLE:
-		SetBgmVol(BGM_ATM_00, true);
-		SetBgmVol(BGM_ATM_01, false);
-		SetBgmVol(BGM_BASS_00, true);
-		SetBgmVol(BGM_BASS_01, false);
-		SetBgmVol(BGM_BASS_02, false);
-		SetBgmVol(BGM_BASS_03, false);
-		SetBgmVol(BGM_BASS_04, false);
-		SetBgmVol(BGM_BASS_05, false);
-		SetBgmVol(BGM_BASS_06, false);
-		SetBgmVol(BGM_DRUM_00, false);
-		SetBgmVol(BGM_DRUM_01, false);
-		SetBgmVol(BGM_SEQ_00, false);
-		SetBgmVol(BGM_SEQ_01, false);
-		SetBgmVol(BGM_SEQ_02, false);
-		SetBgmVol(BGM_SEQ_03, false);
-		SetBgmVol(BGM_SEQ_04, false);
-		SetBgmVol(BGM_SEQ_05, false);
-		SetBgmVol(BGM_SEQ_06, false);
-		SetBgmVol(BGM_SEQ_07, false);
-		SetBgmVol(BGM_SEQ_08, false);
-		SetBgmVol(BGM_SEQ_09, false);
-		SetBgmVol(BGM_SEQ_10, false);
-		SetBgmVol(BGM_TCE_00, false);
+		SetBgmVol(BGM_TITLE, true);
+		SetBgmVol(BGM_GAME, false);
+		SetBgmVol(BGM_RESULT, false);
 		break;
-	case SOUND_BGM_GAME_NORMAL:
-		SetBgmVol(BGM_ATM_00, false);
-		SetBgmVol(BGM_ATM_01, false);
-		SetBgmVol(BGM_BASS_00, true);
-		SetBgmVol(BGM_BASS_01, false);
-		SetBgmVol(BGM_BASS_02, false);
-		SetBgmVol(BGM_BASS_03, false);
-		SetBgmVol(BGM_BASS_04, false);
-		SetBgmVol(BGM_BASS_05, false);
-		SetBgmVol(BGM_BASS_06, false);
-		SetBgmVol(BGM_DRUM_00, true);
-		SetBgmVol(BGM_DRUM_01, false);
-		SetBgmVol(BGM_SEQ_00, false);
-		SetBgmVol(BGM_SEQ_01, false);
-		SetBgmVol(BGM_SEQ_02, false);
-		SetBgmVol(BGM_SEQ_03, false);
-		SetBgmVol(BGM_SEQ_04, false);
-		SetBgmVol(BGM_SEQ_05, false);
-		SetBgmVol(BGM_SEQ_06, false);
-		SetBgmVol(BGM_SEQ_07, false);
-		SetBgmVol(BGM_SEQ_08, false);
-		SetBgmVol(BGM_SEQ_09, false);
-		SetBgmVol(BGM_SEQ_10, false);
-		SetBgmVol(BGM_TCE_00, false);
-		break;
-	case SOUND_BGM_GAME_FIRE:
-		SetBgmVol(BGM_ATM_00, false);
-		SetBgmVol(BGM_ATM_01, false);
-		SetBgmVol(BGM_BASS_00, false);
-		SetBgmVol(BGM_BASS_01, false);
-		SetBgmVol(BGM_BASS_02, true);
-		SetBgmVol(BGM_BASS_03, false);
-		SetBgmVol(BGM_BASS_04, false);
-		SetBgmVol(BGM_BASS_05, false);
-		SetBgmVol(BGM_BASS_06, false);
-		SetBgmVol(BGM_DRUM_00, true);
-		SetBgmVol(BGM_DRUM_01, false);
-		SetBgmVol(BGM_SEQ_00, false);
-		SetBgmVol(BGM_SEQ_01, false);
-		SetBgmVol(BGM_SEQ_02, true);
-		SetBgmVol(BGM_SEQ_03, false);
-		SetBgmVol(BGM_SEQ_04, false);
-		if (g_bBgmBoss) SetBgmVol(BGM_SEQ_05, true);
-		if (!g_bBgmBoss) SetBgmVol(BGM_SEQ_05, false);
-		SetBgmVol(BGM_SEQ_06, false);
-		SetBgmVol(BGM_SEQ_07, false);
-		SetBgmVol(BGM_SEQ_08, false);
-		SetBgmVol(BGM_SEQ_09, false);
-		SetBgmVol(BGM_SEQ_10, false);
-		SetBgmVol(BGM_TCE_00, false);
-		break;
-	case SOUND_BGM_GAME_THUNDER:
-		SetBgmVol(BGM_ATM_00, false);
-		SetBgmVol(BGM_ATM_01, false);
-		SetBgmVol(BGM_BASS_00, false);
-		SetBgmVol(BGM_BASS_01, false);
-		SetBgmVol(BGM_BASS_02, false);
-		SetBgmVol(BGM_BASS_03, true);
-		SetBgmVol(BGM_BASS_04, false);
-		SetBgmVol(BGM_BASS_05, false);
-		SetBgmVol(BGM_BASS_06, false);
-		SetBgmVol(BGM_DRUM_00, true);
-		SetBgmVol(BGM_DRUM_01, false);
-		SetBgmVol(BGM_SEQ_00, false);
-		SetBgmVol(BGM_SEQ_01, false);
-		SetBgmVol(BGM_SEQ_02, false);
-		SetBgmVol(BGM_SEQ_03, true);
-		SetBgmVol(BGM_SEQ_04, false);
-		SetBgmVol(BGM_SEQ_05, false);
-		SetBgmVol(BGM_SEQ_06, false);
-		if (g_bBgmBoss) SetBgmVol(BGM_SEQ_07, true);
-		if (!g_bBgmBoss) SetBgmVol(BGM_SEQ_07, false);
-		SetBgmVol(BGM_SEQ_08, false);
-		SetBgmVol(BGM_SEQ_09, false);
-		SetBgmVol(BGM_SEQ_10, false);
-		SetBgmVol(BGM_TCE_00, false);
-		break;
-	case SOUND_BGM_GAME_ICE:
-		SetBgmVol(BGM_ATM_00, false);
-		SetBgmVol(BGM_ATM_01, false);
-		SetBgmVol(BGM_BASS_00, false);
-		SetBgmVol(BGM_BASS_01, true);
-		SetBgmVol(BGM_BASS_02, false);
-		SetBgmVol(BGM_BASS_03, false);
-		SetBgmVol(BGM_BASS_04, false);
-		SetBgmVol(BGM_BASS_05, false);
-		SetBgmVol(BGM_BASS_06, false);
-		SetBgmVol(BGM_DRUM_00, true);
-		SetBgmVol(BGM_DRUM_01, false);
-		SetBgmVol(BGM_SEQ_00, false);
-		SetBgmVol(BGM_SEQ_01, false);
-		SetBgmVol(BGM_SEQ_02, false);
-		SetBgmVol(BGM_SEQ_03, false);
-		SetBgmVol(BGM_SEQ_04, false);
-		SetBgmVol(BGM_SEQ_05, false);
-		SetBgmVol(BGM_SEQ_06, false);
-		SetBgmVol(BGM_SEQ_07, false);
-		SetBgmVol(BGM_SEQ_08, false);
-		SetBgmVol(BGM_SEQ_09, false);
-		if (g_bBgmBoss) SetBgmVol(BGM_SEQ_10, true);
-		if (!g_bBgmBoss) SetBgmVol(BGM_SEQ_10, false);
-		SetBgmVol(BGM_TCE_00, true);
-		break;
-	case SOUND_BGM_GAME_WIND:
-		SetBgmVol(BGM_ATM_00, false);
-		SetBgmVol(BGM_ATM_01, true);
-		SetBgmVol(BGM_BASS_00, false);
-		SetBgmVol(BGM_BASS_01, false);
-		SetBgmVol(BGM_BASS_02, false);
-		SetBgmVol(BGM_BASS_03, false);
-		SetBgmVol(BGM_BASS_04, false);
-		SetBgmVol(BGM_BASS_05, true);
-		SetBgmVol(BGM_BASS_06, false);
-		SetBgmVol(BGM_DRUM_00, true);
-		SetBgmVol(BGM_DRUM_01, false);
-		SetBgmVol(BGM_SEQ_00, false);
-		SetBgmVol(BGM_SEQ_01, false);
-		SetBgmVol(BGM_SEQ_02, false);
-		SetBgmVol(BGM_SEQ_03, false);
-		SetBgmVol(BGM_SEQ_04, false);
-		SetBgmVol(BGM_SEQ_05, false);
-		if (g_bBgmBoss) SetBgmVol(BGM_SEQ_06, true);
-		if (!g_bBgmBoss) SetBgmVol(BGM_SEQ_06, false);
-		SetBgmVol(BGM_SEQ_07, false);
-		SetBgmVol(BGM_SEQ_08, false);
-		SetBgmVol(BGM_SEQ_09, false);
-		SetBgmVol(BGM_SEQ_10, false);
-		SetBgmVol(BGM_TCE_00, false);
-		break;
-	case SOUND_BGM_GAME_WATER:
-		SetBgmVol(BGM_ATM_00, false);
-		SetBgmVol(BGM_ATM_01, false);
-		SetBgmVol(BGM_BASS_00, false);
-		SetBgmVol(BGM_BASS_01, false);
-		SetBgmVol(BGM_BASS_02, false);
-		SetBgmVol(BGM_BASS_03, false);
-		SetBgmVol(BGM_BASS_04, false);
-		SetBgmVol(BGM_BASS_05, false);
-		SetBgmVol(BGM_BASS_06, true);
-		SetBgmVol(BGM_DRUM_00, true);
-		SetBgmVol(BGM_DRUM_01, false);
-		SetBgmVol(BGM_SEQ_00, true);
-		SetBgmVol(BGM_SEQ_01, false);
-		SetBgmVol(BGM_SEQ_02, false);
-		SetBgmVol(BGM_SEQ_03, false);
-		SetBgmVol(BGM_SEQ_04, false);
-		SetBgmVol(BGM_SEQ_05, false);
-		SetBgmVol(BGM_SEQ_06, false);
-		SetBgmVol(BGM_SEQ_07, false);
-		if (g_bBgmBoss) SetBgmVol(BGM_SEQ_08, true);
-		if (!g_bBgmBoss) SetBgmVol(BGM_SEQ_08, false);
-		SetBgmVol(BGM_SEQ_09, false);
-		SetBgmVol(BGM_SEQ_10, false);
-		SetBgmVol(BGM_TCE_00, false);
-		break;
-	case SOUND_BGM_GAME_EARTH:
-		SetBgmVol(BGM_ATM_00, false);
-		SetBgmVol(BGM_ATM_01, false);
-		SetBgmVol(BGM_BASS_00, false);
-		SetBgmVol(BGM_BASS_01, false);
-		SetBgmVol(BGM_BASS_02, false);
-		SetBgmVol(BGM_BASS_03, false);
-		SetBgmVol(BGM_BASS_04, true);
-		SetBgmVol(BGM_BASS_05, false);
-		SetBgmVol(BGM_BASS_06, false);
-		SetBgmVol(BGM_DRUM_00, true);
-		SetBgmVol(BGM_DRUM_01, false);
-		SetBgmVol(BGM_SEQ_00, false);
-		SetBgmVol(BGM_SEQ_01, false);
-		SetBgmVol(BGM_SEQ_02, false);
-		SetBgmVol(BGM_SEQ_03, false);
-		SetBgmVol(BGM_SEQ_04, true);
-		SetBgmVol(BGM_SEQ_05, false);
-		SetBgmVol(BGM_SEQ_06, false);
-		SetBgmVol(BGM_SEQ_07, false);
-		SetBgmVol(BGM_SEQ_08, false);
-		if (g_bBgmBoss) SetBgmVol(BGM_SEQ_09, true);
-		if (!g_bBgmBoss) SetBgmVol(BGM_SEQ_09, false);
-		SetBgmVol(BGM_SEQ_10, false);
-		SetBgmVol(BGM_TCE_00, false);
-		break;
-	case SOUND_BGM_GAME_PAUSE:
-		SetBgmVol(BGM_ATM_00, false);
-		SetBgmVol(BGM_ATM_01, false);
-		SetBgmVol(BGM_BASS_00, false);
-		SetBgmVol(BGM_BASS_01, false);
-		SetBgmVol(BGM_BASS_02, false);
-		SetBgmVol(BGM_BASS_03, false);
-		SetBgmVol(BGM_BASS_04, false);
-		SetBgmVol(BGM_BASS_05, false);
-		SetBgmVol(BGM_BASS_06, false);
-		SetBgmVol(BGM_DRUM_00, VOLUME_FADE_HALF);
-		SetBgmVol(BGM_DRUM_01, false);
-		SetBgmVol(BGM_SEQ_00, false);
-		SetBgmVol(BGM_SEQ_01, false);
-		SetBgmVol(BGM_SEQ_02, false);
-		SetBgmVol(BGM_SEQ_03, false);
-		SetBgmVol(BGM_SEQ_04, false);
-		SetBgmVol(BGM_SEQ_05, false);
-		SetBgmVol(BGM_SEQ_06, false);
-		SetBgmVol(BGM_SEQ_07, false);
-		SetBgmVol(BGM_SEQ_08, false);
-		SetBgmVol(BGM_SEQ_09, false);
-		SetBgmVol(BGM_SEQ_10, false);
-		SetBgmVol(BGM_TCE_00, false);
+	case SOUND_BGM_GAME:
+		SetBgmVol(BGM_TITLE, false);
+		SetBgmVol(BGM_GAME, true);
+		SetBgmVol(BGM_RESULT, false);
 		break;
 	case SOUND_BGM_RESULT:
-		SetBgmVol(BGM_ATM_00, false);
-		SetBgmVol(BGM_BASS_00, false);
-		SetBgmVol(BGM_DRUM_00, false);
-		SetBgmVol(BGM_DRUM_01, true);
-		SetBgmVol(BGM_SEQ_00, false);
-		SetBgmVol(BGM_SEQ_01, true);
-		SetBgmVol(BGM_ATM_00, false);
-		SetBgmVol(BGM_ATM_01, false);
-		SetBgmVol(BGM_BASS_00, false);
-		SetBgmVol(BGM_BASS_01, false);
-		SetBgmVol(BGM_BASS_02, false);
-		SetBgmVol(BGM_BASS_03, false);
-		SetBgmVol(BGM_BASS_04, false);
-		SetBgmVol(BGM_BASS_05, false);
-		SetBgmVol(BGM_BASS_06, false);
-		SetBgmVol(BGM_DRUM_00, false);
-		SetBgmVol(BGM_DRUM_01, false);
-		SetBgmVol(BGM_SEQ_00, false);
-		SetBgmVol(BGM_SEQ_01, false);
-		SetBgmVol(BGM_SEQ_02, false);
-		SetBgmVol(BGM_SEQ_03, false);
-		SetBgmVol(BGM_SEQ_04, false);
-		SetBgmVol(BGM_SEQ_05, false);
-		SetBgmVol(BGM_SEQ_06, false);
-		SetBgmVol(BGM_SEQ_07, false);
-		SetBgmVol(BGM_SEQ_08, false);
-		SetBgmVol(BGM_SEQ_09, false);
-		SetBgmVol(BGM_SEQ_10, false);
-		SetBgmVol(BGM_TCE_00, false);
+		SetBgmVol(BGM_TITLE, false);
+		SetBgmVol(BGM_GAME, false);
+		SetBgmVol(BGM_RESULT, true);
 		break;
 	}
 }
@@ -600,12 +303,12 @@ long GetVol(LPDIRECTSOUNDBUFFER8 pBuffer)
 void SetSound(void)
 {
 	// BGMがずれないようにロードと分ける
-	for (int i = BGM_ATM_00; i < SOUND_BGM_MAX; i++)
+	for (int i = BGM_00; i < SOUND_BGM_MAX; i++)
 	{
 		// 各BGMロード
 		g_pBgm[i] = LoadSound(i);
 	}
-	for (int i = BGM_ATM_00; i < SOUND_BGM_MAX; i++)
+	for (int i = BGM_00; i < SOUND_BGM_MAX; i++)
 	{
 		// 各BGMボリュームセット
 		PlaySound(g_pBgm[i], E_DS8_FLAG_LOOP);
@@ -625,11 +328,11 @@ void SetSound(void)
 
 	//SetVol(g_pSe[11], SE_11_VOLUME_SE);
 
-	for (int i = 0; i < SOUND_VOICE_MAX; i++)
-	{
-		// 各SEロード
-		g_pVoice[i] = LoadSound(i + VOICE_00);
-	}
+	//for (int i = 0; i < SOUND_VOICE_MAX; i++)
+	//{
+	//	// 各SEロード
+	//	g_pVoice[i] = LoadSound(i + VOICE_00);
+	//}
 }
 
 //=============================================================================
