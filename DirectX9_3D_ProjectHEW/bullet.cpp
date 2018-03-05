@@ -22,12 +22,12 @@ BULLET *GetBullet(int no);
 //*******************************************************************
 // グローバル変数
 //*******************************************************************
-LPDIRECT3DTEXTURE9		D3DTextureBullet = NULL;		// テクスチャへのポインタ
-LPDIRECT3DVERTEXBUFFER9 D3DVtxBuffBullet = NULL;		// 頂点バッファインターフェースへのポインタ
+LPDIRECT3DTEXTURE9		D3DTextureBullet[BULLET_TYPE];		// テクスチャへのポインタ
+LPDIRECT3DVERTEXBUFFER9 D3DVtxBuffBullet;					// 頂点バッファインターフェースへのポインタ
 
-D3DXMATRIX				MtxWorldBullet;				// ワールドマトリックス
+D3DXMATRIX				MtxWorldBullet;						// ワールドマトリックス
 
-BULLET					BulletWk[BULLET_MAX];			// バレットワーク
+BULLET					BulletWk[BULLET_MAX];				// バレットワーク
 
 char *FileNameBullet[BULLET_TYPE] =
 {
@@ -46,23 +46,23 @@ HRESULT InitBullet(void)
 	// 頂点情報の作成
 	MakeVertexBullet(Device);
 
-	for (int i = 0; i < BULLET_MAX; i++)
+	for (int i = 0; i < BULLET_TYPE; i++)
 	{
 		// テクスチャの読み込み
 		D3DXCreateTextureFromFile(Device,					// デバイスへのポインタ
 									FileNameBullet[i],		// ファイルの名前
-									&D3DTextureBullet);		// 読み込むメモリー
+									&D3DTextureBullet[i]);		// 読み込むメモリー
 	}
 
-	for (int i = 0; i < BULLET_MAX; i++)
+	for (int i = 0; i < BULLET_MAX; i++, bullet++)
 	{
-		bullet[i].pos = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
-		bullet[i].rot = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
-		bullet[i].scl = D3DXVECTOR3(1.0f, 1.0f, 1.0f);
-		bullet[i].move = D3DXVECTOR3(1.0f, 1.0f, 1.0f);
-		bullet[i].fSizeX = BULLET_SIZE_X;
-		bullet[i].fSizeY = BULLET_SIZE_Y;
-		bullet[i].use = false;
+		bullet->pos = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
+		bullet->rot = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
+		bullet->scl = D3DXVECTOR3(1.0f, 1.0f, 1.0f);
+		bullet->move = D3DXVECTOR3(1.0f, 1.0f, 1.0f);
+		bullet->fSizeX = BULLET_SIZE_X;
+		bullet->fSizeY = BULLET_SIZE_Y;
+		bullet->use = false;
 	}
 
 	return S_OK;
@@ -74,19 +74,22 @@ HRESULT InitBullet(void)
 //===================================================================
 void UninitBullet(void)
 {
-	if (D3DTextureBullet != NULL)
+	for (int i = 0;i < BULLET_TYPE;i++)
 	{
-		// テクスチャの開放
-		D3DTextureBullet->Release();
-		D3DTextureBullet = NULL;
+		if (D3DTextureBullet[i] != NULL)
+		{
+			// テクスチャの開放
+			D3DTextureBullet[i]->Release();
+			D3DTextureBullet[i] = NULL;
+		}
 	}
-
 	if (D3DVtxBuffBullet != NULL)
 	{
 		// 頂点バッファの開放
 		D3DVtxBuffBullet->Release();
 		D3DVtxBuffBullet = NULL;
 	}
+
 }
 
 
@@ -161,9 +164,9 @@ void DrawBullet(void)
 	Device->SetRenderState(D3DRS_ALPHAREF, 0);
 	Device->SetRenderState(D3DRS_ALPHAFUNC, D3DCMP_GREATER);
 
-	for (int nCntBullet = 0; nCntBullet < BULLET_MAX; nCntBullet++)
+	for (int i = 0; i < BULLET_MAX; i++)
 	{
-		if (bullet[nCntBullet].use)
+		if (bullet[i].use)
 		{
 			// ワールドマトリックスの初期化
 			D3DXMatrixIdentity(&MtxWorldBullet);
@@ -182,11 +185,11 @@ void DrawBullet(void)
 			MtxWorldBullet._33 = mtxView._33;
 
 			// スケールを反映
-			D3DXMatrixScaling(&mtxScale, bullet[nCntBullet].scl.x, bullet[nCntBullet].scl.y, bullet[nCntBullet].scl.z);
+			D3DXMatrixScaling(&mtxScale, bullet[i].scl.x, bullet[i].scl.y, bullet[i].scl.z);
 			D3DXMatrixMultiply(&MtxWorldBullet, &MtxWorldBullet, &mtxScale);
 
 			// 移動を反映
-			D3DXMatrixTranslation(&mtxTranslate, bullet[nCntBullet].pos.x, bullet[nCntBullet].pos.y, bullet[nCntBullet].pos.z);
+			D3DXMatrixTranslation(&mtxTranslate, bullet[i].pos.x, bullet[i].pos.y, bullet[i].pos.z);
 			D3DXMatrixMultiply(&MtxWorldBullet, &MtxWorldBullet, &mtxTranslate);
 
 			// ワールドマトリックスの設定
@@ -199,10 +202,10 @@ void DrawBullet(void)
 			Device->SetFVF(FVF_VERTEX_3D);
 
 			// テクスチャの設定
-			Device->SetTexture(0, D3DTextureBullet);
+			Device->SetTexture(0, D3DTextureBullet[bullet->type]);
 
 			// ポリゴンの描画
-			Device->DrawPrimitive(D3DPT_TRIANGLESTRIP, (nCntBullet * 4), NUM_POLYGON);
+			Device->DrawPrimitive(D3DPT_TRIANGLESTRIP, (i * 4), NUM_POLYGON);
 		}
 	}
 

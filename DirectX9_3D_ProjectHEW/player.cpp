@@ -204,7 +204,7 @@ void UpdatePlayer(void)
 				if (player->item > 0)
 				{
 					// ’e”­ŽËˆ—
-					FireBullet(0);
+					FireBullet(i);
 				}
 			}
 
@@ -416,6 +416,8 @@ void FireBullet(int playernum)
 			
 			player->item = item;	//ŠŽ”‚P‚ÂŒ¸‚ç‚·
 			player->havetime = 0;
+
+			player->type = playernum;
 
 			SetBullet(pos, move, 20.0f, 20.0f, player->type);
 
