@@ -27,6 +27,9 @@ typedef struct		// プレイヤー構造体
 	D3DXVECTOR3	scl;		// スケール
 	float		radius;		// 半径
 	float		item;		// アイテム
+	D3DXVECTOR3	oldPos;		// 座標を戻す用
+
+	int			type;		// プレイヤーで分ける
 } PLAYER;
 
 //*******************************************************************

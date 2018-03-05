@@ -6,6 +6,7 @@
 //-------------------------------------------------------------------
 #include "bullet.h"
 #include "camera.h"
+#include "debugproc.h"
 #include "field.h"
 #include "player.h"
 
@@ -15,6 +16,9 @@
 HRESULT MakeVertexBullet(LPDIRECT3DDEVICE9 Device);
 void SetVertexBullet(int nIdxBullet, float fSizeX, float fSizeY);
 
+void CheckHitPanelBullet(D3DXVECTOR3 pos);
+BULLET *GetBullet(int no);
+
 //*******************************************************************
 // ƒOƒ[ƒoƒ‹•Ï”
 //*******************************************************************
@@ -23,7 +27,7 @@ LPDIRECT3DVERTEXBUFFER9 D3DVtxBuffBullet = NULL;		// ’¸“_ƒoƒbƒtƒ@ƒCƒ“ƒ^[ƒtƒF[ƒ
 
 D3DXMATRIX				MtxWorldBullet;				// ƒ[ƒ‹ƒhƒ}ƒgƒŠƒbƒNƒX
 
-BULLET					g_aBullet[MAX_BULLET];			// ƒoƒŒƒbƒgƒ[ƒN
+BULLET					BulletWk[BULLET_MAX];			// ƒoƒŒƒbƒgƒ[ƒN
 
 //char *FileNameBullet[BULLET_TYPE] =
 //{
@@ -37,6 +41,7 @@ BULLET					g_aBullet[MAX_BULLET];			// ƒoƒŒƒbƒgƒ[ƒN
 HRESULT InitBullet(void)
 {
 	LPDIRECT3DDEVICE9 Device = GetDevice();
+	BULLET *bullet = GetBullet(0);
 
 	// ’¸“_î•ñ‚Ìì¬
 	MakeVertexBullet(Device);
@@ -46,15 +51,15 @@ HRESULT InitBullet(void)
 								TEXTURE_BULLET,				// ƒtƒ@ƒCƒ‹‚Ì–¼‘O
 								&D3DTextureBullet);		// “Ç‚İ‚Şƒƒ‚ƒŠ[
 
-	for (int i = 0; i < MAX_BULLET; i++)
+	for (int i = 0; i < BULLET_MAX; i++)
 	{
-		g_aBullet[i].pos = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
-		g_aBullet[i].rot = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
-		g_aBullet[i].scl = D3DXVECTOR3(1.0f, 1.0f, 1.0f);
-		g_aBullet[i].move = D3DXVECTOR3(1.0f, 1.0f, 1.0f);
-		g_aBullet[i].fSizeX = BULLET_SIZE_X;
-		g_aBullet[i].fSizeY = BULLET_SIZE_Y;
-		g_aBullet[i].bUse = false;
+		bullet[i].pos = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
+		bullet[i].rot = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
+		bullet[i].scl = D3DXVECTOR3(1.0f, 1.0f, 1.0f);
+		bullet[i].move = D3DXVECTOR3(1.0f, 1.0f, 1.0f);
+		bullet[i].fSizeX = BULLET_SIZE_X;
+		bullet[i].fSizeY = BULLET_SIZE_Y;
+		bullet[i].use = false;
 	}
 
 	return S_OK;
@@ -87,74 +92,52 @@ void UninitBullet(void)
 //===================================================================
 void UpdateBullet(void)
 {
-	PLAYER *pPlayer;
+	PLAYER *player = GetPlayer(0);
 	D3DXVECTOR3 rotCamera;
-
-	// ƒvƒŒƒCƒ„[‚ğæ“¾
-	pPlayer = GetPlayer(0);
+	PANEL *panel = GetPanel(0);
+	BULLET *bullet = GetBullet(0);
 
 	// ƒJƒƒ‰‚Ì‰ñ“]‚ğæ“¾
 	rotCamera = GetRotCamera();
 
-	for (int i = 0; i < MAX_BULLET; i++)
+	for (int i = 0; i < BULLET_MAX; i++)
 	{
-		if (g_aBullet[i].bUse)
-		{
-			g_aBullet[i].pos.x += g_aBullet[i].move.x;
-			g_aBullet[i].pos.y += g_aBullet[i].move.y;
-			g_aBullet[i].pos.z += g_aBullet[i].move.z;
-
-			//g_aBullet[i].move.y -= VALUE_GRAVITY;
-
-			//g_aBullet[i].nTimer--;
-			//if (g_aBullet[i].nTimer <= 0)
-			//{
-			//	//DeleteShadow(g_aBullet[i].nIdxShadow);
-			//	g_aBullet[i].bUse = false;
-			//}
-			//else
-			//{
-				//// ‰e‚ÌˆÊ’uİ’è
-				//SetPositionShadow(g_aBullet[i].nIdxShadow, D3DXVECTOR3(g_aBullet[nCntBullet].pos.x, 0.1f, g_aBullet[nCntBullet].pos.z));
-
-				//// ƒGƒtƒFƒNƒg‚Ìİ’è
-				//SetEffect(g_aBullet[i].pos, D3DXVECTOR3(0.0f, 0.0f, 0.0f),
-				//	D3DXCOLOR(0.65f, 0.05f, 0.85f, 0.50f), 16.0f, 16.0f, 30);
-				//SetEffect(g_aBullet[i].pos, D3DXVECTOR3(0.0f, 0.0f, 0.0f),
-				//	D3DXCOLOR(0.05f, 0.85f, 0.65f, 0.30f), 12.0f, 12.0f, 30);
-				//SetEffect(g_aBullet[i].pos, D3DXVECTOR3(0.0f, 0.0f, 0.0f),
-				//	D3DXCOLOR(0.05f, 0.45f, 0.45f, 0.20f), 6.0f, 6.0f, 30);
-			//}
-
-			//if (g_aBullet[i].pos.y < 0.0f)
-			//{
-			//	
-			//	DeleteBullet(i);
-			//	//DeleteShadow(g_aBullet[i].nIdxShadow);
-
-			//}
-
-			/*float fSizeX = 8.0f + (g_aBullet[i].pos.y - 4.0f) * 0.05f;
-			if (fSizeX < 8.0f)
+		//for (int cntPanel = 0; cntPanel < PANEL_MAX; cntPanel++, panel++)
+		//{
+			if (bullet[i].use)
 			{
-				fSizeX = 8.0f;
+				bullet[i].pos.x += bullet[i].move.x;
+				bullet[i].pos.y += bullet[i].move.y;
+				bullet[i].pos.z += bullet[i].move.z;
+
+				bullet[i].move.y -= VALUE_GRAVITY;
+
+				if (bullet[i].pos.y < 0.0f)
+				{
+					DeleteBullet(i);
+
+					//DeleteShadow(bullet[i].nIdxShadow);
+
+				}
 			}
-			float fSizeY = 8.0f + (g_aBullet[i].pos.y - 4.0f) * 0.05f;
-			if (fSizeY < 8.0f)
-			{
-				fSizeY = 8.0f;
-			}*/
 
-			//SetVertexShadow(g_aBullet[i].nIdxShadow, fSizeX, fSizeY);
+			//SetVertexShadow(bullet[i].nIdxShadow, fSizeX, fSizeY);
 
-			//float colA = (200.0f - (g_aBullet[i].pos.y - 4.0f)) / 400.0f;
+			//float colA = (200.0f - (bullet[i].pos.y - 4.0f)) / 400.0f;
 			//if (colA < 0.0f)
 			//{
 			//	colA = 0.0f;
 			//}
-			//SetColorShadow(g_aBullet[i].nIdxShadow, D3DXCOLOR(1.0f, 1.0f, 1.0f, colA));
-		}
+			//SetColorShadow(bullet[i].nIdxShadow, D3DXCOLOR(1.0f, 1.0f, 1.0f, colA));
+
+			// ƒfƒoƒbƒO•\¦
+		//}
+#ifdef _DEBUG
+		PrintDebugProc("[ƒoƒŒƒbƒgÀ•W F(X:%f Y: %f Z: %f)]\n", bullet[i].pos.x, bullet[i].pos.y, bullet[i].pos.z);
+		PrintDebugProc("\n");
+#endif
 	}
+
 }
 
 
@@ -165,18 +148,20 @@ void DrawBullet(void)
 {
 	LPDIRECT3DDEVICE9 Device = GetDevice();
 	D3DXMATRIX mtxView, mtxScale, mtxTranslate;
+	BULLET *bullet = GetBullet(0);
 
-	// ƒ‰ƒCƒeƒBƒ“ƒO‚ğ–³Œø‚É
-	Device->SetRenderState(D3DRS_LIGHTING, FALSE);
+
+	//// ƒ‰ƒCƒeƒBƒ“ƒO‚ğ–³Œø‚É
+	//Device->SetRenderState(D3DRS_LIGHTING, FALSE);
 
 	// ƒ¿ƒeƒXƒg‚ğ—LŒø‚É
 	Device->SetRenderState(D3DRS_ALPHATESTENABLE, TRUE);
 	Device->SetRenderState(D3DRS_ALPHAREF, 0);
 	Device->SetRenderState(D3DRS_ALPHAFUNC, D3DCMP_GREATER);
 
-	for (int nCntBullet = 0; nCntBullet < MAX_BULLET; nCntBullet++)
+	for (int nCntBullet = 0; nCntBullet < BULLET_MAX; nCntBullet++)
 	{
-		if (g_aBullet[nCntBullet].bUse)
+		if (bullet[nCntBullet].use)
 		{
 			// ƒ[ƒ‹ƒhƒ}ƒgƒŠƒbƒNƒX‚Ì‰Šú‰»
 			D3DXMatrixIdentity(&MtxWorldBullet);
@@ -195,11 +180,11 @@ void DrawBullet(void)
 			MtxWorldBullet._33 = mtxView._33;
 
 			// ƒXƒP[ƒ‹‚ğ”½‰f
-			D3DXMatrixScaling(&mtxScale, g_aBullet[nCntBullet].scl.x, g_aBullet[nCntBullet].scl.y, g_aBullet[nCntBullet].scl.z);
+			D3DXMatrixScaling(&mtxScale, bullet[nCntBullet].scl.x, bullet[nCntBullet].scl.y, bullet[nCntBullet].scl.z);
 			D3DXMatrixMultiply(&MtxWorldBullet, &MtxWorldBullet, &mtxScale);
 
 			// ˆÚ“®‚ğ”½‰f
-			D3DXMatrixTranslation(&mtxTranslate, g_aBullet[nCntBullet].pos.x, g_aBullet[nCntBullet].pos.y, g_aBullet[nCntBullet].pos.z);
+			D3DXMatrixTranslation(&mtxTranslate, bullet[nCntBullet].pos.x, bullet[nCntBullet].pos.y, bullet[nCntBullet].pos.z);
 			D3DXMatrixMultiply(&MtxWorldBullet, &MtxWorldBullet, &mtxTranslate);
 
 			// ƒ[ƒ‹ƒhƒ}ƒgƒŠƒbƒNƒX‚Ìİ’è
@@ -219,8 +204,8 @@ void DrawBullet(void)
 		}
 	}
 
-	// ƒ‰ƒCƒeƒBƒ“ƒO‚ğ—LŒø‚É
-	Device->SetRenderState(D3DRS_LIGHTING, TRUE);
+	//// ƒ‰ƒCƒeƒBƒ“ƒO‚ğ—LŒø‚É
+	//Device->SetRenderState(D3DRS_LIGHTING, TRUE);
 
 	// ƒ¿ƒeƒXƒg‚ğ–³Œø‚É
 	Device->SetRenderState(D3DRS_ALPHATESTENABLE, FALSE);
@@ -235,7 +220,7 @@ void DrawBullet(void)
 HRESULT MakeVertexBullet(LPDIRECT3DDEVICE9 Device)
 {
 	// ƒIƒuƒWƒFƒNƒg‚Ì’¸“_ƒoƒbƒtƒ@‚ğ¶¬
-	if (FAILED(Device->CreateVertexBuffer(sizeof(VERTEX_3D) * NUM_VERTEX * MAX_BULLET,	// ’¸“_ƒf[ƒ^—p‚ÉŠm•Û‚·‚éƒoƒbƒtƒ@ƒTƒCƒY(ƒoƒCƒg’PˆÊ)
+	if (FAILED(Device->CreateVertexBuffer(sizeof(VERTEX_3D) * NUM_VERTEX * BULLET_MAX,	// ’¸“_ƒf[ƒ^—p‚ÉŠm•Û‚·‚éƒoƒbƒtƒ@ƒTƒCƒY(ƒoƒCƒg’PˆÊ)
 											D3DUSAGE_WRITEONLY,							// ’¸“_ƒoƒbƒtƒ@‚Ìg—p–@@
 											FVF_VERTEX_3D,								// g—p‚·‚é’¸“_ƒtƒH[ƒ}ƒbƒg
 											D3DPOOL_MANAGED,							// ƒŠƒ\[ƒX‚Ìƒoƒbƒtƒ@‚ğ•Û‚·‚éƒƒ‚ƒŠƒNƒ‰ƒX‚ğw’è
@@ -251,7 +236,7 @@ HRESULT MakeVertexBullet(LPDIRECT3DDEVICE9 Device)
 		// ’¸“_ƒf[ƒ^‚Ì”ÍˆÍ‚ğƒƒbƒN‚µA’¸“_ƒoƒbƒtƒ@‚Ö‚Ìƒ|ƒCƒ“ƒ^‚ğæ“¾
 		D3DVtxBuffBullet->Lock(0, 0, (void**)&pVtx, 0);
 
-		for (int i = 0; i < MAX_BULLET; i++, pVtx += 4)
+		for (int i = 0; i < BULLET_MAX; i++, pVtx += 4)
 		{
 			// ’¸“_À•W‚Ìİ’è
 			pVtx[0].vtx = D3DXVECTOR3(-BULLET_SIZE_X / 2, -BULLET_SIZE_Y / 2, 0.0f);
@@ -315,24 +300,28 @@ void SetVertexBullet(int nIdxBullet, float fSizeX, float fSizeY)
 //===================================================================
 // ’e‚Ìİ’è
 //===================================================================
-int SetBullet(D3DXVECTOR3 pos, D3DXVECTOR3 move, float fSizeX, float fSizeY)
+int SetBullet(D3DXVECTOR3 pos, D3DXVECTOR3 move, float fSizeX, float fSizeY, int type)
 {
+	BULLET *bullet = GetBullet(0);
+	PLAYER *player = GetPlayer(0);
+
 	int nIdxBullet = -1;
 
-	for (int i = 0; i < MAX_BULLET; i++)
+	for (int i = 0; i < BULLET_MAX; i++)
 	{
-		if (!g_aBullet[i].bUse)
+		if (!bullet[i].use)
 		{
-			g_aBullet[i].pos = pos;
-			g_aBullet[i].rot = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
-			g_aBullet[i].scl = D3DXVECTOR3(1.0f, 1.0f, 1.0f);
-			g_aBullet[i].move = move;
-			g_aBullet[i].fSizeX = fSizeX;
-			g_aBullet[i].fSizeY = fSizeY;
-			g_aBullet[i].bUse = true;
+			bullet[i].pos = pos;
+			bullet[i].rot = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
+			bullet[i].scl = D3DXVECTOR3(1.0f, 1.0f, 1.0f);
+			bullet[i].move = move;
+			bullet[i].fSizeX = fSizeX;
+			bullet[i].fSizeY = fSizeY;
+			bullet[i].use = true;
+			bullet[i].type = type;
 
 			//// ‰e‚Ìİ’è
-			//g_aBullet[i].nIdxShadow = SetShadow(pos, 8.0f, 8.0f);		// ‰e‚Ìİ’è
+			//bullet[i].nIdxShadow = SetShadow(pos, 8.0f, 8.0f);		// ‰e‚Ìİ’è
 
 			// ’¸“_À•W‚Ìİ’è
 			SetVertexBullet(i, fSizeX, fSizeY);
@@ -346,14 +335,35 @@ int SetBullet(D3DXVECTOR3 pos, D3DXVECTOR3 move, float fSizeX, float fSizeY)
 	return nIdxBullet;
 }
 
+////===================================================================
+//// ƒoƒŒƒbƒg‚Æƒpƒlƒ‹‚Ì“–‚½‚è”»’è
+////===================================================================
+//void CheckHitPanelBullet(D3DXVECTOR3 pos)
+//{
+//	D3DXVECTOR3 bulletPos = pos;
+//
+//
+//
+//}
+
 //===================================================================
 // ’e‚Ìíœ
 //===================================================================
 void DeleteBullet(int nIdxBullet)
 {
-	if (nIdxBullet >= 0 && nIdxBullet < MAX_BULLET)
+	BULLET *bullet = GetBullet(0);
+
+	if (nIdxBullet >= 0 && nIdxBullet < BULLET_MAX)
 	{
-		//DeleteShadow(g_aBullet[nIdxBullet].nIdxShadow);
-		g_aBullet[nIdxBullet].bUse = false;
+		//DeleteShadow(bullet[nIdxBullet].nIdxShadow);
+		bullet[nIdxBullet].use = false;
 	}
+}
+
+//===================================================================
+// ƒoƒŒƒbƒg‚Ìæ“¾
+//===================================================================
+BULLET *GetBullet(int no)
+{
+	return &BulletWk[no];
 }

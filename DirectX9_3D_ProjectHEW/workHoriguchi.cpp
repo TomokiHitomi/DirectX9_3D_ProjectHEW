@@ -75,6 +75,7 @@ void DrawWorkHoriguchi(void)
 		break;
 	case STAGE_GAME:
 		DrawPlayer();
+		DrawBullet();
 		break;
 	case STAGE_RESULT:
 		break;
