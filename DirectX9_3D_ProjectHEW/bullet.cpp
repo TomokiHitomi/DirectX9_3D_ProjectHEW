@@ -126,7 +126,7 @@ void UpdateBullet(void)
 
 				if (bullet->pos.y < 0.0f)
 				{
-					if (CheckHitPanelBullet(bullet->pos, panel->Pos) == true)
+					if (CheckHitPanelBullet(bullet->pos, panel->Pos))
 					{
 						SetHitPanel(cntPanel, bullet->type);		// パネルの色変更
 						DeleteBullet(i);							// バレットの削除
