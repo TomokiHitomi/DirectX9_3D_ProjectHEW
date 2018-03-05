@@ -12,6 +12,7 @@
 #include "field.h"
 #include "input.h"
 #include "item.h"
+#include "sound.h"
 #include "stage.h"
 #include "player.h"
 #include "fade.h"
@@ -222,9 +223,17 @@ void UpdatePlayer(void)
 			{
 				if (player->item > 0)
 				{
+					// バレット発射音
+					SetSe(SE_BULLET, E_DS8_FLAG_NONE, CONTINUITY_ON);
 					// 弾発射処理
 					FireBullet(i);
 				}
+				else
+				{
+					// ゲージが足りないときにMISS音
+					SetSe(SE_MISS, E_DS8_FLAG_NONE, CONTINUITY_ON);
+				}
+
 			}
 
 
@@ -342,6 +351,9 @@ void HitEnemy(void)
 
 					if (length < (player->radius + ENEMY_SIZE_X) * (player->radius + ENEMY_SIZE_X))
 					{
+						// エネミーと衝突時の爆発音
+						SetSe(SE_BOMB, E_DS8_FLAG_NONE, CONTINUITY_ON);
+
 						// プレイヤーを消す
 						player->use = false;
 
@@ -393,6 +405,9 @@ void HitItem(void)
 						//int haveitem = ceil(player->item);	//小数点以下を切りあげ
 
 						//player->item = haveitem + 1.0f;	//所持数を整数に
+
+						// アイテム取得音
+						SetSe(SE_ITEM, E_DS8_FLAG_NONE, CONTINUITY_ON);
 
 						player->item += 1.0f;
 					}
