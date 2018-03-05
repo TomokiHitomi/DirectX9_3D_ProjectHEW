@@ -29,11 +29,11 @@ D3DXMATRIX				MtxWorldBullet;				// ワールドマトリックス
 
 BULLET					BulletWk[BULLET_MAX];			// バレットワーク
 
-//char *FileNameBullet[BULLET_TYPE] =
-//{
-//	"data/TEXTURE/bullet_R2.png",
-//	"data/TEXTURE/bullet_B2.png"
-//};
+char *FileNameBullet[BULLET_TYPE] =
+{
+	"data/TEXTURE/bullet_R2.png",
+	"data/TEXTURE/bullet_B2.png"
+};
 
 //===================================================================
 // 初期化処理
@@ -46,10 +46,13 @@ HRESULT InitBullet(void)
 	// 頂点情報の作成
 	MakeVertexBullet(Device);
 
-	// テクスチャの読み込み
-	D3DXCreateTextureFromFile(Device,						// デバイスへのポインタ
-								TEXTURE_BULLET,				// ファイルの名前
-								&D3DTextureBullet);		// 読み込むメモリー
+	for (int i = 0; i < BULLET_MAX; i++)
+	{
+		// テクスチャの読み込み
+		D3DXCreateTextureFromFile(Device,					// デバイスへのポインタ
+									FileNameBullet[i],		// ファイルの名前
+									&D3DTextureBullet);		// 読み込むメモリー
+	}
 
 	for (int i = 0; i < BULLET_MAX; i++)
 	{
@@ -121,7 +124,7 @@ void UpdateBullet(void)
 				{
 					if (CheckHitPanelBullet(bullet[i].pos, panel->Pos) == true)
 					{
-						SetHitPanel(cntPanel, player->type);		// パネルの色変更
+						SetHitPanel(cntPanel, 1);		// パネルの色変更
 					}
 
 					// バレットの削除
