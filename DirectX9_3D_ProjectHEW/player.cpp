@@ -6,6 +6,7 @@
 //-------------------------------------------------------------------
 #include "bullet.h"
 #include "camera.h"
+#include "collision.h"
 #include "debugproc.h"
 #include "enemy.h"
 #include "field.h"
@@ -78,12 +79,12 @@ HRESULT InitPlayer(void)
 	//プレイヤーの初期化処理
 	for (int i = 0; i < PLAYER_MAX; i++, player++)
 	{
-		player->use = true;											// useフラグをtrueに
-		player->pos = D3DXVECTOR3((i+1)*165.0f, 0.0f, 100.0f);		// 位置
-		player->rot = D3DXVECTOR3(0.0f, 0.0f, 0.0f);				// 角度
-		player->scl = D3DXVECTOR3(1.0f, 1.0f, 1.0f);				// スケール
-		player->radius = PLAYER_RADIUS;								// 半径
-		player->item = 0.0f;										// アイテムを0に
+		player->use = true;														// useフラグをtrueに
+		player->pos = D3DXVECTOR3((i+1)*165.0f, 0.0f, 100.0f);					// 位置
+		player->rot = D3DXVECTOR3(0.0f, 0.0f, 0.0f);							// 角度
+		player->scl = D3DXVECTOR3(1.0f, 1.0f, 1.0f);							// スケール
+		player->radius = PLAYER_RADIUS;											// 半径
+		player->item = 0.0f;													// アイテムを0に
 		player->type = i;
 		player->oldPos = player->pos;
 		player->havetime = 0;
@@ -168,21 +169,39 @@ void UpdatePlayer(void)
 			panel = GetPanel(GetPanelNumber(PANEL_NUM_Z, PANEL_NUM_X));
 			if (player->pos.x > panel->Pos.x)
 			{
-				player->pos.x = panel->Pos.x;
+				player->pos.x = player->oldPos.x;
 			}
 			if (player->pos.z > panel->Pos.z)
 			{
-				player->pos.z = panel->Pos.z;
+				player->pos.z = player->oldPos.z;
 			}
 
 			panel = GetPanel(GetPanelNumber(1, 1));
 			if (player->pos.x < -panel->Pos.x)
 			{
-				player->pos.x = panel->Pos.x;
+				player->pos.x = player->oldPos.x;
 			}
 			if (player->pos.z < -panel->Pos.z)
 			{
-				player->pos.z = panel->Pos.z;
+				player->pos.z = player->oldPos.z;
+			}
+
+			// 移動先が相手のパネルだったら戻す処理
+			panel = GetPanel(0);
+			for (int j = 0;j < PANEL_MAX;j++, panel++)
+			{
+				if (panel->PanelType != PANEL_NORMAL)		// パネルがノーマルじゃないとき
+				{
+					if (panel->PanelType != i + 1)			// パネルが自色じゃないとき
+					{
+						//if (CollisionBB(player->pos, panel->Pos, D3DXVECTOR2(PLAYER_SIZE_BOX, PLAYER_SIZE_BOX), D3DXVECTOR2(PANEL_SIZE_X / 2, PANEL_SIZE_Z/  2)))
+						if (CollisionBB(player->pos, panel->Pos, D3DXVECTOR2(PLAYER_SIZE_BOX, PLAYER_SIZE_BOX), D3DXVECTOR2(PANEL_SIZE_X / 2, PANEL_SIZE_Z / 2)))
+						{
+							player->pos.x = player->oldPos.x;
+							player->pos.z = player->oldPos.z;
+						}
+					}
+				}
 			}
 
 			// デバッグ表示

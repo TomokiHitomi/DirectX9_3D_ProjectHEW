@@ -34,7 +34,7 @@ bool CollisionBB(D3DXVECTOR3 pos1, D3DXVECTOR3 pos2, D3DXVECTOR2 size1, D3DXVECT
 {
 	// “–‚½‚è”»’è‚ÌŠm”F(BB)
 	if (((pos1.x + size1.x) > (pos2.x - size2.x)) && ((pos2.x + size2.x) > (pos1.x - size1.x))
-		&& ((pos1.y + size1.y) > (pos2.y - size2.y)) && ((pos2.y + size2.y) > (pos1.y - size1.y)))
+		&& ((pos1.z + size1.y) > (pos2.z - size2.y)) && ((pos2.z + size2.y) > (pos1.z - size1.y)))
 	{
 		// “–‚½‚è”»’è
 		return true;
