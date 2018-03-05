@@ -350,8 +350,8 @@ bool CheckHitPanelBullet(D3DXVECTOR3 pos1, D3DXVECTOR3 pos2)
 	float panelPosX = pos2.x;
 	float panelPosZ = pos2.z;
 
-	if (((bulletPosX) > (panelPosX - PANEL_SIZE_X / 2)) && ((bulletPosX) < (panelPosX + PANEL_SIZE_X / 2)) &&
-		((bulletPosZ) > (panelPosZ - PANEL_SIZE_Z / 2)) && ((bulletPosZ) < (panelPosZ + PANEL_SIZE_Z / 2)))
+	if (((bulletPosX) >= (panelPosX - PANEL_SIZE_X / 2)) && ((bulletPosX) <= (panelPosX + PANEL_SIZE_X / 2)) &&
+		((bulletPosZ) >= (panelPosZ - PANEL_SIZE_Z / 2)) && ((bulletPosZ) <= (panelPosZ + PANEL_SIZE_Z / 2)))
 	{
 		return true;
 	}
