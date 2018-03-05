@@ -5,6 +5,7 @@
 //
 //=============================================================================
 #include "uigage.h"
+#include "player.h"
 
 #ifdef _DEBUG
 #include "input.h"
@@ -123,46 +124,14 @@ void UninitUigage(void)
 void UpdateUigage(void)
 {
 	GAGE *gage = GetGage(0);
-	GAGE *gage1 = GetGage(1);
+	PLAYER *player = GetPlayer(0);
 
-	if (GetKeyboardTrigger(DIK_Y))
+	for (int i = 0; i < PLAYER_MAX; i++, player++, gage++)
 	{
-		gage->GageLong -= TEXTURE_GAGE_WIDTH / 6;
-		if (gage->GageLong <= 0)
-		{
-			gage->GageLong = 0;
-		}
+		gage->GageLong = player->item*(TEXTURE_GAGE_WIDTH/3);//ƒAƒCƒeƒ€Žæ“¾”‚ð”½‰f
+		SetVertexGage(i);
 
 	}
-	else if (GetKeyboardTrigger(DIK_U))
-	{
-		gage->GageLong += TEXTURE_GAGE_WIDTH / 6;
-		if (gage->GageLong >= TEXTURE_GAGEFRAME_WIDTH)
-		{
-			gage->GageLong = TEXTURE_GAGEFRAME_WIDTH;
-		}
-	}
-
-	if (GetKeyboardTrigger(DIK_H))
-	{
-		gage1->GageLong -= TEXTURE_GAGE_WIDTH / 6;
-		if (gage1->GageLong <= 0)
-		{
-			gage1->GageLong = 0;
-		}
-
-	}
-	else if (GetKeyboardTrigger(DIK_J))
-	{
-		gage1->GageLong += TEXTURE_GAGE_WIDTH / 6;
-		if (gage1->GageLong >= TEXTURE_GAGEFRAME_WIDTH)
-		{
-			gage1->GageLong = TEXTURE_GAGEFRAME_WIDTH;
-		}
-	}
-
-	SetVertexGage(0);
-	SetVertexGage(1);
 
 }
 
