@@ -22,6 +22,7 @@
 #include "sound.h"
 #include "light.h"
 #include "fade.h"
+#include "sound.h"
 
 /* Work */
 #include "workChisaka.h"
@@ -60,7 +61,7 @@ HRESULT InitStage(HINSTANCE hInstance, HWND hWnd)
 	g_nPlayerWin = STAGE_WIN_NON;	// 勝利プレイヤーを初期化
 
 	InitInput(hInstance, hWnd);		// 入力
-	//InitSound(hWnd);				// サウンド
+	InitSound(hWnd);				// サウンド
 	InitLight();					// ライト
 	InitFade();						// フェード
 	InitStageEach(STAGE_INIT_FAST);	// 各ステージの初期化
@@ -142,18 +143,22 @@ void UpdateStage(void)
 #endif
 
 	UpdateInput();					// 入力
+	UpdateSound();					// サウンド
 
 	// ステージに応じた更新処理
 	switch (g_nStage)
 	{
 	case STAGE_TITLE:
 		UpdateTitle();				// タイトル
+		SetSoundBgm(STAGE_TITLE);
 		break;
 	case STAGE_GAME:
 		UpdateGame();				// ゲーム
+		SetSoundBgm(STAGE_GAME);
 		break;
 	case STAGE_RESULT:
 		UpdateResult();				// リザルト
+		SetSoundBgm(STAGE_RESULT);
 		break;
 	}
 	UpdateCamera();					// カメラ

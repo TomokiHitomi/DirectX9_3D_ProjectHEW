@@ -15,8 +15,8 @@
 //*****************************************************************************
 // マクロ定義
 //*****************************************************************************
-#define VOLUME_CONTROL_UP	(100)			// 音量上昇幅
-#define VOLUME_CONTROL_DOWN	(15)			// 音量下降幅
+#define VOLUME_CONTROL_UP	(120)			// 音量上昇幅
+#define VOLUME_CONTROL_DOWN	(20)			// 音量下降幅
 #define VOLUME_MAX			(-500)			// 最大音量
 #define VOLUME_HALF			(-2000)			// 中間音量
 #define VOLUME_MIN			(-8000)			// 最小音量
@@ -32,105 +32,19 @@
 
 enum
 {	// サウンド通しナンバー(sound.cppの順番と合わせる事)
-	// Atmospheres
-	BGM_ATM_00,		// D#
-	BGM_ATM_01,		// F#
-	// Basslines
-	BGM_BASS_00,	//
-	BGM_BASS_01,	// G#
-	BGM_BASS_02,	// B
-	BGM_BASS_03,	// A#
-	BGM_BASS_04,	// G
-	BGM_BASS_05,	// F#
-	BGM_BASS_06,	// C
-	// Drumloops
-	BGM_DRUM_00,
-	BGM_DRUM_01,
-	// Sequences
-	BGM_SEQ_00,		// D#
-	BGM_SEQ_01,		// D#
-	BGM_SEQ_02,		// B
-	BGM_SEQ_03,		// A#
-	BGM_SEQ_04,		// G
-	BGM_SEQ_05,		// B
-	BGM_SEQ_06,		// F#
-	BGM_SEQ_07,		// A#
-	BGM_SEQ_08,		// C
-	BGM_SEQ_09,		// G
-	BGM_SEQ_10,		// G#
-	// TCE
-	BGM_TCE_00,		// G#
-	// SE
+	BGM_00,
+	BGM_01,
+	BGM_02,
 	SE_00,
-	SE_01,
-	SE_02,
-	SE_03,
-	SE_04,
-	SE_05,
-	SE_06,
-	SE_07,
-	SE_08,
-	SE_09,
-	SE_10,
-	SE_11,
-	SE_12,
-	SE_13,
-	SE_14,
-	SE_15,
-	SE_16,
-	SE_17,
-	SE_18,
-	// VOICE
 	VOICE_00,
-	VOICE_01,
-	VOICE_02,
-	VOICE_03,
-	VOICE_04,
-	VOICE_05,
-	VOICE_06,
-	VOICE_07,
-	VOICE_08,
-	VOICE_09,
-	VOICE_10,
 	SOUND_MAX
 };
 
 enum
 {
-	SE_CLOSE,
-	SE_SELECT,
-	SE_DECISION,
-	SE_PAUSE,
-	SE_NOGRAVITY,
-	SE_GRAVITY,
-	SE_ENEMYBULLET,
-	SE_RESULT,
-	SE_PLAYERBULLET,
-	SE_ALERT,
-	SE_JUMP,
-	SE_HIT,
-	SE_ENEMYFALSE,
-	SE_ENEMYBULLETREVERSAL,
-	SE_SE_MAOU_ONEPOINT33,
-	SE_CRASH,
-	SE_OPENHAT,
-	SE_EXPL045,
-	SE_CLAP009
-};
-
-enum
-{
-	VOICE_FIRE,
-	VOICE_THUNDER,
-	VOICE_ICE,
-	VOICE_WIND,
-	VOICE_WATER,
-	VOICE_EARTH,
-	VOICE_POWERUP,
-	VOICE_WARENICHIKARAWO,
-	VOICE_CLEAR,
-	VOICE_GAMEOVER,
-	VOICE_ITTAA
+	BGM_TITLE,
+	BGM_GAME,
+	BGM_RESULT
 };
 
 enum
@@ -156,14 +70,7 @@ enum
 enum
 {	// BGMフラグ
 	SOUND_BGM_TITLE,
-	SOUND_BGM_GAME_NORMAL,
-	SOUND_BGM_GAME_FIRE,
-	SOUND_BGM_GAME_THUNDER,
-	SOUND_BGM_GAME_ICE,
-	SOUND_BGM_GAME_WIND,
-	SOUND_BGM_GAME_WATER,
-	SOUND_BGM_GAME_EARTH,
-	SOUND_BGM_GAME_PAUSE,
+	SOUND_BGM_GAME,
 	SOUND_BGM_RESULT
 };
 
