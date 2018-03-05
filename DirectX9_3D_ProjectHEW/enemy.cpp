@@ -250,6 +250,13 @@ void UpdateEnemy(void)
 		enemy->move.z -= cosf(camera->rotCamera.y) * VALUE_MOVE_ENEMY;
 	}
 
+
+
+
+#endif
+
+	// エネミー移動処理
+
 	// 移動量に慣性をかける
 	enemy->move.x += (0.0f - enemy->move.x) * RATE_MOVE_ENEMY;
 	enemy->move.y += (0.0f - enemy->move.y) * RATE_MOVE_ENEMY;
@@ -282,7 +289,7 @@ void UpdateEnemy(void)
 	}
 
 	// Z座標のミニマムとX座標のミニマムで制限かける
-	panel = GetPanel(GetPanelNumber(1,1));							// 左下
+	panel = GetPanel(GetPanelNumber(1, 1));							// 左下
 	if (enemy->Eye.x < -panel->Pos.x)
 	{
 		enemy->Eye.x = -panel->Pos.x;
@@ -291,10 +298,6 @@ void UpdateEnemy(void)
 	{
 		enemy->Eye.z = -panel->Pos.z;
 	}
-
-
-
-#endif
 
 
 	enemy = &enemyWk[0];
