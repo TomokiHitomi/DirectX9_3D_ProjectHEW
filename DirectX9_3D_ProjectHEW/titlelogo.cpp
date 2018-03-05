@@ -12,14 +12,14 @@
 //*****************************************************************************
 // マクロ定義
 //*****************************************************************************
-#define	TEXTURE_TITLELOGO		("data/TEXTURE/bg000.jpg")		// 読み込むテクスチャファイル名
-#define	TEXTURE_TITLELOGO_LOGO	("data/TEXTURE/title_logo.png")	// 読み込むテクスチャファイル名
-#define	TEXTURE_LOGO_START		("data/TEXTURE/press_enter.png")// 読み込むテクスチャファイル名
+#define	TEXTURE_TITLELOGO		("data/TEXTURE/aiueo.jpg")		// 読み込むテクスチャファイル名
+#define	TEXTURE_TITLELOGO_LOGO	("data/TEXTURE/とま.png")	// 読み込むテクスチャファイル名
+#define	TEXTURE_LOGO_START		("data/TEXTURE/プリエニ.png")// 読み込むテクスチャファイル名
 
 #define	TITLELOGO_LOGO_POS_X		(SCREEN_CENTER_X)			// タイトルロゴの位置(X座標)
 #define	TITLELOGO_LOGO_POS_Y		(280)						// タイトルロゴの位置(Y座標)
-#define	TITLELOGO_LOGO_WIDTH		(500 / 2)					// タイトルロゴの幅
-#define	TITLELOGO_LOGO_HEIGHT		(500 / 2)					// タイトルロゴの高さ
+#define	TITLELOGO_LOGO_WIDTH		(500 / 1)					// タイトルロゴの幅500/2
+#define	TITLELOGO_LOGO_HEIGHT		(400 / 2)					// タイトルロゴの高さ
 
 #define	START_POS_X					(SCREEN_CENTER_X)			// スタートボタンの位置(X座標)
 #define	START_POS_Y					(550)						// スタートボタンの位置(Y座標)
