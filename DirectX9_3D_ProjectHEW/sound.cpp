@@ -37,9 +37,16 @@ long g_nVol[SOUND_BGM_MAX];
 
 // サウンドファイルのパス（sound.hの通しナンバーと順番を合わせること）
 const TCHAR* c_soundFilename[] = {
+	// BGM
 	_T("data/SOUND/BGM/bgm_maoudamashii_ethnic25.wav"),
 	_T("data/SOUND/BGM/bgm_maoudamashii_ethnic13.wav"),
-	_T("data/SOUND/BGM/bgm_maoudamashii_ethnic31.wav")
+	_T("data/SOUND/BGM/bgm_maoudamashii_ethnic31.wav"),
+	// SE
+	_T("data/SOUND/SE/decision26.wav"),
+	_T("data/SOUND/SE/decision15.wav"),
+	_T("data/SOUND/SE/punch-swing1.wav"),
+	_T("data/SOUND/SE/bomb2.wav"),
+	_T("data/SOUND/SE/nyu3.wav")
 };
 
 // グローバル変数
@@ -321,11 +328,11 @@ void SetSound(void)
 
 	//SetVol(g_pSe[11], SE_11_VOLUME_SE);
 
-	for (int i = 0; i < SOUND_VOICE_MAX; i++)
-	{
-		// 各SEロード
-		g_pVoice[i] = LoadSound(i + VOICE_00);
-	}
+	//for (int i = 0; i < SOUND_VOICE_MAX; i++)
+	//{
+	//	// 各SEロード
+	//	g_pVoice[i] = LoadSound(i + VOICE_00);
+	//}
 }
 
 //=============================================================================

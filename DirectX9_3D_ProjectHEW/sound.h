@@ -36,6 +36,10 @@ enum
 	BGM_01,
 	BGM_02,
 	SE_00,
+	SE_01,
+	SE_02,
+	SE_03,
+	SE_04,
 	VOICE_00,
 	SOUND_MAX
 };
@@ -45,6 +49,15 @@ enum
 	BGM_TITLE,
 	BGM_GAME,
 	BGM_RESULT
+};
+
+enum
+{
+	SE_BUTTON,
+	SE_BULLET,
+	SE_MISS,
+	SE_BOMB,
+	SE_ITEM
 };
 
 enum
