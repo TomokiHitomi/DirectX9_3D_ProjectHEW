@@ -12,8 +12,6 @@
 //*****************************************************************************
 // マクロ定義
 //*****************************************************************************
-
-
 #define	TEXTURE_RESULTLOGO			"data/TEXTURE/空.jpg"			// 読み込むテクスチャファイル名
 #define	TEXTURE_RESULTLOGO_LOGO	 	"data/TEXTURE/ガメオベラ.png"	// 読み込むテクスチャファイル名
 #define	TEXTURE_RESULTLOGO_LOGO2	"data/TEXTURE/ロゴ.png"		// 読み込むテクスチャファイル名
