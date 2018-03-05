@@ -330,7 +330,7 @@ void HitEnemy(void)
 						SetStageWinPlayer(i);
 
 						// ƒŠƒUƒ‹ƒg‚ÖˆÚs
-						//SetFade(FADE_OUT, STAGE_RESULT);
+						SetFade(FADE_OUT, STAGE_RESULT);
 
 						//// SEÄ¶
 						//PlaySound(SOUND_LABEL_SE_COIN);
