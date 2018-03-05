@@ -13,13 +13,14 @@
 #include "item.h"
 #include "stage.h"
 #include "player.h"
+#include "fade.h"
 
 //*******************************************************************
 // プロトタイプ宣言
 //*******************************************************************
 void HitEnemy(void);
 void HitItem(void);
-void FireBullet(void);
+void FireBullet(int playernum);
 
 //*******************************************************************
 // グローバル変数
@@ -83,6 +84,9 @@ HRESULT InitPlayer(void)
 		player->scl = D3DXVECTOR3(1.0f, 1.0f, 1.0f);				// スケール
 		player->radius = PLAYER_RADIUS;								// 半径
 		player->item = 0.0f;										// アイテムを0に
+		player->type = i;
+		player->oldPos = player->pos;
+		player->havetime = 0;
 	}
 
 	return S_OK;
@@ -133,112 +137,90 @@ void UpdatePlayer(void)
 
 	for (int i = 0; i < PLAYER_MAX; i++, player++)
 	{
-		player->oldPos.x = player->pos.x;
-		player->oldPos.z = player->pos.z;
-
-		// 移動処理
-		if (GetKeyboardPress(DIK_A) || IsButtonPressed(i, BUTTON_POV_LEFT) || IsButtonPressed(i, BUTTON_LEFT))
+		if (player->use)
 		{
-			player->pos.x -= VALUE_MOVE_PLAYER;
-			player->rot.y = rotCamera.y + D3DX_PI * 0.5f;
-		}
-		else if (GetKeyboardPress(DIK_D) || IsButtonPressed(i, BUTTON_POV_RIGHT) || IsButtonPressed(i, BUTTON_RIGHT))
-		{
-			player->pos.x += VALUE_MOVE_PLAYER;
-			player->rot.y = rotCamera.y - D3DX_PI * 0.5f;
-		}
-		else if (GetKeyboardPress(DIK_W) || IsButtonPressed(i, BUTTON_POV_UP) || IsButtonPressed(i, BUTTON_UP))
-		{
-			player->pos.z += VALUE_MOVE_PLAYER;
-			player->rot.y = rotCamera.y + D3DX_PI * 1.0f;
-		}
-		else if (GetKeyboardPress(DIK_S) || IsButtonPressed(i, BUTTON_POV_DOWN) || IsButtonPressed(i, BUTTON_DOWN))
-		{
-			player->pos.z -= VALUE_MOVE_PLAYER;
-			player->rot.y = rotCamera.y + D3DX_PI * 0.0f;
-		}
+			player->oldPos.x = player->pos.x;
+			player->oldPos.z = player->pos.z;
 
-		// フィールド外に出てたら戻す処理
-		panel = GetPanel(GetPanelNumber(PANEL_NUM_Z, PANEL_NUM_X));
-		if (player->pos.x > panel->Pos.x)
-		{
-			player->pos.x = panel->Pos.x;
-		}
-		if (player->pos.z > panel->Pos.z)
-		{
-			player->pos.z = panel->Pos.z;
-		}
+			// 移動処理
+			if (GetKeyboardPress(DIK_A) || IsButtonPressed(i, BUTTON_POV_LEFT) || IsButtonPressed(i, BUTTON_LEFT))
+			{
+				player->pos.x -= VALUE_MOVE_PLAYER;
+				player->rot.y = rotCamera.y + D3DX_PI * 0.5f;
+			}
+			else if (GetKeyboardPress(DIK_D) || IsButtonPressed(i, BUTTON_POV_RIGHT) || IsButtonPressed(i, BUTTON_RIGHT))
+			{
+				player->pos.x += VALUE_MOVE_PLAYER;
+				player->rot.y = rotCamera.y - D3DX_PI * 0.5f;
+			}
+			else if (GetKeyboardPress(DIK_W) || IsButtonPressed(i, BUTTON_POV_UP) || IsButtonPressed(i, BUTTON_UP))
+			{
+				player->pos.z += VALUE_MOVE_PLAYER;
+				player->rot.y = rotCamera.y + D3DX_PI * 1.0f;
+			}
+			else if (GetKeyboardPress(DIK_S) || IsButtonPressed(i, BUTTON_POV_DOWN) || IsButtonPressed(i, BUTTON_DOWN))
+			{
+				player->pos.z -= VALUE_MOVE_PLAYER;
+				player->rot.y = rotCamera.y + D3DX_PI * 0.0f;
+			}
 
-		panel = GetPanel(GetPanelNumber(1, 1));
-		if (player->pos.x < -panel->Pos.x)
-		{
-			player->pos.x = panel->Pos.x;
-		}
-		if (player->pos.z < -panel->Pos.z)
-		{
-			player->pos.z = panel->Pos.z;
-		}
+			// フィールド外に出てたら戻す処理
+			panel = GetPanel(GetPanelNumber(PANEL_NUM_Z, PANEL_NUM_X));
+			if (player->pos.x > panel->Pos.x)
+			{
+				player->pos.x = panel->Pos.x;
+			}
+			if (player->pos.z > panel->Pos.z)
+			{
+				player->pos.z = panel->Pos.z;
+			}
 
+			panel = GetPanel(GetPanelNumber(1, 1));
+			if (player->pos.x < -panel->Pos.x)
+			{
+				player->pos.x = panel->Pos.x;
+			}
+			if (player->pos.z < -panel->Pos.z)
+			{
+				player->pos.z = panel->Pos.z;
+			}
 
-		//player = GetPlayer(0);
-		//for (int i = 0; i < PLAYER_MAX; i++, player++)
-		//{
-		//	panel = GetPanel(GetPanelNumber(PANEL_NUM_Z, PANEL_NUM_X));
-		//	if (player->pos.x > panel->Pos.x)
-		//	{
-		//		player->pos.x = panel->Pos.x;
-		//	}
-		//	if (player->pos.z > panel->Pos.z)
-		//	{
-		//		player->pos.z = panel->Pos.z;
-		//	}
-
-
-		//	panel = GetPanel(GetPanelNumber(1, 1));
-		//	if (player->pos.x < -panel->Pos.x)
-		//	{
-		//		player->pos.x = panel->Pos.x;
-		//	}
-		//	if (player->pos.z < -panel->Pos.z)
-		//	{
-		//		player->pos.z = panel->Pos.z;
-		//	}
-		//}
-
-
-
+			// デバッグ表示
 #ifdef _DEBUG
-		PrintDebugProc("[プレイヤー座標 ：(X:%f Y: %f Z: %f)]\n", player->pos.x, player->pos.y, player->pos.z);
+			PrintDebugProc("[プレイヤー座標 ：(X:%f Y: %f Z: %f)]\n", player->pos.x, player->pos.y, player->pos.z);
+
 #endif
+
+
+
+				// エネミーとの当たり判定
+			HitEnemy();
+
+			// アイテム取得
+			HitItem();
+
+			if (GetKeyboardTrigger(DIK_SPACE) || IsButtonTriggered(i, BUTTON_C))
+			{
+				if (player->item > 0)
+				{
+					// 弾発射処理
+					FireBullet(i);
+				}
+			}
+
+
+			player->item -= 0.003f;
+			if (player->item < 0.0f)
+			{
+				player->item = 0.0f;
+			}
+			else if (player->item > 3.0f)
+			{
+				player->item = 3.0f;
+			}
+
+		}
 	}
-
-//#ifdef _DEBUG
-//	if (GetKeyboardPress(DIK_Q))
-//	{
-//		player->pos.y += VALUE_MOVE_PLAYER;
-//	}
-//	else if (GetKeyboardPress(DIK_E))
-//	{
-//		player->pos.y -= VALUE_MOVE_PLAYER;
-//	}
-//#endif
-
-	// エネミーとの当たり判定
-	HitEnemy();
-
-	// アイテム取得
-	HitItem();
-
-	// 弾発射処理
-	FireBullet();
-
-		// デバッグ表示
-#ifdef _DEBUG
-//		PrintDebugProc("[プレイヤー座標 ：(X:%f Y: %f Z: %f)]\n", player->pos.x, player->pos.y, player->pos.z);
-//		PrintDebugProc("プレイヤー移動 : WSADQE : 前後左右上下\n");
-		PrintDebugProc("\n");
-#endif
-
 }
 
 //===================================================================
@@ -326,27 +308,33 @@ void HitEnemy(void)
 	{
 		ENEMY *enemy = GetEnemy(0);
 
-		for (int cntItem = 0; cntItem < MAX_ITEM; cntItem++, enemy++)
+		if (player->use)
 		{
-			// 当たり判定
-			if (enemy->use == true)
+			for (int cntItem = 0; cntItem < MAX_ITEM; cntItem++, enemy++)
 			{
-				float length = 0;		// 多分おかしい（でかい）
-
-				length = (player->pos.x - enemy->Eye.x) * (player->pos.x - enemy->Eye.x)
-					+ (player->pos.y - enemy->Eye.y) * (player->pos.y - enemy->Eye.y)
-					+ (player->pos.z - enemy->Eye.z) * (player->pos.z - enemy->Eye.z);
-
-				if (length < (player->radius + ENEMY_SIZE_X) * (player->radius + ENEMY_SIZE_X))
+				// 当たり判定
+				if (enemy->use == true)
 				{
-					// プレイヤーを消す
-					player->use = false;
+					float length = 0;		// 多分おかしい（でかい）
 
-					// 残っている方を渡す
-					SetStageWinPlayer(i + 1);
+					length = (player->pos.x - enemy->Eye.x) * (player->pos.x - enemy->Eye.x)
+						+ (player->pos.y - enemy->Eye.y) * (player->pos.y - enemy->Eye.y)
+						+ (player->pos.z - enemy->Eye.z) * (player->pos.z - enemy->Eye.z);
 
-					//// SE再生
-					//PlaySound(SOUND_LABEL_SE_COIN);
+					if (length < (player->radius + ENEMY_SIZE_X) * (player->radius + ENEMY_SIZE_X))
+					{
+						// プレイヤーを消す
+						player->use = false;
+
+						// 残っている方を渡す
+						SetStageWinPlayer(i);
+
+						// リザルトへ移行
+						//SetFade(FADE_OUT, STAGE_RESULT);
+
+						//// SE再生
+						//PlaySound(SOUND_LABEL_SE_COIN);
+					}
 				}
 			}
 		}
@@ -380,8 +368,16 @@ void HitItem(void)
 
 				if (length < (player->radius + ITEM_SIZE_X) * (player->radius + ITEM_SIZE_X))
 				{
-					// 所持アイテム数の増加
-					player->item += 1.0f;
+					
+					if (player->item <= 2.0f)
+					{
+						//int haveitem = ceil(player->item);	//小数点以下を切りあげ
+
+						//player->item = haveitem + 1.0f;	//所持数を整数に
+
+						player->item += 1.0f;
+					}
+					
 
 					//// アイテム消去
 					item->use = false;
@@ -401,14 +397,10 @@ void HitItem(void)
 //===================================================================
 // バレット発射処理
 //===================================================================
-void FireBullet(void)
+void FireBullet(int playernum)
 {
-	PLAYER *player = &PlayerWk[0];		// プレイヤー取得
+	PLAYER *player = &PlayerWk[playernum];		// プレイヤー取得
 
-	for (int i = 0; i < PLAYER_MAX; i++, player++)
-	{
-		if (GetKeyboardTrigger(DIK_SPACE))
-		{
 			D3DXVECTOR3 pos = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
 			D3DXVECTOR3 move = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
 
@@ -420,11 +412,13 @@ void FireBullet(void)
 			move.y = BULLET_ANGLE_Y;
 			move.z = -cosf(player->rot.y) * VALUE_MOVE_BULLET;
 
+			int item=player->item;	//小数点以下を切り捨て
+			
+			player->item = item;	//所持数１つ減らす
+			player->havetime = 0;
+
 			SetBullet(pos, move, 20.0f, 20.0f, player->type);
 
-
-		}
-	}
 	return;
 }
 

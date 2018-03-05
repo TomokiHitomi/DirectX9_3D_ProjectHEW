@@ -147,8 +147,8 @@ void UpdateResultlogo(void)
 	}
 	
 
-	//SetTextureResultlogologo(GetStageWinPlayer());
-	SetTextureResultlogologo(1);
+	SetTextureResultlogologo(GetStageWinPlayer());
+	//SetTextureResultlogologo(1);
 
 
 	if (GetKeyboardTrigger(DIK_RETURN))
