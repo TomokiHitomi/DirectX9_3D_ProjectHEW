@@ -28,7 +28,7 @@
 #define	RESULTLOGO_LOGO2_HEIGHT	(240 / 2)				// リザルトロゴの高さ
 
 #define	COUNT_APPERA_RESULTLOGO	(60)		// リザルトロゴ出現までの待ち時間	
-#define	LIMIT_COUNT_WAIT	(60 * 5)	// 待ち時間
+#define	LIMIT_COUNT_WAIT	(60 * 15)	// 待ち時間
 
 //*****************************************************************************
 // プロトタイプ宣言
