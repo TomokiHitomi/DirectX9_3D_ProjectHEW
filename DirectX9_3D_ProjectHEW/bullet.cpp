@@ -107,26 +107,26 @@ void UpdateBullet(void)
 	// カメラの回転を取得
 	rotCamera = GetRotCamera();
 
-	for (int i = 0; i < BULLET_MAX; i++)
+	for (int i = 0; i < BULLET_MAX; i++, bullet++)
 	{
 
-		if (bullet[i].use)		// バレットが使用中だったら
+		if (bullet->use)		// バレットが使用中だったら
 		{
 
-			bullet[i].pos.x += bullet[i].move.x;
-			bullet[i].pos.y += bullet[i].move.y;
-			bullet[i].pos.z += bullet[i].move.z;
+			bullet->pos.x += bullet->move.x;
+			bullet->pos.y += bullet->move.y;
+			bullet->pos.z += bullet->move.z;
 
-			bullet[i].move.y -= VALUE_GRAVITY;
+			bullet->move.y -= VALUE_GRAVITY;
 
 
 			panel = GetPanel(0);
 			for (int cntPanel = 0; cntPanel < PANEL_MAX; cntPanel++, panel++)
 			{
 
-				if (bullet[i].pos.y < 0.0f)
+				if (bullet->pos.y < 0.0f)
 				{
-					if (CheckHitPanelBullet(bullet[i].pos, panel->Pos) == true)
+					if (CheckHitPanelBullet(bullet->pos, panel->Pos) == true)
 					{
 						SetHitPanel(cntPanel, bullet->type);		// パネルの色変更
 						DeleteBullet(i);							// バレットの削除
@@ -136,7 +136,7 @@ void UpdateBullet(void)
 		}
 			// デバッグ表示
 #ifdef _DEBUG
-			PrintDebugProc("[バレット座標 ：(X:%f Y: %f Z: %f)]\n", bullet[i].pos.x, bullet[i].pos.y, bullet[i].pos.z);
+			PrintDebugProc("[バレット座標 ：(X:%f Y: %f Z: %f)]\n", bullet->pos.x, bullet->pos.y, bullet->pos.z);
 			PrintDebugProc("\n");
 #endif
 	}
@@ -162,9 +162,9 @@ void DrawBullet(void)
 	Device->SetRenderState(D3DRS_ALPHAREF, 0);
 	Device->SetRenderState(D3DRS_ALPHAFUNC, D3DCMP_GREATER);
 
-	for (int i = 0; i < BULLET_MAX; i++)
+	for (int i = 0; i < BULLET_MAX; i++, bullet++)
 	{
-		if (bullet[i].use)
+		if (bullet->use)
 		{
 			// ワールドマトリックスの初期化
 			D3DXMatrixIdentity(&MtxWorldBullet);
@@ -183,11 +183,11 @@ void DrawBullet(void)
 			MtxWorldBullet._33 = mtxView._33;
 
 			// スケールを反映
-			D3DXMatrixScaling(&mtxScale, bullet[i].scl.x, bullet[i].scl.y, bullet[i].scl.z);
+			D3DXMatrixScaling(&mtxScale, bullet->scl.x, bullet->scl.y, bullet->scl.z);
 			D3DXMatrixMultiply(&MtxWorldBullet, &MtxWorldBullet, &mtxScale);
 
 			// 移動を反映
-			D3DXMatrixTranslation(&mtxTranslate, bullet[i].pos.x, bullet[i].pos.y, bullet[i].pos.z);
+			D3DXMatrixTranslation(&mtxTranslate, bullet->pos.x, bullet->pos.y, bullet->pos.z);
 			D3DXMatrixMultiply(&MtxWorldBullet, &MtxWorldBullet, &mtxTranslate);
 
 			// ワールドマトリックスの設定
