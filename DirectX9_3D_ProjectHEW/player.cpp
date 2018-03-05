@@ -204,7 +204,7 @@ void UpdatePlayer(void)
 				if (player->item > 0)
 				{
 					// ’e”­Ëˆ—
-					FireBullet(i);
+					FireBullet(0);
 				}
 			}
 
