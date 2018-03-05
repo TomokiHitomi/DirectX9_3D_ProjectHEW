@@ -9,6 +9,11 @@
 #include "calculate.h"
 #include "input.h"
 
+/* Debug */
+#ifdef _DEBUG
+#include "debugproc.h"
+#endif
+
 //*****************************************************************************
 // ƒ}ƒNƒ’è‹`
 //*****************************************************************************
@@ -37,9 +42,6 @@ LPDIRECT3DVERTEXBUFFER9 g_pD3DVtxBuffHitPanel = NULL;	// ’¸“_ƒoƒbƒtƒ@‚Ö‚Ìƒ|ƒCƒ“ƒ
 
 HIT_PANEL				g_aHitPanel[PANEL_MAX];
 
-#ifdef _DEBUG
-int p;
-#endif
 //=============================================================================
 // ‰Šú‰»ˆ—
 //=============================================================================
@@ -80,9 +82,6 @@ HRESULT InitField(void)
 		hitpanel->Use = false;
 	}
 
-#ifdef _DEBUG
-	p = 0;
-#endif
 	return S_OK;
 }
 
@@ -134,15 +133,9 @@ void UpdateField(void)
 	if (GetKeyboardTrigger(DIK_L))
 	{
 		{
-			p = rand()%105;
-			hitpanel = GetHitPanel(p);
-			panel = GetPanel(p);
-			if (hitpanel->Use == false)
-			{
-				panel->HitFlag = (panel->PanelType + 1) % 3;
-
-				hitpanel->Use = true;
-			}
+			int p = rand()%105;
+			int num = rand() % 2;
+			SetHitPanel(p, num);
 		}
 	}
 #endif
@@ -152,7 +145,10 @@ void UpdateField(void)
 
 	for (int i = 0; i < PANEL_MAX; i++, panel++, hitpanel++)
 	{
-		if (hitpanel->Use == true)//ƒqƒbƒgƒpƒlƒ‹‚ğon
+#ifdef _DEBUG
+		PrintDebugProc("%d", panel->PanelType);
+#endif
+		if (hitpanel->Use == true)//ƒqƒbƒgƒpƒlƒ‹‚ªon‚Ì
 		{
 			hitpanel->Size.x++;//ƒqƒbƒgƒpƒlƒ‹‚ÌƒTƒCƒY‚ğ­‚µ‚¸‚Â‘å‚«‚­
 			hitpanel->Size.z++;
@@ -496,4 +492,23 @@ HIT_PANEL *GetHitPanel(int no)
 int GetPanelNumber(int height, int width)
 {
 	return (height-1)*PANEL_NUM_X + (width-1);
+}
+
+//==========================================================
+//ƒpƒlƒ‹•ÏX‚Ì€”õ
+//no(ˆø”‚P)		•Ï‚¦‚½‚¢ƒpƒlƒ‹‚Ì”Ô†
+//playernum(ˆø”2)	•Ï‚¦‚æ‚¤‚Æ‚µ‚Ä‚¢‚éƒvƒŒƒCƒ„[‚Ì”Ô†
+//==========================================================
+void SetHitPanel(int no,int playernum)
+{
+	PANEL *panel = GetPanel(no);
+	HIT_PANEL *hitpanel = GetHitPanel(no);
+	
+	if (hitpanel->Use == false && panel->PanelType == PANEL_NORMAL)//ƒqƒbƒgƒpƒlƒ‹‚ªg‚í‚ê‚Ä‚È‚¢@‚©‚Â@ƒpƒlƒ‹ƒ^ƒCƒv‚ª0‚Ì
+	{
+		panel->HitFlag = playernum+1;	//ƒvƒŒƒCƒ„[ƒiƒ“ƒo[‚É1‘«‚µ‚½ƒtƒ‰ƒOƒiƒ“ƒo[‚ğ—§‚Ä‚é
+										//¦ 0”Ô‚ªƒm[ƒ}ƒ‹ƒpƒlƒ‹‚Ì‚½‚ß@1”Ô•ª‚Ì‚¸‚ê‚ªo‚Ä‚¢‚é
+
+		hitpanel->Use = true;//ƒqƒbƒgƒpƒlƒ‹‚ğg—pó‘Ô‚É
+	}
 }

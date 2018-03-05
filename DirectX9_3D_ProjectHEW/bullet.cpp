@@ -6,6 +6,7 @@
 //-------------------------------------------------------------------
 #include "bullet.h"
 #include "camera.h"
+#include "debugproc.h"
 #include "field.h"
 #include "player.h"
 
@@ -15,21 +16,24 @@
 HRESULT MakeVertexBullet(LPDIRECT3DDEVICE9 Device);
 void SetVertexBullet(int nIdxBullet, float fSizeX, float fSizeY);
 
+bool CheckHitPanelBullet(D3DXVECTOR3 pos1, D3DXVECTOR3 pos2);
+BULLET *GetBullet(int no);
+
 //*******************************************************************
 // グローバル変数
 //*******************************************************************
-LPDIRECT3DTEXTURE9		D3DTextureBullet = NULL;		// テクスチャへのポインタ
-LPDIRECT3DVERTEXBUFFER9 D3DVtxBuffBullet = NULL;		// 頂点バッファインターフェースへのポインタ
+LPDIRECT3DTEXTURE9		D3DTextureBullet[BULLET_TYPE];		// テクスチャへのポインタ
+LPDIRECT3DVERTEXBUFFER9 D3DVtxBuffBullet;					// 頂点バッファインターフェースへのポインタ
 
-D3DXMATRIX				MtxWorldBullet;				// ワールドマトリックス
+D3DXMATRIX				MtxWorldBullet;						// ワールドマトリックス
 
-BULLET					g_aBullet[MAX_BULLET];			// バレットワーク
+BULLET					BulletWk[BULLET_MAX];				// バレットワーク
 
-//char *FileNameBullet[BULLET_TYPE] =
-//{
-//	"data/TEXTURE/bullet_R2.png",
-//	"data/TEXTURE/bullet_B2.png"
-//};
+char *FileNameBullet[BULLET_TYPE] =
+{
+	"data/TEXTURE/bullet_R2.png",
+	"data/TEXTURE/bullet_B2.png"
+};
 
 //===================================================================
 // 初期化処理
@@ -37,24 +41,29 @@ BULLET					g_aBullet[MAX_BULLET];			// バレットワーク
 HRESULT InitBullet(void)
 {
 	LPDIRECT3DDEVICE9 Device = GetDevice();
+	BULLET *bullet = GetBullet(0);
 
 	// 頂点情報の作成
 	MakeVertexBullet(Device);
 
-	// テクスチャの読み込み
-	D3DXCreateTextureFromFile(Device,						// デバイスへのポインタ
-								TEXTURE_BULLET,				// ファイルの名前
-								&D3DTextureBullet);		// 読み込むメモリー
-
-	for (int i = 0; i < MAX_BULLET; i++)
+	for (int i = 0; i < BULLET_TYPE; i++)
 	{
-		g_aBullet[i].pos = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
-		g_aBullet[i].rot = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
-		g_aBullet[i].scl = D3DXVECTOR3(1.0f, 1.0f, 1.0f);
-		g_aBullet[i].move = D3DXVECTOR3(1.0f, 1.0f, 1.0f);
-		g_aBullet[i].fSizeX = BULLET_SIZE_X;
-		g_aBullet[i].fSizeY = BULLET_SIZE_Y;
-		g_aBullet[i].bUse = false;
+		// テクスチャの読み込み
+		D3DXCreateTextureFromFile(Device,					// デバイスへのポインタ
+									FileNameBullet[i],		// ファイルの名前
+									&D3DTextureBullet[i]);		// 読み込むメモリー
+	}
+
+	for (int i = 0; i < BULLET_MAX; i++, bullet++)
+	{
+		bullet->pos = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
+		bullet->rot = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
+		bullet->scl = D3DXVECTOR3(1.0f, 1.0f, 1.0f);
+		bullet->move = D3DXVECTOR3(1.0f, 1.0f, 1.0f);
+		bullet->fSizeX = BULLET_SIZE_X;
+		bullet->fSizeY = BULLET_SIZE_Y;
+		bullet->use = false;
+		bullet->type = 0;
 	}
 
 	return S_OK;
@@ -66,19 +75,22 @@ HRESULT InitBullet(void)
 //===================================================================
 void UninitBullet(void)
 {
-	if (D3DTextureBullet != NULL)
+	for (int i = 0;i < BULLET_TYPE;i++)
 	{
-		// テクスチャの開放
-		D3DTextureBullet->Release();
-		D3DTextureBullet = NULL;
+		if (D3DTextureBullet[i] != NULL)
+		{
+			// テクスチャの開放
+			D3DTextureBullet[i]->Release();
+			D3DTextureBullet[i] = NULL;
+		}
 	}
-
 	if (D3DVtxBuffBullet != NULL)
 	{
 		// 頂点バッファの開放
 		D3DVtxBuffBullet->Release();
 		D3DVtxBuffBullet = NULL;
 	}
+
 }
 
 
@@ -87,74 +99,48 @@ void UninitBullet(void)
 //===================================================================
 void UpdateBullet(void)
 {
-	PLAYER *pPlayer;
+	PLAYER *player = GetPlayer(0);
 	D3DXVECTOR3 rotCamera;
-
-	// プレイヤーを取得
-	pPlayer = GetPlayer(0);
+	PANEL *panel = GetPanel(0);
+	BULLET *bullet = GetBullet(0);
 
 	// カメラの回転を取得
 	rotCamera = GetRotCamera();
 
-	for (int i = 0; i < MAX_BULLET; i++)
+	for (int i = 0; i < BULLET_MAX; i++, bullet++)
 	{
-		if (g_aBullet[i].bUse)
+
+		if (bullet->use)		// バレットが使用中だったら
 		{
-			g_aBullet[i].pos.x += g_aBullet[i].move.x;
-			g_aBullet[i].pos.y += g_aBullet[i].move.y;
-			g_aBullet[i].pos.z += g_aBullet[i].move.z;
 
-			//g_aBullet[i].move.y -= VALUE_GRAVITY;
+			bullet->pos.x += bullet->move.x;
+			bullet->pos.y += bullet->move.y;
+			bullet->pos.z += bullet->move.z;
 
-			//g_aBullet[i].nTimer--;
-			//if (g_aBullet[i].nTimer <= 0)
-			//{
-			//	//DeleteShadow(g_aBullet[i].nIdxShadow);
-			//	g_aBullet[i].bUse = false;
-			//}
-			//else
-			//{
-				//// 影の位置設定
-				//SetPositionShadow(g_aBullet[i].nIdxShadow, D3DXVECTOR3(g_aBullet[nCntBullet].pos.x, 0.1f, g_aBullet[nCntBullet].pos.z));
+			bullet->move.y -= VALUE_GRAVITY;
 
-				//// エフェクトの設定
-				//SetEffect(g_aBullet[i].pos, D3DXVECTOR3(0.0f, 0.0f, 0.0f),
-				//	D3DXCOLOR(0.65f, 0.05f, 0.85f, 0.50f), 16.0f, 16.0f, 30);
-				//SetEffect(g_aBullet[i].pos, D3DXVECTOR3(0.0f, 0.0f, 0.0f),
-				//	D3DXCOLOR(0.05f, 0.85f, 0.65f, 0.30f), 12.0f, 12.0f, 30);
-				//SetEffect(g_aBullet[i].pos, D3DXVECTOR3(0.0f, 0.0f, 0.0f),
-				//	D3DXCOLOR(0.05f, 0.45f, 0.45f, 0.20f), 6.0f, 6.0f, 30);
-			//}
 
-			//if (g_aBullet[i].pos.y < 0.0f)
-			//{
-			//	
-			//	DeleteBullet(i);
-			//	//DeleteShadow(g_aBullet[i].nIdxShadow);
-
-			//}
-
-			/*float fSizeX = 8.0f + (g_aBullet[i].pos.y - 4.0f) * 0.05f;
-			if (fSizeX < 8.0f)
+			panel = GetPanel(0);
+			for (int cntPanel = 0; cntPanel < PANEL_MAX; cntPanel++, panel++)
 			{
-				fSizeX = 8.0f;
+
+				if (bullet->pos.y < 0.0f)
+				{
+					if (CheckHitPanelBullet(bullet->pos, panel->Pos) == true)
+					{
+						SetHitPanel(cntPanel, bullet->type);		// パネルの色変更
+						DeleteBullet(i);							// バレットの削除
+					}
+				}
 			}
-			float fSizeY = 8.0f + (g_aBullet[i].pos.y - 4.0f) * 0.05f;
-			if (fSizeY < 8.0f)
-			{
-				fSizeY = 8.0f;
-			}*/
-
-			//SetVertexShadow(g_aBullet[i].nIdxShadow, fSizeX, fSizeY);
-
-			//float colA = (200.0f - (g_aBullet[i].pos.y - 4.0f)) / 400.0f;
-			//if (colA < 0.0f)
-			//{
-			//	colA = 0.0f;
-			//}
-			//SetColorShadow(g_aBullet[i].nIdxShadow, D3DXCOLOR(1.0f, 1.0f, 1.0f, colA));
 		}
+			// デバッグ表示
+#ifdef _DEBUG
+			PrintDebugProc("[バレット座標 ：(X:%f Y: %f Z: %f)]\n", bullet->pos.x, bullet->pos.y, bullet->pos.z);
+			PrintDebugProc("\n");
+#endif
 	}
+
 }
 
 
@@ -165,18 +151,20 @@ void DrawBullet(void)
 {
 	LPDIRECT3DDEVICE9 Device = GetDevice();
 	D3DXMATRIX mtxView, mtxScale, mtxTranslate;
+	BULLET *bullet = GetBullet(0);
 
-	// ライティングを無効に
-	Device->SetRenderState(D3DRS_LIGHTING, FALSE);
+
+	//// ライティングを無効に
+	//Device->SetRenderState(D3DRS_LIGHTING, FALSE);
 
 	// αテストを有効に
 	Device->SetRenderState(D3DRS_ALPHATESTENABLE, TRUE);
 	Device->SetRenderState(D3DRS_ALPHAREF, 0);
 	Device->SetRenderState(D3DRS_ALPHAFUNC, D3DCMP_GREATER);
 
-	for (int nCntBullet = 0; nCntBullet < MAX_BULLET; nCntBullet++)
+	for (int i = 0; i < BULLET_MAX; i++, bullet++)
 	{
-		if (g_aBullet[nCntBullet].bUse)
+		if (bullet->use)
 		{
 			// ワールドマトリックスの初期化
 			D3DXMatrixIdentity(&MtxWorldBullet);
@@ -195,11 +183,11 @@ void DrawBullet(void)
 			MtxWorldBullet._33 = mtxView._33;
 
 			// スケールを反映
-			D3DXMatrixScaling(&mtxScale, g_aBullet[nCntBullet].scl.x, g_aBullet[nCntBullet].scl.y, g_aBullet[nCntBullet].scl.z);
+			D3DXMatrixScaling(&mtxScale, bullet->scl.x, bullet->scl.y, bullet->scl.z);
 			D3DXMatrixMultiply(&MtxWorldBullet, &MtxWorldBullet, &mtxScale);
 
 			// 移動を反映
-			D3DXMatrixTranslation(&mtxTranslate, g_aBullet[nCntBullet].pos.x, g_aBullet[nCntBullet].pos.y, g_aBullet[nCntBullet].pos.z);
+			D3DXMatrixTranslation(&mtxTranslate, bullet->pos.x, bullet->pos.y, bullet->pos.z);
 			D3DXMatrixMultiply(&MtxWorldBullet, &MtxWorldBullet, &mtxTranslate);
 
 			// ワールドマトリックスの設定
@@ -212,15 +200,15 @@ void DrawBullet(void)
 			Device->SetFVF(FVF_VERTEX_3D);
 
 			// テクスチャの設定
-			Device->SetTexture(0, D3DTextureBullet);
+			Device->SetTexture(0, D3DTextureBullet[bullet->type]);
 
 			// ポリゴンの描画
-			Device->DrawPrimitive(D3DPT_TRIANGLESTRIP, (nCntBullet * 4), NUM_POLYGON);
+			Device->DrawPrimitive(D3DPT_TRIANGLESTRIP, (i * 4), NUM_POLYGON);
 		}
 	}
 
-	// ライティングを有効に
-	Device->SetRenderState(D3DRS_LIGHTING, TRUE);
+	//// ライティングを有効に
+	//Device->SetRenderState(D3DRS_LIGHTING, TRUE);
 
 	// αテストを無効に
 	Device->SetRenderState(D3DRS_ALPHATESTENABLE, FALSE);
@@ -235,7 +223,7 @@ void DrawBullet(void)
 HRESULT MakeVertexBullet(LPDIRECT3DDEVICE9 Device)
 {
 	// オブジェクトの頂点バッファを生成
-	if (FAILED(Device->CreateVertexBuffer(sizeof(VERTEX_3D) * NUM_VERTEX * MAX_BULLET,	// 頂点データ用に確保するバッファサイズ(バイト単位)
+	if (FAILED(Device->CreateVertexBuffer(sizeof(VERTEX_3D) * NUM_VERTEX * BULLET_MAX,	// 頂点データ用に確保するバッファサイズ(バイト単位)
 											D3DUSAGE_WRITEONLY,							// 頂点バッファの使用法　
 											FVF_VERTEX_3D,								// 使用する頂点フォーマット
 											D3DPOOL_MANAGED,							// リソースのバッファを保持するメモリクラスを指定
@@ -251,7 +239,7 @@ HRESULT MakeVertexBullet(LPDIRECT3DDEVICE9 Device)
 		// 頂点データの範囲をロックし、頂点バッファへのポインタを取得
 		D3DVtxBuffBullet->Lock(0, 0, (void**)&pVtx, 0);
 
-		for (int i = 0; i < MAX_BULLET; i++, pVtx += 4)
+		for (int i = 0; i < BULLET_MAX; i++, pVtx += 4)
 		{
 			// 頂点座標の設定
 			pVtx[0].vtx = D3DXVECTOR3(-BULLET_SIZE_X / 2, -BULLET_SIZE_Y / 2, 0.0f);
@@ -315,24 +303,27 @@ void SetVertexBullet(int nIdxBullet, float fSizeX, float fSizeY)
 //===================================================================
 // 弾の設定
 //===================================================================
-int SetBullet(D3DXVECTOR3 pos, D3DXVECTOR3 move, float fSizeX, float fSizeY)
+int SetBullet(D3DXVECTOR3 pos, D3DXVECTOR3 move, float fSizeX, float fSizeY, int type)
 {
+	BULLET *bullet = GetBullet(0);
+
 	int nIdxBullet = -1;
 
-	for (int i = 0; i < MAX_BULLET; i++)
+	for (int i = 0; i < BULLET_MAX; i++, bullet++)
 	{
-		if (!g_aBullet[i].bUse)
+		if (!bullet->use)
 		{
-			g_aBullet[i].pos = pos;
-			g_aBullet[i].rot = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
-			g_aBullet[i].scl = D3DXVECTOR3(1.0f, 1.0f, 1.0f);
-			g_aBullet[i].move = move;
-			g_aBullet[i].fSizeX = fSizeX;
-			g_aBullet[i].fSizeY = fSizeY;
-			g_aBullet[i].bUse = true;
+			bullet->pos = pos;
+			bullet->rot = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
+			bullet->scl = D3DXVECTOR3(1.0f, 1.0f, 1.0f);
+			bullet->move = move;
+			bullet->fSizeX = fSizeX;
+			bullet->fSizeY = fSizeY;
+			bullet->use = true;
+			bullet->type = type;
 
 			//// 影の設定
-			//g_aBullet[i].nIdxShadow = SetShadow(pos, 8.0f, 8.0f);		// 影の設定
+			//bullet[i].nIdxShadow = SetShadow(pos, 8.0f, 8.0f);		// 影の設定
 
 			// 頂点座標の設定
 			SetVertexBullet(i, fSizeX, fSizeY);
@@ -347,13 +338,46 @@ int SetBullet(D3DXVECTOR3 pos, D3DXVECTOR3 move, float fSizeX, float fSizeY)
 }
 
 //===================================================================
+// バレットとパネルの当たり判定
+//
+// 引数1 : 着弾時のバレットの座標
+// 引数2 : パネルの座標
+//===================================================================
+bool CheckHitPanelBullet(D3DXVECTOR3 pos1, D3DXVECTOR3 pos2)
+{
+	float bulletPosX = pos1.x;
+	float bulletPosZ = pos1.z;
+	float panelPosX = pos2.x;
+	float panelPosZ = pos2.z;
+
+	if (((bulletPosX) > (panelPosX - PANEL_SIZE_X / 2)) && ((bulletPosX) < (panelPosX + PANEL_SIZE_X / 2)) &&
+		((bulletPosZ) > (panelPosZ - PANEL_SIZE_Z / 2)) && ((bulletPosZ) < (panelPosZ + PANEL_SIZE_Z / 2)))
+	{
+		return true;
+	}
+
+	return false;
+}
+
+//===================================================================
 // 弾の削除
 //===================================================================
 void DeleteBullet(int nIdxBullet)
 {
-	if (nIdxBullet >= 0 && nIdxBullet < MAX_BULLET)
+	BULLET *bullet = GetBullet(nIdxBullet);
+
+	if (nIdxBullet >= 0 && nIdxBullet < BULLET_MAX)
 	{
-		//DeleteShadow(g_aBullet[nIdxBullet].nIdxShadow);
-		g_aBullet[nIdxBullet].bUse = false;
+		//DeleteShadow(bullet[nIdxBullet].nIdxShadow);
+		bullet->use = false;
+		bullet->type = 0;
 	}
+}
+
+//===================================================================
+// バレットの取得
+//===================================================================
+BULLET *GetBullet(int no)
+{
+	return &BulletWk[no];
 }

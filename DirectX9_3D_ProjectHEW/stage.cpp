@@ -22,6 +22,7 @@
 #include "sound.h"
 #include "light.h"
 #include "fade.h"
+#include "sound.h"
 
 /* Work */
 #include "workChisaka.h"
@@ -60,7 +61,7 @@ HRESULT InitStage(HINSTANCE hInstance, HWND hWnd)
 	g_nPlayerWin = STAGE_WIN_NON;	// 勝利プレイヤーを初期化
 
 	InitInput(hInstance, hWnd);		// 入力
-	//InitSound(hWnd);				// サウンド
+	InitSound(hWnd);				// サウンド
 	InitLight();					// ライト
 	InitFade();						// フェード
 	InitStageEach(STAGE_INIT_FAST);	// 各ステージの初期化
@@ -139,27 +140,50 @@ void UpdateStage(void)
 		break;
 	}
 	PrintDebugProc("\n");
+	// SEテスト（sound.hをincludeして関数を呼ぶ）
+	if (GetKeyboardTrigger(DIK_1))
+	{	// タイトル・リザルト画面の決定ボタン
+		SetSe(SE_BUTTON, E_DS8_FLAG_NONE, CONTINUITY_ON);
+	}
+	if (GetKeyboardTrigger(DIK_2))
+	{	// バレット発射音
+		SetSe(SE_BULLET, E_DS8_FLAG_NONE, CONTINUITY_ON);
+	}
+	if (GetKeyboardTrigger(DIK_3))
+	{	// ゲージが足りないときにMISS音
+		SetSe(SE_MISS, E_DS8_FLAG_NONE, CONTINUITY_ON);
+	}
+	if (GetKeyboardTrigger(DIK_4))
+	{	// エネミーと衝突時の爆発音
+		SetSe(SE_BOMB, E_DS8_FLAG_NONE, CONTINUITY_ON);
+	}
+	if (GetKeyboardTrigger(DIK_5))
+	{	// アイテム取得音
+		SetSe(SE_ITEM, E_DS8_FLAG_NONE, CONTINUITY_ON);
+	}
 #endif
 
 	UpdateInput();					// 入力
+	UpdateSound();					// サウンド
 
 	// ステージに応じた更新処理
 	switch (g_nStage)
 	{
 	case STAGE_TITLE:
 		UpdateTitle();				// タイトル
+		SetSoundBgm(STAGE_TITLE);
 		break;
 	case STAGE_GAME:
 		UpdateGame();				// ゲーム
+		SetSoundBgm(STAGE_GAME);
 		break;
 	case STAGE_RESULT:
 		UpdateResult();				// リザルト
+		SetSoundBgm(STAGE_RESULT);
 		break;
 	}
 	UpdateCamera();					// カメラ
 	UpdateFade();					// フェード
-
-
 }
 
 //=============================================================================
