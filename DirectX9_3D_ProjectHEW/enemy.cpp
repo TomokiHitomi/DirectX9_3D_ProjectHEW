@@ -181,6 +181,7 @@ void UpdateEnemy(void)
 	ENEMY *enemy = &enemyWk[0];
 	CAMERA *camera = GetCamera();
 	PANEL *panel = GetPanel(0);
+	PLAYER *player = GetPlayer(0);
 	
 	// アニメーション
 	SetEnemyAnimation(ENEMY_ANIM_SEC);
@@ -198,8 +199,23 @@ void UpdateEnemy(void)
 	}
 #endif
 
+
+	// ゲージの少ないほうを追尾
+	if (player[0].item < player[1].item)
+	{	// 1Pのほうがゲージが少ない場合
+		
+		// 1Pを追尾
+		key = 0;
+	}
+	if (player[0].item > player[1].item)
+	{	// 2Pのほうがゲージが少ない場合
+
+		// 2Pを追尾
+		key = 1;
+	}
 	// 追尾をセット
 	SetEnemyHoming(key, ENEMY_SPEED_FREQUENCY, ENEMY_SPEEDUP);
+
 
 	// デバッグ時に手動でエネミー移動
 #ifdef _DEBUG
