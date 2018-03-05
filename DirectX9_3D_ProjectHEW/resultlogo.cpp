@@ -147,11 +147,11 @@ void UpdateResultlogo(void)
 	}
 	
 
-	//SetTextureResultlogologo(GetStageWinPlayer());
-	SetTextureResultlogologo(1);
+	SetTextureResultlogologo(GetStageWinPlayer());
+	//SetTextureResultlogologo(1);
 
 
-	if (GetKeyboardTrigger(DIK_RETURN))
+	if (GetKeyboardTrigger(DIK_RETURN) || IsButtonTriggered(1, BUTTON_C) || IsButtonTriggered(0, BUTTON_C))
 	{// Enter押したら、フェードアウトしてモードを切り替えいく
 		SetFade(FADE_OUT, STAGE_TITLE);
 	}

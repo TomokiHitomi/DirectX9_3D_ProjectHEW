@@ -151,7 +151,7 @@ void UpdateTitlelogo(void)
 	}
 
 	// エンターキーでステージ遷移
-	if(GetKeyboardTrigger(DIK_RETURN))
+	if(GetKeyboardTrigger(DIK_RETURN) || IsButtonTriggered(1, BUTTON_C) || IsButtonTriggered(0, BUTTON_C))
 	{
 		if(g_nCountAppearStart == 0)
 		{// タイトル登場スキップ

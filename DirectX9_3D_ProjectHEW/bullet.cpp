@@ -16,7 +16,7 @@
 HRESULT MakeVertexBullet(LPDIRECT3DDEVICE9 Device);
 void SetVertexBullet(int nIdxBullet, float fSizeX, float fSizeY);
 
-void CheckHitPanelBullet(D3DXVECTOR3 pos);
+bool CheckHitPanelBullet(D3DXVECTOR3 pos1, D3DXVECTOR3 pos2);
 BULLET *GetBullet(int no);
 
 //*******************************************************************
@@ -102,39 +102,38 @@ void UpdateBullet(void)
 
 	for (int i = 0; i < BULLET_MAX; i++)
 	{
-		//for (int cntPanel = 0; cntPanel < PANEL_MAX; cntPanel++, panel++)
-		//{
-			if (bullet[i].use)
-			{
-				bullet[i].pos.x += bullet[i].move.x;
-				bullet[i].pos.y += bullet[i].move.y;
-				bullet[i].pos.z += bullet[i].move.z;
 
-				bullet[i].move.y -= VALUE_GRAVITY;
+		if (bullet[i].use)		// バレットが使用中だったら
+		{
+
+			bullet[i].pos.x += bullet[i].move.x;
+			bullet[i].pos.y += bullet[i].move.y;
+			bullet[i].pos.z += bullet[i].move.z;
+
+			bullet[i].move.y -= VALUE_GRAVITY;
+
+
+			panel = GetPanel(0);
+			for (int cntPanel = 0; cntPanel < PANEL_MAX; cntPanel++, panel++)
+			{
 
 				if (bullet[i].pos.y < 0.0f)
 				{
-					DeleteBullet(i);
+					if (CheckHitPanelBullet(bullet[i].pos, panel->Pos) == true)
+					{
+						SetHitPanel(cntPanel, player->type);		// パネルの色変更
+					}
 
-					//DeleteShadow(bullet[i].nIdxShadow);
+					// バレットの削除
+					DeleteBullet(i);
 
 				}
 			}
-
-			//SetVertexShadow(bullet[i].nIdxShadow, fSizeX, fSizeY);
-
-			//float colA = (200.0f - (bullet[i].pos.y - 4.0f)) / 400.0f;
-			//if (colA < 0.0f)
-			//{
-			//	colA = 0.0f;
-			//}
-			//SetColorShadow(bullet[i].nIdxShadow, D3DXCOLOR(1.0f, 1.0f, 1.0f, colA));
-
+		}
 			// デバッグ表示
-		//}
 #ifdef _DEBUG
-		PrintDebugProc("[バレット座標 ：(X:%f Y: %f Z: %f)]\n", bullet[i].pos.x, bullet[i].pos.y, bullet[i].pos.z);
-		PrintDebugProc("\n");
+			PrintDebugProc("[バレット座標 ：(X:%f Y: %f Z: %f)]\n", bullet[i].pos.x, bullet[i].pos.y, bullet[i].pos.z);
+			PrintDebugProc("\n");
 #endif
 	}
 
@@ -335,16 +334,27 @@ int SetBullet(D3DXVECTOR3 pos, D3DXVECTOR3 move, float fSizeX, float fSizeY, int
 	return nIdxBullet;
 }
 
-////===================================================================
-//// バレットとパネルの当たり判定
-////===================================================================
-//void CheckHitPanelBullet(D3DXVECTOR3 pos)
-//{
-//	D3DXVECTOR3 bulletPos = pos;
+//===================================================================
+// バレットとパネルの当たり判定
 //
-//
-//
-//}
+// 引数1 : 着弾時のバレットの座標
+// 引数2 : パネルの座標
+//===================================================================
+bool CheckHitPanelBullet(D3DXVECTOR3 pos1, D3DXVECTOR3 pos2)
+{
+	float bulletPosX = pos1.x;
+	float bulletPosZ = pos1.z;
+	float panelPosX = pos2.x;
+	float panelPosZ = pos2.z;
+
+	if (((bulletPosX) > (panelPosX - PANEL_SIZE_X / 2)) && ((bulletPosX) < (panelPosX + PANEL_SIZE_X / 2)) &&
+		((bulletPosZ) > (panelPosZ - PANEL_SIZE_Z / 2)) && ((bulletPosZ) < (panelPosZ + PANEL_SIZE_Z / 2)))
+	{
+		return true;
+	}
+
+	return false;
+}
 
 //===================================================================
 // 弾の削除
