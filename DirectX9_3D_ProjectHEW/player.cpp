@@ -35,6 +35,9 @@ DWORD				NumMatPlayer[PLAYER_MAX];			// 属性情報の総数
 D3DXMATRIX			MtxWorldPlayer;						// ワールドマトリックス
 PLAYER				PlayerWk[PLAYER_MAX];				// プレイヤーワーク
 
+
+bool				updateflag;
+
 char *FileNamePlayer[PLAYER_MAX] =
 {
 	"data/MODEL/PLAYER/player01.x",
@@ -91,6 +94,7 @@ HRESULT InitPlayer(void)
 		player->havetime = 0;
 	}
 
+	updateflag = true;
 	return S_OK;
 }
 
@@ -129,124 +133,128 @@ void UninitPlayer(void)
 //===================================================================
 void UpdatePlayer(void)
 {
-	PLAYER *player = &PlayerWk[0];
-	CAMERA *camera = GetCamera();
-	D3DXVECTOR3 rotCamera;
-	PANEL *panel = GetPanel(0);
 
-	// カメラの向き取得
-	rotCamera = GetRotCamera();
-
-	for (int i = 0; i < PLAYER_MAX; i++, player++)
+	if (updateflag == true)
 	{
-		if (player->use)
+		PLAYER *player = &PlayerWk[0];
+		CAMERA *camera = GetCamera();
+		D3DXVECTOR3 rotCamera;
+		PANEL *panel = GetPanel(0);
+
+		// カメラの向き取得
+		rotCamera = GetRotCamera();
+
+		for (int i = 0; i < PLAYER_MAX; i++, player++)
 		{
-			player->oldPos.x = player->pos.x;
-			player->oldPos.z = player->pos.z;
+			if (player->use)
+			{
+				player->oldPos.x = player->pos.x;
+				player->oldPos.z = player->pos.z;
 
-			// 移動処理
-			if (GetKeyboardPress(DIK_A) || IsButtonPressed(i, BUTTON_POV_LEFT) || IsButtonPressed(i, BUTTON_LEFT))
-			{
-				player->pos.x -= VALUE_MOVE_PLAYER;
-				player->rot.y = rotCamera.y + D3DX_PI * 0.5f;
-			}
-			else if (GetKeyboardPress(DIK_D) || IsButtonPressed(i, BUTTON_POV_RIGHT) || IsButtonPressed(i, BUTTON_RIGHT))
-			{
-				player->pos.x += VALUE_MOVE_PLAYER;
-				player->rot.y = rotCamera.y - D3DX_PI * 0.5f;
-			}
-			else if (GetKeyboardPress(DIK_W) || IsButtonPressed(i, BUTTON_POV_UP) || IsButtonPressed(i, BUTTON_UP))
-			{
-				player->pos.z += VALUE_MOVE_PLAYER;
-				player->rot.y = rotCamera.y + D3DX_PI * 1.0f;
-			}
-			else if (GetKeyboardPress(DIK_S) || IsButtonPressed(i, BUTTON_POV_DOWN) || IsButtonPressed(i, BUTTON_DOWN))
-			{
-				player->pos.z -= VALUE_MOVE_PLAYER;
-				player->rot.y = rotCamera.y + D3DX_PI * 0.0f;
-			}
-
-			// フィールド外に出てたら戻す処理
-			panel = GetPanel(GetPanelNumber(PANEL_NUM_Z, PANEL_NUM_X));
-			if (player->pos.x > panel->Pos.x)
-			{
-				player->pos.x = player->oldPos.x;
-			}
-			if (player->pos.z > panel->Pos.z)
-			{
-				player->pos.z = player->oldPos.z;
-			}
-
-			panel = GetPanel(GetPanelNumber(1, 1));
-			if (player->pos.x < -panel->Pos.x)
-			{
-				player->pos.x = player->oldPos.x;
-			}
-			if (player->pos.z < -panel->Pos.z)
-			{
-				player->pos.z = player->oldPos.z;
-			}
-
-			// 移動先が相手のパネルだったら戻す処理
-			panel = GetPanel(0);
-			for (int j = 0;j < PANEL_MAX;j++, panel++)
-			{
-				if (panel->PanelType != PANEL_NORMAL)		// パネルがノーマルじゃないとき
+				// 移動処理
+				if (GetKeyboardPress(DIK_A) || IsButtonPressed(i, BUTTON_POV_LEFT) || IsButtonPressed(i, BUTTON_LEFT))
 				{
-					if (panel->PanelType != i + 1)			// パネルが自色じゃないとき
+					player->pos.x -= VALUE_MOVE_PLAYER;
+					player->rot.y = rotCamera.y + D3DX_PI * 0.5f;
+				}
+				else if (GetKeyboardPress(DIK_D) || IsButtonPressed(i, BUTTON_POV_RIGHT) || IsButtonPressed(i, BUTTON_RIGHT))
+				{
+					player->pos.x += VALUE_MOVE_PLAYER;
+					player->rot.y = rotCamera.y - D3DX_PI * 0.5f;
+				}
+				else if (GetKeyboardPress(DIK_W) || IsButtonPressed(i, BUTTON_POV_UP) || IsButtonPressed(i, BUTTON_UP))
+				{
+					player->pos.z += VALUE_MOVE_PLAYER;
+					player->rot.y = rotCamera.y + D3DX_PI * 1.0f;
+				}
+				else if (GetKeyboardPress(DIK_S) || IsButtonPressed(i, BUTTON_POV_DOWN) || IsButtonPressed(i, BUTTON_DOWN))
+				{
+					player->pos.z -= VALUE_MOVE_PLAYER;
+					player->rot.y = rotCamera.y + D3DX_PI * 0.0f;
+				}
+
+				// フィールド外に出てたら戻す処理
+				panel = GetPanel(GetPanelNumber(PANEL_NUM_Z, PANEL_NUM_X));
+				if (player->pos.x > panel->Pos.x)
+				{
+					player->pos.x = player->oldPos.x;
+				}
+				if (player->pos.z > panel->Pos.z)
+				{
+					player->pos.z = player->oldPos.z;
+				}
+
+				panel = GetPanel(GetPanelNumber(1, 1));
+				if (player->pos.x < -panel->Pos.x)
+				{
+					player->pos.x = player->oldPos.x;
+				}
+				if (player->pos.z < -panel->Pos.z)
+				{
+					player->pos.z = player->oldPos.z;
+				}
+
+				// 移動先が相手のパネルだったら戻す処理
+				panel = GetPanel(0);
+				for (int j = 0; j < PANEL_MAX; j++, panel++)
+				{
+					if (panel->PanelType != PANEL_NORMAL)		// パネルがノーマルじゃないとき
 					{
-						//if (CollisionBB(player->pos, panel->Pos, D3DXVECTOR2(PLAYER_SIZE_BOX, PLAYER_SIZE_BOX), D3DXVECTOR2(PANEL_SIZE_X / 2, PANEL_SIZE_Z/  2)))
-						if (CollisionBB(player->pos, panel->Pos, D3DXVECTOR2(PLAYER_SIZE_BOX, PLAYER_SIZE_BOX), D3DXVECTOR2(PANEL_SIZE_X / 2, PANEL_SIZE_Z / 2)))
+						if (panel->PanelType != i + 1)			// パネルが自色じゃないとき
 						{
-							player->pos.x = player->oldPos.x;
-							player->pos.z = player->oldPos.z;
+							//if (CollisionBB(player->pos, panel->Pos, D3DXVECTOR2(PLAYER_SIZE_BOX, PLAYER_SIZE_BOX), D3DXVECTOR2(PANEL_SIZE_X / 2, PANEL_SIZE_Z/  2)))
+							if (CollisionBB(player->pos, panel->Pos, D3DXVECTOR2(PLAYER_SIZE_BOX, PLAYER_SIZE_BOX), D3DXVECTOR2(PANEL_SIZE_X / 2, PANEL_SIZE_Z / 2)))
+							{
+								player->pos.x = player->oldPos.x;
+								player->pos.z = player->oldPos.z;
+							}
 						}
 					}
 				}
-			}
 
-			// デバッグ表示
+				// デバッグ表示
 #ifdef _DEBUG
-			PrintDebugProc("[プレイヤー座標 ：(X:%f Y: %f Z: %f)]\n", player->pos.x, player->pos.y, player->pos.z);
+				PrintDebugProc("[プレイヤー座標 ：(X:%f Y: %f Z: %f)]\n", player->pos.x, player->pos.y, player->pos.z);
 
 #endif
 
 
 
 				// エネミーとの当たり判定
-			HitEnemy();
+				HitEnemy();
 
-			// アイテム取得
-			HitItem();
+				// アイテム取得
+				HitItem();
 
-			if (GetKeyboardTrigger(DIK_SPACE) || IsButtonTriggered(i, BUTTON_C))
-			{
-				if (player->item > 0)
+				if (GetKeyboardTrigger(DIK_SPACE) || IsButtonTriggered(i, BUTTON_C))
 				{
-					// バレット発射音
-					SetSe(SE_BULLET, E_DS8_FLAG_NONE, CONTINUITY_ON);
-					// 弾発射処理
-					FireBullet(i);
+					if (player->item > 0)
+					{
+						// バレット発射音
+						SetSe(SE_BULLET, E_DS8_FLAG_NONE, CONTINUITY_ON);
+						// 弾発射処理
+						FireBullet(i);
+					}
+					else
+					{
+						// ゲージが足りないときにMISS音
+						SetSe(SE_MISS, E_DS8_FLAG_NONE, CONTINUITY_ON);
+					}
+
 				}
-				else
+
+
+				player->item -= 0.003f;
+				if (player->item < 0.0f)
 				{
-					// ゲージが足りないときにMISS音
-					SetSe(SE_MISS, E_DS8_FLAG_NONE, CONTINUITY_ON);
+					player->item = 0.0f;
+				}
+				else if (player->item > 3.0f)
+				{
+					player->item = 3.0f;
 				}
 
 			}
-
-
-			player->item -= 0.003f;
-			if (player->item < 0.0f)
-			{
-				player->item = 0.0f;
-			}
-			else if (player->item > 3.0f)
-			{
-				player->item = 3.0f;
-			}
-
 		}
 	}
 }
@@ -362,6 +370,8 @@ void HitEnemy(void)
 
 						// リザルトへ移行
 						SetFade(FADE_OUT, STAGE_RESULT);
+
+						updateflag = false;
 
 						//// SE再生
 						//PlaySound(SOUND_LABEL_SE_COIN);
