@@ -354,16 +354,6 @@ HRESULT UpdateMobUse()
 		result = pMobUse->Acquire();
 	}
 
-	// マウスポインタの更新座標を取得
-	POINT lpMouse;
-	GetCursorPos(&lpMouse);
-
-
-	// デバッグ用
-#ifdef _DEBUG
-	PrintDebugProc("Mouse.X[%l]  Y[%l]\n", lpMouse.x, lpMouse.y);
-#endif
-
 	return result;
 }
 

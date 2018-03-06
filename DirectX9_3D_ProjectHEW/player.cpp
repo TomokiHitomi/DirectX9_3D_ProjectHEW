@@ -20,8 +20,8 @@
 //*******************************************************************
 // プロトタイプ宣言
 //*******************************************************************
-void HitEnemy(void);
-void HitItem(void);
+void HitEnemy(int nPlayer);
+void HitItem(int nPlayer);
 void FireBullet(int playernum);
 
 //*******************************************************************
@@ -138,7 +138,10 @@ void UninitPlayer(void)
 //===================================================================
 void UpdatePlayer(void)
 {
-
+	// デバッグ用
+#ifdef _DEBUG
+	PrintDebugProc("【 Player 】\n");
+#endif
 	if (updateflag == true)
 	{
 		PLAYER *player = &PlayerWk[0];
@@ -226,10 +229,10 @@ void UpdatePlayer(void)
 
 
 				// エネミーとの当たり判定
-				HitEnemy();
+				HitEnemy(i);
 
 				// アイテム取得
-				HitItem();
+				HitItem(i);
 
 				if (GetKeyboardTrigger(DIK_SPACE) || IsButtonTriggered(i, BUTTON_C))
 				{
@@ -341,106 +344,93 @@ void DrawPlayer(void)
 //===================================================================
 // エネミーとの当たり判定
 //===================================================================
-void HitEnemy(void)
+void HitEnemy(int nPlayer)
 {
 	// エネミーとぶつかったら
-	PLAYER *player = &PlayerWk[0];		// プレイヤー取得
-	for (int i = 0; i < PLAYER_MAX; i++, player++)
+	PLAYER *player = &PlayerWk[nPlayer];		// プレイヤー取得
+
+	ENEMY *enemy = GetEnemy(0);
+	for (int i = 0; i < ENEMY_MAX; i++, enemy++)
 	{
-		ENEMY *enemy = GetEnemy(0);
-
-		if (player->use)
+		// 当たり判定
+		if (enemy->use == true)
 		{
-			for (int cntItem = 0; cntItem < MAX_ITEM; cntItem++, enemy++)
+			float length = 0;		// 多分おかしい（でかい）
+
+			length = (player->pos.x - enemy->Eye.x) * (player->pos.x - enemy->Eye.x)
+				+ (player->pos.y - enemy->Eye.y) * (player->pos.y - enemy->Eye.y)
+				+ (player->pos.z - enemy->Eye.z) * (player->pos.z - enemy->Eye.z);
+
+			if (length < (player->radius + ENEMY_SIZE_X) * (player->radius + ENEMY_SIZE_X))
 			{
-				// 当たり判定
-				if (enemy->use == true)
-				{
-					float length = 0;		// 多分おかしい（でかい）
+				// エネミーと衝突時の爆発音
+				SetSe(SE_BOMB, E_DS8_FLAG_NONE, CONTINUITY_ON);
 
-					length = (player->pos.x - enemy->Eye.x) * (player->pos.x - enemy->Eye.x)
-						+ (player->pos.y - enemy->Eye.y) * (player->pos.y - enemy->Eye.y)
-						+ (player->pos.z - enemy->Eye.z) * (player->pos.z - enemy->Eye.z);
+				// プレイヤーを消す
+				player->use = false;
 
-					if (length < (player->radius + ENEMY_SIZE_X) * (player->radius + ENEMY_SIZE_X))
-					{
-						// エネミーと衝突時の爆発音
-						SetSe(SE_BOMB, E_DS8_FLAG_NONE, CONTINUITY_ON);
+				// 残っている方を渡す
+				SetStageWinPlayer(nPlayer);
 
-						// プレイヤーを消す
-						player->use = false;
+				// リザルトへ移行
+				SetFade(FADE_OUT, STAGE_RESULT);
 
-						// 残っている方を渡す
-						SetStageWinPlayer(i);
+				updateflag = false;
 
-						// リザルトへ移行
-						SetFade(FADE_OUT, STAGE_RESULT);
-
-						updateflag = false;
-
-						//// SE再生
-						//PlaySound(SOUND_LABEL_SE_COIN);
-					}
-				}
+				//// SE再生
+				//PlaySound(SOUND_LABEL_SE_COIN);
 			}
 		}
 	}
-	return;
 }
 
 //===================================================================
 // アイテムとの当たり判定
 //===================================================================
-void HitItem(void)
+void HitItem(int nPlayer)
 {
-	PLAYER *player = &PlayerWk[0];		// プレイヤー取得
+	PLAYER *player = &PlayerWk[nPlayer];		// プレイヤー取得
 	PANEL *panel = GetPanel(0);
+	ITEM *item = GetItem(0);
 
-
-	for (int i = 0; i < PLAYER_MAX; i++, player++)
+	for (int i = 0; i < MAX_ITEM; i++, item++)
 	{
-		ITEM *item = GetItem(0);
-
-		for (int cntItem = 0; cntItem < MAX_ITEM; cntItem++, item++)
+		// 当たり判定
+		if (item->use == true)
 		{
-			// 当たり判定
-			if (item->use == true)
+			float length = 0;		// 多分おかしい（でかい）
+
+			length = (player->pos.x - item->pos.x) * (player->pos.x - item->pos.x)
+				+ (player->pos.y - item->pos.y) * (player->pos.y - item->pos.y)
+				+ (player->pos.z - item->pos.z) * (player->pos.z - item->pos.z);
+
+			if (length < (player->radius + ITEM_SIZE_X) * (player->radius + ITEM_SIZE_X))
 			{
-				float length = 0;		// 多分おかしい（でかい）
-
-				length = (player->pos.x - item->pos.x) * (player->pos.x - item->pos.x)
-					+ (player->pos.y - item->pos.y) * (player->pos.y - item->pos.y)
-					+ (player->pos.z - item->pos.z) * (player->pos.z - item->pos.z);
-
-				if (length < (player->radius + ITEM_SIZE_X) * (player->radius + ITEM_SIZE_X))
+					
+				if (player->item <= 2.0f)
 				{
-					
-					if (player->item <= 2.0f)
-					{
-						//int haveitem = ceil(player->item);	//小数点以下を切りあげ
+					//int haveitem = ceil(player->item);	//小数点以下を切りあげ
 
-						//player->item = haveitem + 1.0f;	//所持数を整数に
+					//player->item = haveitem + 1.0f;	//所持数を整数に
 
-						// アイテム取得音
-						SetSe(SE_ITEM, E_DS8_FLAG_NONE, CONTINUITY_ON);
-
-						player->item += 1.0f;
-					}
-					
-
-					//// アイテム消去
-					item->use = false;
-
-					// パネルをセット状態から解放
-					panel[item->no].ItemSet = false;
-
-					//// SE再生
-					//PlaySound(SOUND_LABEL_SE_COIN);
+					player->item += 1.0f;
 				}
+
+				// アイテム取得音
+				SetSe(SE_ITEM, E_DS8_FLAG_NONE, CONTINUITY_ON);
+
+				//// アイテム消去
+				item->use = false;
+
+				// パネルをセット状態から解放
+				panel[item->no].ItemSet = false;
+
+				//// SE再生
+				//PlaySound(SOUND_LABEL_SE_COIN);
 			}
 		}
 	}
-	return;
+
 }
 
 //===================================================================

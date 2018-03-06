@@ -32,7 +32,7 @@ HRESULT InitDebugProc(void)
 	HRESULT hr;
 
 	// 情報表示用フォントを設定
-	hr = D3DXCreateFont(pDevice, 18, 0, 0, 0, FALSE, SHIFTJIS_CHARSET,
+	hr = D3DXCreateFont(pDevice, 22, 0, 0, 0, FALSE, SHIFTJIS_CHARSET,
 					OUT_DEFAULT_PRECIS, DEFAULT_QUALITY, DEFAULT_PITCH, "Terminal", &g_pD3DXFont);
 
 	// 情報クリア
@@ -76,7 +76,7 @@ void DrawDebugProc(void)
 	RECT rect = {0, g_nDrawPos, SCREEN_WIDTH, SCREEN_HEIGHT};
 
 	// 情報表示
-	g_pD3DXFont->DrawText(NULL, g_aStrDebug, -1, &rect, DT_LEFT, D3DCOLOR_ARGB(0xff, 0xff, 0xff, 0xff));
+	g_pD3DXFont->DrawText(NULL, g_aStrDebug, -1, &rect, DT_LEFT, D3DCOLOR_ARGB(0xff, 0x00, 0x00, 0x00));
 
 	// 情報クリア
 	memset(g_aStrDebug, 0, sizeof g_aStrDebug);

@@ -258,6 +258,7 @@ void DrawMeshWall(void)
 		// ポリゴンの描画
 		pDevice->DrawIndexedPrimitive(D3DPT_TRIANGLESTRIP, 0, 0, pMesh->nNumVertex, 0, pMesh->nNumPolygon);
 	}
+
 	// ライティングを有効に
 	//pDevice->SetRenderState(D3DRS_LIGHTING, TRUE);
 
