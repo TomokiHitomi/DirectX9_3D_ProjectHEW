@@ -16,6 +16,7 @@
 #include "stage.h"
 #include "player.h"
 #include "fade.h"
+#include "effect.h"
 
 //*******************************************************************
 // プロトタイプ宣言
@@ -372,9 +373,10 @@ void HitEnemy(int nPlayer)
 				// 残っている方を渡す
 				SetStageWinPlayer(nPlayer);
 
-				// リザルトへ移行
-				SetFade(FADE_OUT, STAGE_RESULT);
+				// 爆発エフェクト
+				SetEffect(D3DXVECTOR3(enemy->Eye.x, EFFECT_Y, enemy->Eye.z));
 
+				enemy->use = false;
 				updateflag = false;
 
 				//// SE再生

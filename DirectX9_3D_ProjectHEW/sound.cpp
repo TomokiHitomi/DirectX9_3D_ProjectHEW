@@ -46,7 +46,8 @@ const TCHAR* c_soundFilename[] = {
 	_T("data/SOUND/SE/decision15.wav"),
 	_T("data/SOUND/SE/punch-swing1.wav"),
 	_T("data/SOUND/SE/bomb2.wav"),
-	_T("data/SOUND/SE/nyu3.wav")
+	_T("data/SOUND/SE/nyu3.wav"),
+	_T("data/SOUND/SE/robot - footstep2.wav")
 };
 
 // ƒOƒ[ƒoƒ‹•Ï”

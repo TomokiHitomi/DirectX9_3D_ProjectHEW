@@ -11,7 +11,7 @@
 
 #define	TEXTURE_UIFRAME		"data/TEXTURE/UI板.png"		// 読み込むテクスチャファイル名
 #define	TEXTURE_WIDTH		(SCREEN_WIDTH)
-#define	TEXTURE_HEIGHT		(180)
+#define	TEXTURE_HEIGHT		(180*SCREEN_SCALE)
 
 //*****************************************************************************
 // プロトタイプ宣言

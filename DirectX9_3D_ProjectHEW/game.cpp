@@ -10,6 +10,7 @@
 #include "fade.h"
 
 // ゲームで必要なインクルード
+#include "effect.h"
 
 // 担当ワーク
 #include "workChisaka.h"
@@ -37,7 +38,7 @@
 //=============================================================================
 HRESULT InitGame(int nType)
 {
-
+	InitEffect(nType);			// エフェクト
 	return S_OK;
 }
 
@@ -46,7 +47,7 @@ HRESULT InitGame(int nType)
 //=============================================================================
 void UninitGame(void)
 {
-
+	UninitEffect;				// エフェクト
 }
 
 //=============================================================================
@@ -59,6 +60,8 @@ void UpdateGame(void)
 	UpdateWorkHoriguchi();		// 堀口担当分
 	UpdateWorkYamaguchi();		// 山口担当分
 	UpdateWorkYoshida();		// 吉田担当分
+
+	UpdateEffect();				// エフェクト
 }
 
 //=============================================================================
@@ -71,5 +74,7 @@ void DrawGame(void)
 	DrawWorkHoriguchi();		// 堀口担当分
 	DrawWorkYamaguchi();		// 山口担当分
 	DrawWorkYoshida();			// 吉田担当分
+
+	DrawEffect();				// エフェクト
 }
 

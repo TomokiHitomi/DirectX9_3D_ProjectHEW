@@ -40,6 +40,7 @@ enum
 	SE_02,
 	SE_03,
 	SE_04,
+	SE_05,
 	VOICE_00,
 	SOUND_MAX
 };
@@ -57,7 +58,8 @@ enum
 	SE_BULLET,
 	SE_MISS,
 	SE_BOMB,
-	SE_ITEM
+	SE_ITEM,
+	SE_ENEMY_WALK
 };
 
 enum

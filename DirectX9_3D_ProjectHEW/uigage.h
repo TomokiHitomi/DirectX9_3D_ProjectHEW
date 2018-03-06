@@ -12,15 +12,15 @@
 #include "calculate.h"
 
 #define	TEXTURE_GAGEFRAME			"data/TEXTURE/gage frame.png"		// 読み込むテクスチャファイル名
-#define	TEXTURE_GAGEFRAME_WIDTH		(350)								//フレーム横サイズ
-#define	TEXTURE_GAGEFRAME_HEIGHT	(70.0f)								//フレーム縦サイズ
+#define	TEXTURE_GAGEFRAME_WIDTH		(350*SCREEN_SCALE)								//フレーム横サイズ
+#define	TEXTURE_GAGEFRAME_HEIGHT	(70.0f*SCREEN_SCALE)								//フレーム縦サイズ
 #define	MAX_GAGEFRAME				(2)									//フレーム使用数
-#define	TEXTUER_GAGEFRAME_POS_X		(320.0f)							//フレームposX
+#define	TEXTUER_GAGEFRAME_POS_X		(320.0f*SCREEN_SCALE)							//フレームposX
 #define	TEXTUER_GAGEFRAME_POS_Y		(TEXTURE_HEIGHT/2)					//フレームposY
 
 
 #define	TEXTURE_GAGE				"data/TEXTURE/gage.png"				//読み込むテクスチャファイル名
-#define	TEXTURE_SIZECHANGE			(7.5f)
+#define	TEXTURE_SIZECHANGE			(7.5f*SCREEN_SCALE)
 #define	TEXTURE_GAGE_WIDTH			(TEXTURE_GAGEFRAME_WIDTH)			//ゲージ横サイズ
 #define	TEXTURE_GAGE_HEIGHT			(TEXTURE_GAGEFRAME_HEIGHT-TEXTURE_SIZECHANGE)			//ゲージ縦サイズ
 #define	MAX_GAGE					(2)									//ゲージ使用数
