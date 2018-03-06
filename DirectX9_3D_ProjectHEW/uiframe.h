@@ -16,7 +16,7 @@
 //*****************************************************************************
 // プロトタイプ宣言
 //*****************************************************************************
-HRESULT InitUiframe(void);
+HRESULT InitUiframe(int nType);
 void UninitUiframe(void);
 void UpdateUiframe(void);
 void DrawUiframe(void);

@@ -56,7 +56,7 @@ typedef struct		// エネミー構造体
 //*****************************************************************************
 // プロトタイプ宣言
 //*****************************************************************************
-HRESULT InitEnemy(void);
+HRESULT InitEnemy(int nType);
 void UninitEnemy(void);
 void UpdateEnemy(void);
 void DrawEnemy(void);

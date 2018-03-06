@@ -8,6 +8,7 @@
 #include "debugproc.h"
 #include "calculate.h"
 #include "input.h"
+#include "stage.h"
 
 /* Debug */
 #ifdef _DEBUG
@@ -45,13 +46,15 @@ HIT_PANEL				g_aHitPanel[PANEL_MAX];
 //=============================================================================
 // 初期化処理
 //=============================================================================
-HRESULT InitField(void)
+HRESULT InitField(int nType)
 {
 	LPDIRECT3DDEVICE9 pDevice = GetDevice();
 	PANEL *panel = GetPanel(0);
 	HIT_PANEL *hitpanel = GetHitPanel(0);
 
-	MakeVertexField(pDevice);
+	if (nType == STAGE_INIT_FAST)
+	{
+		MakeVertexField(pDevice);
 
 		// テクスチャの読み込み
 		D3DXCreateTextureFromFile(pDevice,					// デバイスへのポインタ
@@ -61,6 +64,8 @@ HRESULT InitField(void)
 		D3DXCreateTextureFromFile(pDevice,					// デバイスへのポインタ
 			TEXTURE_PANEL,			// ファイルの名前
 			&g_pD3DTextureHitPanel);// 読み込むメモリー
+
+	}
 
 
 	for (int i = 0; i < PANEL_MAX; i++, panel++,hitpanel++)

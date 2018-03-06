@@ -6,6 +6,7 @@
 //=============================================================================
 #include "uigage.h"
 #include "player.h"
+#include "stage.h"
 
 #ifdef _DEBUG
 #include "input.h"
@@ -38,24 +39,24 @@ GAGE					g_Gage[MAX_GAGE];
 //=============================================================================
 // 初期化処理
 //=============================================================================
-HRESULT InitUigage(void)
+HRESULT InitUigage(int nType)
 {
 	LPDIRECT3DDEVICE9 pDevice = GetDevice();
 	GAGE_FRAME *gageframe = GetGageframe(0);
 	GAGE *gage = GetGage(0);
 
-	// 頂点情報の作成
-	MakeVertexUigage(pDevice);
+	if (nType == STAGE_INIT_FAST)
+	{
+		// テクスチャの読み込み
+		D3DXCreateTextureFromFile(pDevice,						// デバイスへのポインタ
+			TEXTURE_GAGEFRAME,				// ファイルの名前
+			&g_pD3DTextureUigageframe);		// 読み込むメモリー
 
-	// テクスチャの読み込み
-	D3DXCreateTextureFromFile(pDevice,						// デバイスへのポインタ
-		TEXTURE_GAGEFRAME,				// ファイルの名前
-		&g_pD3DTextureUigageframe);		// 読み込むメモリー
-
-	// テクスチャの読み込み
-	D3DXCreateTextureFromFile(pDevice,						// デバイスへのポインタ
-		TEXTURE_GAGE,				// ファイルの名前
-		&g_pD3DTextureUigage);		// 読み込むメモリー
+											// テクスチャの読み込み
+		D3DXCreateTextureFromFile(pDevice,						// デバイスへのポインタ
+			TEXTURE_GAGE,				// ファイルの名前
+			&g_pD3DTextureUigage);		// 読み込むメモリー
+	}
 
 	for (int i = 0; i < MAX_GAGEFRAME; i++, gageframe++,gage++)
 	{
@@ -79,8 +80,8 @@ HRESULT InitUigage(void)
 
 	}
 
-
-
+	// 頂点情報の作成
+	MakeVertexUigage(pDevice);
 
 	return S_OK;
 }

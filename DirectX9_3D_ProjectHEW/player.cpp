@@ -47,38 +47,43 @@ char *FileNamePlayer[PLAYER_MAX] =
 //===================================================================
 // 初期化処理
 //===================================================================
-HRESULT InitPlayer(void)
+HRESULT InitPlayer(int nType)
 {
 	LPDIRECT3DDEVICE9 Device = GetDevice();
 	PLAYER *player = &PlayerWk[0];
 
-	for (int i = 0; i < PLAYER_MAX; i++)
+	if (nType == STAGE_INIT_FAST)
 	{
-
-		D3DTexturePlayer[i] = NULL;
-		D3DXMeshPlayer[i] = NULL;
-		D3DXMatBuffPlayer[i] = NULL;
-
-		// Xファイルの読み込み
-		if (FAILED(D3DXLoadMeshFromX(FileNamePlayer[i],		// モデルデータ
-			D3DXMESH_SYSTEMMEM,								// 使用するメモリのオプション
-			Device,											// デバイス
-			NULL,											// 未使用
-			&D3DXMatBuffPlayer[i],							// マテリアルデータへのポインタ
-			NULL,											// 未使用
-			&NumMatPlayer[i],								// D3DXMATERIAL構造体の数
-			&D3DXMeshPlayer[i])))							// メッシュデータへのポインタ
+		for (int i = 0; i < PLAYER_MAX; i++)
 		{
-			return E_FAIL;
-		}
+
+			D3DTexturePlayer[i] = NULL;
+			D3DXMeshPlayer[i] = NULL;
+			D3DXMatBuffPlayer[i] = NULL;
+
+			// Xファイルの読み込み
+			if (FAILED(D3DXLoadMeshFromX(FileNamePlayer[i],		// モデルデータ
+				D3DXMESH_SYSTEMMEM,								// 使用するメモリのオプション
+				Device,											// デバイス
+				NULL,											// 未使用
+				&D3DXMatBuffPlayer[i],							// マテリアルデータへのポインタ
+				NULL,											// 未使用
+				&NumMatPlayer[i],								// D3DXMATERIAL構造体の数
+				&D3DXMeshPlayer[i])))							// メッシュデータへのポインタ
+			{
+				return E_FAIL;
+			}
 
 #if 0
-		//テクスチャの読み込み
-		D3DXCreateTextureFromFile(Device,
-			TEXTURE_FILENAME,
-			&D3DTexturePlayer);
+			//テクスチャの読み込み
+			D3DXCreateTextureFromFile(Device,
+				TEXTURE_FILENAME,
+				&D3DTexturePlayer);
 #endif
+			}
+
 	}
+
 
 	//プレイヤーの初期化処理
 	for (int i = 0; i < PLAYER_MAX; i++, player++)

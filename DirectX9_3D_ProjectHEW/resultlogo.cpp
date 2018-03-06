@@ -8,6 +8,7 @@
 #include "input.h"
 #include "fade.h"
 #include "stage.h"
+#include "sound.h"
 
 //*****************************************************************************
 // プロトタイプ宣言
@@ -30,9 +31,9 @@ LPDIRECT3DVERTEXBUFFER9 g_pD3DVtxBuffResultlogologo = NULL;		// 頂点バッファイン
 
 
 int						g_nCountAppearResultlogo = 0;		// 出現までの待ち時間
-float					g_fAlphaResultlogo = 0.0f;			// リザルトロゴのα値
 int						g_nCountWaitResultlogo = 0;			// 待ち時間
-
+float					g_fAlphaResultlogo = 0.0f;			// リザルトロゴのα値
+bool					g_bResultFade;
 
 
 
@@ -44,9 +45,9 @@ HRESULT InitResultlogo(int nType)
 	LPDIRECT3DDEVICE9 pDevice = GetDevice();
 
 	g_nCountAppearResultlogo = 0;
-	g_fAlphaResultlogo = 0.0f;
 	g_nCountWaitResultlogo = 0;
-
+	g_fAlphaResultlogo = 0.0f;
+	g_bResultFade = false;
 
 
 
@@ -153,13 +154,22 @@ void UpdateResultlogo(void)
 
 	if (GetKeyboardTrigger(DIK_RETURN) || IsButtonTriggered(1, BUTTON_C) || IsButtonTriggered(0, BUTTON_C))
 	{// Enter押したら、フェードアウトしてモードを切り替えいく
-		SetFade(FADE_OUT, STAGE_TITLE);
+		if (!g_bResultFade)
+		{
+			g_bResultFade = true;
+			SetSe(SE_BUTTON, E_DS8_FLAG_NONE, CONTINUITY_ON);
+			SetFade(FADE_OUT, STAGE_TITLE);
+		}
 	}
 
 	g_nCountWaitResultlogo++;
 	if (g_nCountWaitResultlogo == LIMIT_COUNT_WAIT)
 	{
-		SetFade(FADE_OUT, STAGE_TITLE);
+		if (!g_bResultFade)
+		{
+			g_bResultFade = true;
+			SetFade(FADE_OUT, STAGE_TITLE);
+		}
 	}
 }
 

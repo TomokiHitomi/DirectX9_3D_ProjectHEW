@@ -5,6 +5,7 @@
 //
 //=============================================================================
 #include "uiframe.h"
+#include "stage.h"
 
 //*****************************************************************************
 // ƒ}ƒNƒ’è‹`
@@ -24,19 +25,21 @@ LPDIRECT3DVERTEXBUFFER9 g_pD3DVtxBuffUiframe = NULL;		// ’¸“_ƒoƒbƒtƒ@ƒCƒ“ƒ^[ƒtƒ
 //=============================================================================
 // ‰Šú‰»ˆ—
 //=============================================================================
-HRESULT InitUiframe(void)
+HRESULT InitUiframe(int nType)
 {
 	LPDIRECT3DDEVICE9 pDevice = GetDevice();
 
+	if (nType == STAGE_INIT_FAST)
+	{
+		// ƒeƒNƒXƒ`ƒƒ‚Ì“Ç‚İ‚İ
+		D3DXCreateTextureFromFile(pDevice,						// ƒfƒoƒCƒX‚Ö‚Ìƒ|ƒCƒ“ƒ^
+			TEXTURE_UIFRAME,				// ƒtƒ@ƒCƒ‹‚Ì–¼‘O
+			&g_pD3DTextureUiframe);		// “Ç‚İ‚Şƒƒ‚ƒŠ[
+
+	}
 
 	// ’¸“_î•ñ‚Ìì¬
 	MakeVertexUiframe(pDevice);
-
-	// ƒeƒNƒXƒ`ƒƒ‚Ì“Ç‚İ‚İ
-	D3DXCreateTextureFromFile(pDevice,						// ƒfƒoƒCƒX‚Ö‚Ìƒ|ƒCƒ“ƒ^
-		TEXTURE_UIFRAME,				// ƒtƒ@ƒCƒ‹‚Ì–¼‘O
-		&g_pD3DTextureUiframe);		// “Ç‚İ‚Şƒƒ‚ƒŠ[
-
 
 	return S_OK;
 }

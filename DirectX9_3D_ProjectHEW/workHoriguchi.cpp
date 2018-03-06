@@ -32,8 +32,8 @@
 //=============================================================================
 HRESULT InitWorkHoriguchi(int nType)
 {
-	InitPlayer();
-	InitBullet();
+	InitPlayer(nType);
+	InitBullet(nType);
 	return S_OK;
 }
 

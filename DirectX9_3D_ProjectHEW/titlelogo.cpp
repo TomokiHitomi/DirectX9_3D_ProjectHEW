@@ -8,7 +8,7 @@
 #include "input.h"
 #include "fade.h"
 #include "stage.h"
-
+#include "sound.h"
 
 //*****************************************************************************
 // プロトタイプ宣言
@@ -26,10 +26,11 @@ LPDIRECT3DVERTEXBUFFER9 g_pD3DVtxBuffTitlelogoLogo = NULL;	// 頂点バッファインタ
 LPDIRECT3DTEXTURE9		g_pD3DTextureStart = NULL;		// テクスチャへのポインタ
 LPDIRECT3DVERTEXBUFFER9 g_pD3DVtxBuffStart = NULL;		// 頂点バッファインターフェースへのポインタ
 int						g_nCountAppearStart = 0;		//
-float					g_fAlphaLogo = 0.0f;			//
-int						g_nCountDisp = 0;				//
-bool					g_bDispStart = false;			//
 int						g_nConutDemo = 0;				//
+int						g_nCountDisp = 0;				//
+float					g_fAlphaLogo = 0.0f;			//
+bool					g_bDispStart = false;			//
+bool					g_bTitleFade;
 
 //=============================================================================
 // 初期化処理
@@ -39,10 +40,11 @@ HRESULT InitTitlelogo(int nType)
 	LPDIRECT3DDEVICE9 pDevice = GetDevice();
 
 	g_nCountAppearStart = 0;
-	g_fAlphaLogo = 0.0f;
 	g_nCountDisp = 0;
-	g_bDispStart = false;
 	g_nConutDemo = 0;
+	g_fAlphaLogo = 0.0f;
+	g_bDispStart = false;
+	g_bTitleFade = false;
 
 	// 頂点情報の作成
 	MakeVertexTitlelogo(pDevice);
@@ -162,7 +164,12 @@ void UpdateTitlelogo(void)
 		}
 		else
 		{// ゲームへ
-			SetFade(FADE_OUT, STAGE_GAME);
+			if (!g_bTitleFade)
+			{
+				g_bTitleFade = true;
+				SetSe(SE_BUTTON, E_DS8_FLAG_NONE, CONTINUITY_ON);
+				SetFade(FADE_OUT, STAGE_GAME);
+			}
 		}
 	}
 }

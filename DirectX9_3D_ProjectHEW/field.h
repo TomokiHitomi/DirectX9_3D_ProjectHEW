@@ -52,7 +52,7 @@ enum PANEL_TYPE		//パネルタイプ
 //*****************************************************************************
 // プロトタイプ宣言
 //*****************************************************************************
-HRESULT InitField(void);
+HRESULT InitField(int nType);
 void UninitField(void);
 void UpdateField(void);
 void DrawField(void);

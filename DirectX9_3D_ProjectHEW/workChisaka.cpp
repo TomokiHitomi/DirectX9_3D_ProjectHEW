@@ -33,8 +33,8 @@
 //=============================================================================
 HRESULT InitWorkChisaka(int nType)
 {
-	InitEnemy();
-	InitItem();
+	InitEnemy(nType);
+	InitItem(nType);
 	return S_OK;
 }
 

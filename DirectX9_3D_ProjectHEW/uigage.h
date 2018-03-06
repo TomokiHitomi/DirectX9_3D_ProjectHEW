@@ -45,7 +45,7 @@ typedef struct
 //*****************************************************************************
 // プロトタイプ宣言
 //*****************************************************************************
-HRESULT InitUigage(void);
+HRESULT InitUigage(int nType);
 void UninitUigage(void);
 void UpdateUigage(void);
 void DrawUigage(void);

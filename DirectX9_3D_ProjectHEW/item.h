@@ -53,7 +53,7 @@ typedef struct
 //*****************************************************************************
 // プロトタイプ宣言
 //*****************************************************************************
-HRESULT InitItem(void);
+HRESULT InitItem(int nType);
 void UninitItem(void);
 void UpdateItem(void);
 void DrawItem(void);

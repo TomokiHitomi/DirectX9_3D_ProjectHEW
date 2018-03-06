@@ -59,7 +59,6 @@ void UpdateTitle(void)
 	UpdateWorkHoriguchi();		// –xŒû’S“–•ª
 	UpdateWorkYamaguchi();		// ŽRŒû’S“–•ª
 	UpdateWorkYoshida();		// ‹g“c’S“–•ª
-
 }
 
 //=============================================================================

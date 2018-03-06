@@ -9,6 +9,7 @@
 #include "input.h"
 #include "player.h"
 #include "enemy.h"
+#include "stage.h"
 
 
 //*****************************************************************************
@@ -63,38 +64,41 @@ const char *FileNameEnemy[ENEMY_ANIM_MAX] =
 //=============================================================================
 // 初期化処理
 //=============================================================================
-HRESULT InitEnemy(void)
+HRESULT InitEnemy(int nType)
 {
 	LPDIRECT3DDEVICE9 pDevice = GetDevice();
 	ENEMY *enemy = &enemyWk[0];
 
-
-	for (int nCntEnemyAnim = 0; nCntEnemyAnim < ENEMY_ANIM_MAX; nCntEnemyAnim++)
+	if (nType == STAGE_INIT_FAST)
 	{
-		g_pD3DTextureEnemy[nCntEnemyAnim] = NULL;
-		g_pD3DXMeshEnemy[nCntEnemyAnim] = NULL;
-		g_pD3DXBuffMatEnemy[nCntEnemyAnim] = NULL;
-
-
-		// Xファイルの読み込み
-		if (FAILED(D3DXLoadMeshFromX(FileNameEnemy[nCntEnemyAnim],
-			D3DXMESH_SYSTEMMEM,
-			pDevice,
-			NULL,
-			&g_pD3DXBuffMatEnemy[nCntEnemyAnim],
-			NULL,
-			&g_nNumMatEnemy[nCntEnemyAnim],
-			&g_pD3DXMeshEnemy[nCntEnemyAnim])))
+		for (int nCntEnemyAnim = 0; nCntEnemyAnim < ENEMY_ANIM_MAX; nCntEnemyAnim++)
 		{
-			return E_FAIL;
-		}
+			g_pD3DTextureEnemy[nCntEnemyAnim] = NULL;
+			g_pD3DXMeshEnemy[nCntEnemyAnim] = NULL;
+			g_pD3DXBuffMatEnemy[nCntEnemyAnim] = NULL;
+
+
+			// Xファイルの読み込み
+			if (FAILED(D3DXLoadMeshFromX(FileNameEnemy[nCntEnemyAnim],
+				D3DXMESH_SYSTEMMEM,
+				pDevice,
+				NULL,
+				&g_pD3DXBuffMatEnemy[nCntEnemyAnim],
+				NULL,
+				&g_nNumMatEnemy[nCntEnemyAnim],
+				&g_pD3DXMeshEnemy[nCntEnemyAnim])))
+			{
+				return E_FAIL;
+			}
 
 #if 0
-		// テクスチャの読み込み
-		D3DXCreateTextureFromFile(pDevice,					// デバイスへのポインタ
-			TEXTURE_FILENAME,		// ファイルの名前
-			&g_pD3DTextureModel);	// 読み込むメモリー
+			// テクスチャの読み込み
+			D3DXCreateTextureFromFile(pDevice,					// デバイスへのポインタ
+				TEXTURE_FILENAME,		// ファイルの名前
+				&g_pD3DTextureModel);	// 読み込むメモリー
 #endif
+
+		}
 
 	}
 

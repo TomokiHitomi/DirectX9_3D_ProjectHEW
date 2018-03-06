@@ -9,6 +9,7 @@
 #include "debugproc.h"
 #include "field.h"
 #include "player.h"
+#include "stage.h"
 
 //*******************************************************************
 // プロトタイプ宣言
@@ -38,20 +39,20 @@ char *FileNameBullet[BULLET_TYPE] =
 //===================================================================
 // 初期化処理
 //===================================================================
-HRESULT InitBullet(void)
+HRESULT InitBullet(int nType)
 {
 	LPDIRECT3DDEVICE9 Device = GetDevice();
 	BULLET *bullet = GetBullet(0);
 
-	// 頂点情報の作成
-	MakeVertexBullet(Device);
-
-	for (int i = 0; i < BULLET_TYPE; i++)
+	if (nType == STAGE_INIT_FAST)
 	{
-		// テクスチャの読み込み
-		D3DXCreateTextureFromFile(Device,					// デバイスへのポインタ
-									FileNameBullet[i],		// ファイルの名前
-									&D3DTextureBullet[i]);		// 読み込むメモリー
+		for (int i = 0; i < BULLET_TYPE; i++)
+		{
+			// テクスチャの読み込み
+			D3DXCreateTextureFromFile(Device,					// デバイスへのポインタ
+				FileNameBullet[i],		// ファイルの名前
+				&D3DTextureBullet[i]);		// 読み込むメモリー
+		}
 	}
 
 	for (int i = 0; i < BULLET_MAX; i++, bullet++)
@@ -65,6 +66,9 @@ HRESULT InitBullet(void)
 		bullet->use = false;
 		bullet->type = 0;
 	}
+
+	// 頂点情報の作成
+	MakeVertexBullet(Device);
 
 	return S_OK;
 }

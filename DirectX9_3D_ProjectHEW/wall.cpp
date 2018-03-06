@@ -6,6 +6,7 @@
 //=============================================================================
 #include "wall.h"
 #include "input.h"
+#include "stage.h"
 
 //*****************************************************************************
 // マクロ定義
@@ -24,7 +25,7 @@ int g_nNumMeshField = 0;						// メッシュ壁の数
 // 初期化処理
 //=============================================================================
 HRESULT InitMeshWall(D3DXVECTOR3 pos, D3DXVECTOR3 rot, D3DXCOLOR col,
-	int nNumBlockX, int nNumBlockY, float fBlockSizeX, float fBlockSizeZ)
+	int nNumBlockX, int nNumBlockY, float fBlockSizeX, float fBlockSizeZ, int nType)
 {
 	LPDIRECT3DDEVICE9 pDevice = GetDevice();
 	MESH_WALL *pMesh;
@@ -34,12 +35,15 @@ HRESULT InitMeshWall(D3DXVECTOR3 pos, D3DXVECTOR3 rot, D3DXCOLOR col,
 		return E_FAIL;
 	}
 
-	// テクスチャの読み込み
-	if (!g_pD3DTexture)
+	if (nType == STAGE_INIT_FAST)
 	{
-		D3DXCreateTextureFromFile(pDevice,					// デバイスへのポインタ
-			TEXTURE_FILENAME,		// ファイルの名前
-			&g_pD3DTexture);		// 読み込むメモリー
+		// テクスチャの読み込み
+		if (!g_pD3DTexture)
+		{
+			D3DXCreateTextureFromFile(pDevice,					// デバイスへのポインタ
+				TEXTURE_FILENAME,		// ファイルの名前
+				&g_pD3DTexture);		// 読み込むメモリー
+		}
 	}
 
 	pMesh = &g_aMeshWall[g_nNumMeshField];

@@ -38,7 +38,7 @@ typedef struct		// プレイヤー構造体
 //*******************************************************************
 // プロトタイプ宣言
 //*******************************************************************
-HRESULT InitPlayer(void);
+HRESULT InitPlayer(int nType);
 void UninitPlayer(void);
 void UpdatePlayer(void);
 void DrawPlayer(void);

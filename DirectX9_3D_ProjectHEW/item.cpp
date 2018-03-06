@@ -8,6 +8,7 @@
 #include "field.h"
 #include "main.h"
 #include "debugproc.h"
+#include "stage.h"
 
 //#include "stdlib.h"
 //#include "shadow.h"
@@ -47,37 +48,40 @@ const char *FileNameItem[ITEMTYPE_MAX] =
 //=============================================================================
 // 初期化処理
 //=============================================================================
-HRESULT InitItem(void)
+HRESULT InitItem(int nType)
 {
 	LPDIRECT3DDEVICE9 pDevice = GetDevice();
 	ITEM *item = &itemWk[0];
 	int one = 0;
 
-	for (int nCntItemType = 0; nCntItemType < ITEMTYPE_MAX; nCntItemType++)
+	if (nType == STAGE_INIT_FAST)
 	{
-		g_pD3DTextureItem[nCntItemType] = NULL;
-		g_pMeshItem[nCntItemType] = NULL;
-		g_pD3DXMatBuffItem[nCntItemType] = NULL;
-
-		// Xファイルの読み込み
-		if (FAILED(D3DXLoadMeshFromX(FileNameItem[nCntItemType],
-			D3DXMESH_SYSTEMMEM,
-			pDevice,
-			NULL,
-			&g_pD3DXMatBuffItem[nCntItemType],
-			NULL,
-			&g_aNumMatItem[nCntItemType],
-			&g_pMeshItem[nCntItemType])))
+		for (int nCntItemType = 0; nCntItemType < ITEMTYPE_MAX; nCntItemType++)
 		{
-			return E_FAIL;
-		}
+			g_pD3DTextureItem[nCntItemType] = NULL;
+			g_pMeshItem[nCntItemType] = NULL;
+			g_pD3DXMatBuffItem[nCntItemType] = NULL;
+
+			// Xファイルの読み込み
+			if (FAILED(D3DXLoadMeshFromX(FileNameItem[nCntItemType],
+				D3DXMESH_SYSTEMMEM,
+				pDevice,
+				NULL,
+				&g_pD3DXMatBuffItem[nCntItemType],
+				NULL,
+				&g_aNumMatItem[nCntItemType],
+				&g_pMeshItem[nCntItemType])))
+			{
+				return E_FAIL;
+			}
 
 #if 0
-		// テクスチャの読み込み
-		D3DXCreateTextureFromFile(pDevice,									// デバイスへのポインタ
-			TEXTURE_FILENAME,						// ファイルの名前
-			&g_pD3DTextureModelItem[nCntItemType]);	// 読み込むメモリー
+			// テクスチャの読み込み
+			D3DXCreateTextureFromFile(pDevice,									// デバイスへのポインタ
+				TEXTURE_FILENAME,						// ファイルの名前
+				&g_pD3DTextureModelItem[nCntItemType]);	// 読み込むメモリー
 #endif
+		}
 	}
 
 	for (int nCntItem = 0; nCntItem < MAX_ITEM; nCntItem++,item++)
