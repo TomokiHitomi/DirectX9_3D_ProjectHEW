@@ -9,6 +9,7 @@
 #include "main.h"
 #include "debugproc.h"
 #include "stage.h"
+#include "shadow.h"
 
 //#include "stdlib.h"
 //#include "shadow.h"
@@ -95,6 +96,12 @@ HRESULT InitItem(int nType)
 		item->life = 0;
 		item->no = 0;
 		item->use = false;
+
+		// シャドウ用
+		item->nIdxShadow = 0;
+		item->fSizeShadow = 0.0f;
+		item->colShadow = D3DXCOLOR(0.5f, 0.5f, 0.5f, 0.8f);
+		item->bShadow = false;
 	}
 
 	poptime = 0;
@@ -185,12 +192,33 @@ void UpdateItem(void)
 			//	item->use = false;
 			//}
 
+			// シャドウ
+			if (!item->bShadow)
+			{	// シャドウ設置
+				item->nIdxShadow = CreateShadow(item->pos, 25.0f, 25.0f);
+				item->fSizeShadow = ITEM_SHADOW_SIZE;
+				item->colShadow = D3DXCOLOR(0.5f, 0.5f, 0.5f, 0.7f);
+				item->bShadow = true;
+			}
+			else
+			{
+				// シャドウ管理
+				SetPositionShadow(item->nIdxShadow, D3DXVECTOR3(item->pos.x, 0.2f, item->pos.z));
+				SetVertexShadow(item->nIdxShadow, item->fSizeShadow, item->fSizeShadow);
+				SetColorShadow(item->nIdxShadow, item->colShadow);
+			}
+
+			if (item->pos.y < ITEM_SHADOW_REREASE && item->bShadow)
+			{
+				// アイテムの影を削除
+				ReleaseShadow(item->nIdxShadow);
+				item->bShadow = false;
+			}
 			// 完全にフィールドの下に行ったら消去
 			if (item->pos.y < -ITEM_SIZE_Y)
 			{
 				// アイテムを消去
 				item->use = false;
-
 				// パネルをセット状態から解放してあげる
 				panel[item->no].ItemSet = false;
 

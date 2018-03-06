@@ -18,7 +18,7 @@
 
 #define SHADOW_POS_Y		(0.2f)							// ƒVƒƒƒhƒE‚Ì‚‚³‚ğŒÅ’è
 
-#define	MAX_SHADOW			(5000)							// ‰eÅ‘å”
+#define	MAX_SHADOW			(20)							// ‰eÅ‘å”
 
 #define SHADOW_ALPHA		(1)
 

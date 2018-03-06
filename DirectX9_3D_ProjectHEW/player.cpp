@@ -17,6 +17,7 @@
 #include "player.h"
 #include "fade.h"
 #include "effect.h"
+#include "shadow.h"
 
 //*******************************************************************
 // プロトタイプ宣言
@@ -98,6 +99,12 @@ HRESULT InitPlayer(int nType)
 		player->type = i;
 		player->oldPos = player->pos;
 		player->havetime = 0;
+
+		// シャドウ用
+		player->nIdxShadow = 0;
+		player->fSizeShadow = 0.0f;
+		player->colShadow = D3DXCOLOR(0.5f, 0.5f, 0.5f, 0.8f);
+		player->bShadow = false;
 	}
 
 	updateflag = true;
@@ -157,6 +164,7 @@ void UpdatePlayer(void)
 		{
 			if (player->use)
 			{
+
 				player->oldPos.x = player->pos.x;
 				player->oldPos.z = player->pos.z;
 
@@ -263,6 +271,21 @@ void UpdatePlayer(void)
 					player->item = 3.0f;
 				}
 
+				// シャドウ
+				if (!player->bShadow)
+				{	// シャドウ設置
+					player->nIdxShadow = CreateShadow(player->pos, 25.0f, 25.0f);
+					player->fSizeShadow = PLAYER_SHADOW_SIZE;
+					player->colShadow = D3DXCOLOR(0.7f, 0.7f, 0.7f, 0.7f);
+					player->bShadow = true;
+				}
+				else
+				{
+					// シャドウ管理
+					SetPositionShadow(player->nIdxShadow, D3DXVECTOR3(player->pos.x, 0.2f, player->pos.z));
+					SetVertexShadow(player->nIdxShadow, player->fSizeShadow, player->fSizeShadow);
+					SetColorShadow(player->nIdxShadow, player->colShadow);
+				}
 			}
 		}
 	}
@@ -379,6 +402,9 @@ void HitEnemy(int nPlayer)
 				enemy->use = false;
 				updateflag = false;
 
+				ReleaseShadow(enemy->nIdxShadow);
+				ReleaseShadow(player->nIdxShadow);
+
 				//// SE再生
 				//PlaySound(SOUND_LABEL_SE_COIN);
 			}
@@ -421,9 +447,11 @@ void HitItem(int nPlayer)
 				// アイテム取得音
 				SetSe(SE_ITEM, E_DS8_FLAG_NONE, CONTINUITY_ON);
 
-				//// アイテム消去
+				// アイテム消去
 				item->use = false;
-
+				// アイテムの影を削除
+				ReleaseShadow(item->nIdxShadow);
+				item->bShadow = false;
 				// パネルをセット状態から解放
 				panel[item->no].ItemSet = false;
 

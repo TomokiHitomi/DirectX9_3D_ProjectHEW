@@ -10,6 +10,7 @@
 #include "player.h"
 #include "enemy.h"
 #include "stage.h"
+#include "shadow.h"
 
 
 //*****************************************************************************
@@ -142,7 +143,11 @@ HRESULT InitEnemy(int nType)
 		// ランダムで最初に追尾するプレイヤーを選ぶ
 		key = rand() % PLAYER_MAX;
 
-
+		// シャドウ用
+		enemy->nIdxShadow = 0;
+		enemy->fSizeShadow = 0.0f;
+		enemy->colShadow = D3DXCOLOR(0.5f, 0.5f, 0.5f, 0.8f);
+		enemy->bShadow = false;
 	}
 
 
@@ -326,7 +331,21 @@ void UpdateEnemy(void)
 	//PrintDebugProc("\n");
 #endif
 
-
+	// シャドウ
+	if (!enemy->bShadow)
+	{	// シャドウ設置
+		enemy->nIdxShadow = CreateShadow(enemy->Eye, 25.0f, 25.0f);
+		enemy->fSizeShadow = ENEMY_SHADOW_SIZE;
+		enemy->colShadow = D3DXCOLOR(0.7f, 0.7f, 0.7f, 0.7f);
+		enemy->bShadow = true;
+	}
+	else
+	{
+		// シャドウ管理
+		SetPositionShadow(enemy->nIdxShadow, D3DXVECTOR3(enemy->Eye.x, 0.2f, enemy->Eye.z));
+		SetVertexShadow(enemy->nIdxShadow, enemy->fSizeShadow, enemy->fSizeShadow);
+		SetColorShadow(enemy->nIdxShadow, enemy->colShadow);
+	}
 }
 //=============================================================================
 // 描画処理

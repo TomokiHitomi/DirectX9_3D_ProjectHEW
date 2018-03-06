@@ -27,6 +27,7 @@
 
 #define	ENEMY_SPEED_FREQUENCY	(60*10)							// エネミーの移動速度の更新頻度(フレーム×秒数)
 #define	ENEMY_SPEEDUP			(0.2f)							// エネミーの移動速度変化量
+#define ENEMY_SHADOW_SIZE		(53.0f)							// エネミーの影サイズ
 
 //*****************************************************************************
 // 構造体宣言
@@ -50,6 +51,11 @@ typedef struct		// エネミー構造体
 
 	float			speed;							// 移動速度係数
 
+	// シャドウ用
+	int				nIdxShadow;
+	float			fSizeShadow;
+	D3DXCOLOR		colShadow;
+	bool			bShadow;
 } ENEMY;
 
 

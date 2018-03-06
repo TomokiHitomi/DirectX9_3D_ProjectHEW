@@ -11,6 +11,7 @@
 
 // ゲームで必要なインクルード
 #include "effect.h"
+#include "shadow.h"
 
 // 担当ワーク
 #include "workChisaka.h"
@@ -39,6 +40,7 @@
 HRESULT InitGame(int nType)
 {
 	InitEffect(nType);			// エフェクト
+	InitShadow(nType);			// シャドウ
 	return S_OK;
 }
 
@@ -47,7 +49,8 @@ HRESULT InitGame(int nType)
 //=============================================================================
 void UninitGame(void)
 {
-	UninitEffect;				// エフェクト
+	UninitEffect();				// エフェクト
+	UninitShadow();				// シャドウ
 }
 
 //=============================================================================
@@ -62,6 +65,7 @@ void UpdateGame(void)
 	UpdateWorkYoshida();		// 吉田担当分
 
 	UpdateEffect();				// エフェクト
+	UpdateShadow();				// シャドウ
 }
 
 //=============================================================================
@@ -69,12 +73,13 @@ void UpdateGame(void)
 //=============================================================================
 void DrawGame(void)
 {
-	DrawWorkChisaka();			// 千坂担当分
-	DrawWorkHitomi();			// 人見担当分
-	DrawWorkHoriguchi();		// 堀口担当分
-	DrawWorkYamaguchi();		// 山口担当分
-	DrawWorkYoshida();			// 吉田担当分
 
+	DrawWorkYamaguchi();		// 山口担当分
+	DrawWorkHitomi();			// 人見担当分
+	DrawWorkChisaka();			// 千坂担当分
+	DrawWorkHoriguchi();		// 堀口担当分
+	DrawWorkYoshida();			// 吉田担当分
 	DrawEffect();				// エフェクト
+	// シャドウのDrawは山口担当分内
 }
 

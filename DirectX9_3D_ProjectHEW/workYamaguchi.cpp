@@ -14,6 +14,7 @@
 #include "wall.h"
 #include "uiframe.h"
 #include "uigage.h"
+#include "shadow.h"
 
 // デバッグ用
 #ifdef _DEBUG
@@ -91,7 +92,8 @@ void DrawWorkYamaguchi(void)
 		break;
 	case STAGE_GAME:
 		DrawField();	//フィールド
-		DrawMeshWall();//壁
+		DrawShadow();	// シャドウ
+		DrawMeshWall();	//壁
 		DrawUiframe();	//UI画面
 		DrawUigage();	//UIゲージ
 		break;

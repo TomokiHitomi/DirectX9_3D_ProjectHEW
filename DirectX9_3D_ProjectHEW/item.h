@@ -20,7 +20,8 @@
 #define	ITEM_SIZE_X				(10.0f)						// アイテムの幅
 #define	ITEM_SIZE_Y				(40.0f)						// アイテムの高さ
 #define	ITEM_POP_FREQUENCY		(60*3)						// アイテムのポップ頻度(フレーム×秒数)
-
+#define ITEM_SHADOW_SIZE		(35.0f)						// アイテムの影サイズ
+#define ITEM_SHADOW_REREASE		(-20.0f)					// アイテムの影を削除する高さ
 
 //**************************************
 // 種類
@@ -43,11 +44,16 @@ typedef struct
 	D3DXVECTOR3	scl;				// スケール
 
 	float		fRadius;			// 半径
-	int			nIdxShadow;			// 影ID
 	int			nType;				// 種類
 	int			life;				// 寿命
 	int			no;					// ポップしているパネル番号
 	bool		use;				// 使用しているかどうか
+
+	// シャドウ用
+	int				nIdxShadow;
+	float			fSizeShadow;
+	D3DXCOLOR		colShadow;
+	bool			bShadow;
 } ITEM;
 
 //*****************************************************************************

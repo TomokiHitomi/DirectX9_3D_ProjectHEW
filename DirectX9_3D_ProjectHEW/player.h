@@ -16,6 +16,7 @@
 #define PLAYER_SIZE_BOX		(5.0f)			// ボックスの当たり判定サイズ
 #define VALUE_MOVE_PLAYER	(2.0f)			// 移動速度
 #define PLAYER_MAX			(2)				// プレイヤーの最大数
+#define PLAYER_SHADOW_SIZE	(23.0f)			// プレイヤーの影サイズ
 
 //*******************************************************************
 // 構造体宣言
@@ -33,6 +34,12 @@ typedef struct		// プレイヤー構造体
 	int			type;		// プレイヤーで分ける
 
 	int			havetime;	//アイテムの所持時間
+
+	// シャドウ用
+	int				nIdxShadow;
+	float			fSizeShadow;
+	D3DXCOLOR		colShadow;
+	bool			bShadow;
 } PLAYER;
 
 //*******************************************************************
